@@ -11,7 +11,7 @@ CFLAGS=-g
 .c.o:
 	${CC} ${CFLAGS} -c $<
 
-compile: stack.s
+compile: ../../stack.s
 
 stack.s: stack.cl atoi.cl
 	${CLASSDIR}/bin/coolc stack.cl atoi.cl 

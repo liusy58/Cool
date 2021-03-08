@@ -97,7 +97,7 @@ class Main inherits IO {
       l <- l.cons(str2);
       l <- l.cons(str1);
       return l;      
-   }
+   };
 
    add(l : List) : List{
       let z : A2I <- new A2I 
@@ -112,7 +112,7 @@ class Main inherits IO {
       let str3 <- z.i2a(num3);
       l <- l.cons(str3)
       return l;      
-   }
+   };
 
 
    evaluate(l : List) : List{
@@ -130,7 +130,7 @@ class Main inherits IO {
          fi
       fi
       return l
-   }
+   };
 
    main() : Object {
       mylist : List;
