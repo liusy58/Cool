@@ -41,7 +41,7 @@ lexer: ${OBJS}
 .cc.o:
 	${CC} ${CFLAGS} -c $<
 
-cool-lex.cc: cool.flex 
+cool-lex.cc: cool.flex
 	${FLEX} cool.flex
 
 dotest:	lexer test.cl

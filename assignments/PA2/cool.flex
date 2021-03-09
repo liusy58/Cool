@@ -50,6 +50,10 @@ extern YYSTYPE cool_yylval;
  */
 
 DARROW          =>
+LE              <=
+ASSIGN          <-
+
+
 
 %%
 
@@ -61,13 +65,14 @@ DARROW          =>
  /*
   *  The multiple-character operators.
   */
-{DARROW}		{ return (DARROW); }
-
+<INITIAL>{DARROW}		{ return (DARROW); }
+<INITIAL>{LE}		    { return (LE); }
+<INITIAL>{ASSIGN}       {return (ASSIGN);}
  /*
   * Keywords are case-insensitive except for the values true and false,
   * which must begin with a lower-case letter.
   */
-
+<INITIAL>
 
  /*
   *  String constants (C syntax)
