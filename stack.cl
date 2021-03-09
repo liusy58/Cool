@@ -17,7 +17,7 @@ class List {
    -- Int, we need to have an Int as the result of the method body,
    -- even though abort() never returns.
 
-   head()  : Int { { abort(); 0; } };
+   head()  : String { { abort(); ""; } };
 
    -- As for head(), the self is just to make sure the return type of
    -- tail() is correct.
@@ -25,7 +25,7 @@ class List {
    tail()  : List { { abort(); self; } };
 
 
-   len()  : Int {0}
+   len()  : Int {0};
 
    -- When we cons and element onto the empty list we get a non-empty
    -- list. The (new Cons) expression creates a new list cell of class
@@ -37,7 +37,6 @@ class List {
    cons(i : String) : List {
       (new Cons).init(i, self)
    };
-
 };
 
 
@@ -78,29 +77,30 @@ class Main inherits IO {
          in_string();
       }
    };
+
    print_list(l : List) : Object {
       if l.isNil() then out_string("")
-                     else {
+      else {
             out_string(l.head());
             out_string("\n");
             print_list(l.tail());
-            }
+         }
       fi
    };
 
 
    swap(l : List) : List{
-      l <- l.tail();
-      let str1 :String = l.head();
-      l <- l.tail();
-      let str2 :String = l.head();
+      l <- l.tail()
+      let str1 : String <- l.head()
+      l <- l.tail()
+      let str2 : String <- l.head();
       l <- l.cons(str2);
       l <- l.cons(str1);
       return l;      
    };
 
    add(l : List) : List{
-      let z : A2I <- new A2I 
+      let z : A2I <- new A2I ;
       l <- l.tail();
       let str1 :String = l.head();
       l <- l.tail();
@@ -110,7 +110,7 @@ class Main inherits IO {
 
       let num3 <- num1+num2;
       let str3 <- z.i2a(num3);
-      l <- l.cons(str3)
+      l <- l.cons(str3);
       return l;      
    };
 
@@ -119,7 +119,7 @@ class Main inherits IO {
       if l.isNil() or l.len() <= 2 then
          return l;
       else
-         let str <- l.head(0);
+         let str : String <- l.head();
          if str = "s" then{
             l <- swap(l) ; 
          }
@@ -134,7 +134,7 @@ class Main inherits IO {
 
    main() : Object {
       mylist : List;
-      
+      mylist <- new Cons;
       while true loop
         let s : String <- prompt() 
          if s = "x" then
