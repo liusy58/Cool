@@ -68,12 +68,17 @@ ASSIGN          <-
 <INITIAL>{DARROW}		{ return (DARROW); }
 <INITIAL>{LE}		    { return (LE); }
 <INITIAL>{ASSIGN}       {return (ASSIGN);}
+<INITIAL>      {return (ASSIGN);}
+
  /*
   * Keywords are case-insensitive except for the values true and false,
   * which must begin with a lower-case letter.
   */
-<INITIAL>
+<INITIAL>{}  {}
 
+
+
+(?i:ELSE)
  /*
   *  String constants (C syntax)
   *  Escape sequence \c is accepted for all characters c. Except for 
