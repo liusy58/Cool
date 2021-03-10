@@ -52,9 +52,20 @@ extern YYSTYPE cool_yylval;
 DARROW          =>
 LE              <=
 ASSIGN          <-
-
-
-
+CLASS           ?i:class
+ELSE            ?i:else
+IF              ?i:if
+IN              ?i:in
+INHERITS        ?i:inherits
+LET             ?i:let
+LOOP            ?i:loop
+POOL            ?i:pool
+WHILE           ?i:while
+CASE            ?i:case
+ESAC            ?i:esac
+OF              ?i:of
+TRUE            true
+FALSE           false
 %%
 
  /*
@@ -68,23 +79,46 @@ ASSIGN          <-
 <INITIAL>{DARROW}		{ return (DARROW); }
 <INITIAL>{LE}		    { return (LE); }
 <INITIAL>{ASSIGN}       {return (ASSIGN);}
-<INITIAL>      {return (ASSIGN);}
+
+
 
  /*
   * Keywords are case-insensitive except for the values true and false,
   * which must begin with a lower-case letter.
   */
-<INITIAL>{}  {}
+<INITIAL>{CLASS}  { return (CLASS);}
+<INITIAL>{ELSE}  {return (ELSE);}
+<INITIAL>{IF}  {return (IF);}
+<INITIAL>{IN}  {return (IN);}
+<INITIAL>{INHERITS}  {return (INHERITS);}
+<INITIAL>{LET}  {return (LET);}
+<INITIAL>{LOOP}  {return (LOOP);}
+<INITIAL>{POOL}  {return (POOL);}
+<INITIAL>{WHILE}  {return (WHILE);}
+<INITIAL>{CASE}  {return (CASE);}
+<INITIAL>{ESAC}  {return (ESAC);}
+<INITIAL>{OF}  {return (OF);}
 
 
+<INITIAL>{TRUE}  {cool_yylval.boolean = true;return (BOOL_CONST);}
+<INITIAL>{FALSE}  {cool_yylval.boolean = false;return (BOOL_CONST);}
 
-(?i:ELSE)
- /*
-  *  String constants (C syntax)
-  *  Escape sequence \c is accepted for all characters c. Except for 
-  *  \n \t \b \f, the result is c.
-  *
-  */
 
+<INITIAL>\+      {return '+';}
+<INITIAL>\/      {return '/';}
+<INITIAL>-      {return '-';}
+<INITIAL>\*      {return '*';}
+<INITIAL>=      {return '=';}
+<INITIAL><      {return '<';}
+<INITIAL>\.      {return '.';}
+<INITIAL>~      {return '~';}
+<INITIAL>,      {return ',';}
+<INITIAL>;      {return ';';}
+<INITIAL>:      {return ':';}
+<INITIAL>\(      {return '(';}
+<INITIAL>\)      {return ')';}
+<INITIAL>@      {return '@';}
+<INITIAL>\{      {return '{';}
+<INITIAL>\}      {return '}';}
 
 %%

@@ -13,3 +13,6 @@ for filename in ../../examples/*.cl;do
 done
 
 rm -rf refout myout
+
+
+

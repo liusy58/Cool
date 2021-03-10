@@ -1,5 +1,5 @@
 ---------  Test  ../../examples/arith.cl  ---------
-2,1859c2,440
+2,1859c2,839
 < #7 CLASS
 < #7 TYPEID A
 < #7 '{'
@@ -1862,72 +1862,119 @@
 > (*
 >  *  A contribution from Anne Sheets (sheets@cory)
 >  *
->  *  Tests the arithmetic operations and various other things
+>  *  Tests the arithmetic operations and various other th#1 IN
+> gs
 >  *)
 > 
-> class A {
+> #1 CLASS
+>  A {
 > 
->    var : Int <- 0;
+>    var : #1 IN
+> t #1 ASSIGN
+>  0;
 > 
->    value() : Int { var };
+>    value() : #1 IN
+> t { var };
 > 
->    set_var(num : Int) : SELF_TYPE {
+>    set_var(num : #1 IN
+> t) : SELF_TYPE {
 >       {
->          var <- num;
+>          var #1 ASSIGN
+>  num;
 >          self;
 >       }
 >    };
 > 
->    method1(num : Int) : SELF_TYPE {  -- same
+>    method1(num : #1 IN
+> t) : SELF_TYPE {  -- same
 >       self
 >    };
 > 
->    method2(num1 : Int, num2 : Int) : B {  -- plus
->       (let x : Int in
+>    method2(num1 : #1 IN
+> t, num2 : #1 IN
+> t) : B {  -- plus
+>       (#1 LET
+>  x : #1 IN
+> t #1 IN
+> 
 > 	 {
->             x <- num1 + num2;
+>             x #1 ASSIGN
+>  num1 + num2;
 > 	    (new B).set_var(x);
 > 	 }
 >       )
 >    };
 > 
->    method3(num : Int) : C {  -- negate
->       (let x : Int in
+>    method3(num : #1 IN
+> t) : C {  -- negate
+>       (#1 LET
+>  x : #1 IN
+> t #1 IN
+> 
 > 	 {
->             x <- ~num;
+>             x #1 ASSIGN
+>  ~num;
 > 	    (new C).set_var(x);
 > 	 }
 >       )
 >    };
 > 
->    method4(num1 : Int, num2 : Int) : D {  -- diff
->             if num2 < num1 then
->                (let x : Int in
+>    method4(num1 : #1 IN
+> t, num2 : #1 IN
+> t) : D {  -- d#1 IF
+> f
+>             #1 IF
+>  num2 < num1 then
+>                (#1 LET
+>  x : #1 IN
+> t #1 IN
+> 
 > 		  {
->                      x <- num1 - num2;
+>                      x #1 ASSIGN
+>  num1 - num2;
 > 	             (new D).set_var(x);
 > 	          }
 >                )
->             else
->                (let x : Int in
+>             #1 ELSE
+> 
+>                (#1 LET
+>  x : #1 IN
+> t #1 IN
+> 
 > 		  {
-> 	             x <- num2 - num1;
+> 	             x #1 ASSIGN
+>  num2 - num1;
 > 	             (new D).set_var(x);
 > 		  }
 >                )
 >             fi
 >    };
 > 
->    method5(num : Int) : E {  -- factorial
->       (let x : Int <- 1 in
+>    method5(num : #1 IN
+> t) : E {  -- factorial
+>       (#1 LET
+>  x : #1 IN
+> t #1 ASSIGN
+>  1 #1 IN
+> 
 > 	 {
-> 	    (let y : Int <- 1 in
-> 	       while y <= num loop
+> 	    (#1 LET
+>  y : #1 IN
+> t #1 ASSIGN
+>  1 #1 IN
+> 
+> 	       #1 WHILE
+>  y #1 LE
+>  num #1 LOOP
+> 
 > 	          {
->                      x <- x * y;
-> 	             y <- y + 1;
+>                      x #1 ASSIGN
+>  x * y;
+> 	             y #1 ASSIGN
+>  y + 1;
 > 	          }
-> 	       pool
+> 	       #1 POOL
+> 
 > 	    );
 > 	    (new E).set_var(x);
 > 	 }
@@ -1936,12 +1983,19 @@
 > 
 > };
 > 
-> class B inherits A {  -- B is a number squared
+> #1 CLASS
+>  B #1 INHERITS
+>  A {  -- B is a number squared
 > 
->    method5(num : Int) : E { -- square
->       (let x : Int in
+>    method5(num : #1 IN
+> t) : E { -- square
+>       (#1 LET
+>  x : #1 IN
+> t #1 IN
+> 
 > 	 {
->             x <- num * num;
+>             x #1 ASSIGN
+>  num * num;
 > 	    (new E).set_var(x);
 > 	 }
 >       )
@@ -1949,21 +2003,33 @@
 > 
 > };
 > 
-> class C inherits B {
+> #1 CLASS
+>  C #1 INHERITS
+>  B {
 > 
->    method6(num : Int) : A { -- negate
->       (let x : Int in
+>    method6(num : #1 IN
+> t) : A { -- negate
+>       (#1 LET
+>  x : #1 IN
+> t #1 IN
+> 
 >          {
->             x <- ~num;
+>             x #1 ASSIGN
+>  ~num;
 > 	    (new A).set_var(x);
 >          }
 >       )
 >    };
 > 
->    method5(num : Int) : E {  -- cube
->       (let x : Int in
+>    method5(num : #1 IN
+> t) : E {  -- cube
+>       (#1 LET
+>  x : #1 IN
+> t #1 IN
+> 
 > 	 {
->             x <- num * num * num;
+>             x #1 ASSIGN
+>  num * num * num;
 > 	    (new E).set_var(x);
 > 	 }
 >       )
@@ -1971,14 +2037,32 @@
 > 
 > };
 > 
-> class D inherits B {  
+> #1 CLASS
+>  D #1 INHERITS
+>  B {  
 > 		
->    method7(num : Int) : Bool {  -- divisible by 3
->       (let x : Int <- num in
->             if x < 0 then method7(~x) else
->             if 0 = x then true else
->             if 1 = x then false else
-> 	    if 2 = x then false else
+>    method7(num : #1 IN
+> t) : Bool {  -- divisible by 3
+>       (#1 LET
+>  x : #1 IN
+> t #1 ASSIGN
+>  num #1 IN
+> 
+>             #1 IF
+>  x < 0 then method7(~x) #1 ELSE
+> 
+>             #1 IF
+>  0 = x then #1 BOOL_CONST true
+>  #1 ELSE
+> 
+>             #1 IF
+>  1 = x then #1 BOOL_CONST false
+>  #1 ELSE
+> 
+> 	    #1 IF
+>  2 = x then #1 BOOL_CONST false
+>  #1 ELSE
+> 
 > 	       method7(x - 3)
 > 	    fi fi fi fi
 >       )
@@ -1986,12 +2070,19 @@
 > 
 > };
 > 
-> class E inherits D {
+> #1 CLASS
+>  E #1 INHERITS
+>  D {
 > 
->    method6(num : Int) : A {  -- division
->       (let x : Int in
+>    method6(num : #1 IN
+> t) : A {  -- division
+>       (#1 LET
+>  x : #1 IN
+> t #1 IN
+> 
 >          {
->             x <- num / 8;
+>             x #1 ASSIGN
+>  num / 8;
 > 	    (new A).set_var(x);
 >          }
 >       )
@@ -1999,109 +2090,236 @@
 > 
 > };
 > 
-> (* The following code is from atoi.cl in ~cs164/examples *)
+> (* The follow#1 IN
+> g code is from atoi.cl #1 IN
+>  ~cs164/examples *)
 > 
 > (*
->    The class A2I provides integer-to-string and string-to-integer
-> conversion routines.  To use these routines, either inherit them
-> in the class where needed, have a dummy variable bound to
-> something of type A2I, or simpl write (new A2I).method(argument).
+>    The #1 CLASS
+>  A2I provides #1 IN
+> teger-to-str#1 IN
+> g and str#1 IN
+> g-to-#1 IN
+> teger
+> conversion rout#1 IN
+> es.  To use these rout#1 IN
+> es, either #1 IN
+> herit them
+> #1 IN
+>  the #1 CLASS
+>  where needed, have a dummy variable bound to
+> someth#1 IN
+> g #1 OF
+>  type A2I, or simpl write (new A2I).method(argument).
 > *)
 > 
 > 
 > (*
->    c2i   Converts a 1-character string to an integer.  Aborts
->          if the string is not "0" through "9"
+>    c2i   Converts a 1-character str#1 IN
+> g to an #1 IN
+> teger.  Aborts
+>          #1 IF
+>  the str#1 IN
+> g is not "0" through "9"
 > *)
-> class A2I {
+> #1 CLASS
+>  A2I {
 > 
->      c2i(char : String) : Int {
-> 	if char = "0" then 0 else
-> 	if char = "1" then 1 else
-> 	if char = "2" then 2 else
->         if char = "3" then 3 else
->         if char = "4" then 4 else
->         if char = "5" then 5 else
->         if char = "6" then 6 else
->         if char = "7" then 7 else
->         if char = "8" then 8 else
->         if char = "9" then 9 else
+>      c2i(char : Str#1 IN
+> g) : #1 IN
+> t {
+> 	#1 IF
+>  char = "0" then 0 #1 ELSE
+> 
+> 	#1 IF
+>  char = "1" then 1 #1 ELSE
+> 
+> 	#1 IF
+>  char = "2" then 2 #1 ELSE
+> 
+>         #1 IF
+>  char = "3" then 3 #1 ELSE
+> 
+>         #1 IF
+>  char = "4" then 4 #1 ELSE
+> 
+>         #1 IF
+>  char = "5" then 5 #1 ELSE
+> 
+>         #1 IF
+>  char = "6" then 6 #1 ELSE
+> 
+>         #1 IF
+>  char = "7" then 7 #1 ELSE
+> 
+>         #1 IF
+>  char = "8" then 8 #1 ELSE
+> 
+>         #1 IF
+>  char = "9" then 9 #1 ELSE
+> 
 >         { abort(); 0; }  (* the 0 is needed to satisfy the
 > 				  typchecker *)
 >         fi fi fi fi fi fi fi fi fi fi
 >      };
 > 
 > (*
->    i2c is the inverse of c2i.
+>    i2c is the #1 IN
+> verse #1 OF
+>  c2i.
 > *)
->      i2c(i : Int) : String {
-> 	if i = 0 then "0" else
-> 	if i = 1 then "1" else
-> 	if i = 2 then "2" else
-> 	if i = 3 then "3" else
-> 	if i = 4 then "4" else
-> 	if i = 5 then "5" else
-> 	if i = 6 then "6" else
-> 	if i = 7 then "7" else
-> 	if i = 8 then "8" else
-> 	if i = 9 then "9" else
+>      i2c(i : #1 IN
+> t) : Str#1 IN
+> g {
+> 	#1 IF
+>  i = 0 then "0" #1 ELSE
+> 
+> 	#1 IF
+>  i = 1 then "1" #1 ELSE
+> 
+> 	#1 IF
+>  i = 2 then "2" #1 ELSE
+> 
+> 	#1 IF
+>  i = 3 then "3" #1 ELSE
+> 
+> 	#1 IF
+>  i = 4 then "4" #1 ELSE
+> 
+> 	#1 IF
+>  i = 5 then "5" #1 ELSE
+> 
+> 	#1 IF
+>  i = 6 then "6" #1 ELSE
+> 
+> 	#1 IF
+>  i = 7 then "7" #1 ELSE
+> 
+> 	#1 IF
+>  i = 8 then "8" #1 ELSE
+> 
+> 	#1 IF
+>  i = 9 then "9" #1 ELSE
+> 
 > 	{ abort(); ""; }  -- the "" is needed to satisfy the typchecker
 >         fi fi fi fi fi fi fi fi fi fi
 >      };
 > 
 > (*
->    a2i converts an ASCII string into an integer.  The empty string
-> is converted to 0.  Signed and unsigned strings are handled.  The
-> method aborts if the string does not represent an integer.  Very
-> long strings of digits produce strange answers because of arithmetic 
+>    a2i converts an ASCII str#1 IN
+> g #1 IN
+> to an #1 IN
+> teger.  The empty str#1 IN
+> g
+> is converted to 0.  Signed and unsigned str#1 IN
+> gs are handled.  The
+> method aborts #1 IF
+>  the str#1 IN
+> g does not represent an #1 IN
+> teger.  Very
+> long str#1 IN
+> gs #1 OF
+>  digits produce strange answers because #1 OF
+>  arithmetic 
 > overflow.
 > 
 > *)
->      a2i(s : String) : Int {
->         if s.length() = 0 then 0 else
-> 	if s.substr(0,1) = "-" then ~a2i_aux(s.substr(1,s.length()-1)) else
->         if s.substr(0,1) = "+" then a2i_aux(s.substr(1,s.length()-1)) else
+>      a2i(s : Str#1 IN
+> g) : #1 IN
+> t {
+>         #1 IF
+>  s.length() = 0 then 0 #1 ELSE
+> 
+> 	#1 IF
+>  s.substr(0,1) = "-" then ~a2i_aux(s.substr(1,s.length()-1)) #1 ELSE
+> 
+>         #1 IF
+>  s.substr(0,1) = "+" then a2i_aux(s.substr(1,s.length()-1)) #1 ELSE
+> 
 >            a2i_aux(s)
 >         fi fi fi
 >      };
 > 
-> (* a2i_aux converts the usigned portion of the string.  As a
->    programming example, this method is written iteratively.  *)
+> (* a2i_aux converts the usigned portion #1 OF
+>  the str#1 IN
+> g.  As a
+>    programm#1 IN
+> g example, this method is written iteratively.  *)
 > 
 > 
->      a2i_aux(s : String) : Int {
-> 	(let int : Int <- 0 in	
+>      a2i_aux(s : Str#1 IN
+> g) : #1 IN
+> t {
+> 	(#1 LET
+>  #1 IN
+> t : #1 IN
+> t #1 ASSIGN
+>  0 #1 IN
+> 	
 >            {	
->                (let j : Int <- s.length() in
-> 	          (let i : Int <- 0 in
-> 		    while i < j loop
+>                (#1 LET
+>  j : #1 IN
+> t #1 ASSIGN
+>  s.length() #1 IN
+> 
+> 	          (#1 LET
+>  i : #1 IN
+> t #1 ASSIGN
+>  0 #1 IN
+> 
+> 		    #1 WHILE
+>  i < j #1 LOOP
+> 
 > 			{
-> 			    int <- int * 10 + c2i(s.substr(i,1));
-> 			    i <- i + 1;
+> 			    #1 IN
+> t #1 ASSIGN
+>  #1 IN
+> t * 10 + c2i(s.substr(i,1));
+> 			    i #1 ASSIGN
+>  i + 1;
 > 			}
-> 		    pool
+> 		    #1 POOL
+> 
 > 		  )
 > 	       );
->               int;
+>               #1 IN
+> t;
 > 	    }
 >         )
 >      };
 > 
-> (* i2a converts an integer to a string.  Positive and negative 
+> (* i2a converts an #1 IN
+> teger to a str#1 IN
+> g.  Positive and negative 
 >    numbers are handled correctly.  *)
 > 
->     i2a(i : Int) : String {
-> 	if i = 0 then "0" else 
->         if 0 < i then i2a_aux(i) else
+>     i2a(i : #1 IN
+> t) : Str#1 IN
+> g {
+> 	#1 IF
+>  i = 0 then "0" #1 ELSE
+>  
+>         #1 IF
+>  0 < i then i2a_aux(i) #1 ELSE
+> 
 >           "-".concat(i2a_aux(i * ~1)) 
 >         fi fi
 >     };
 > 	
-> (* i2a_aux is an example using recursion.  *)		
+> (* i2a_aux is an example us#1 IN
+> g recursion.  *)		
 > 
->     i2a_aux(i : Int) : String {
->         if i = 0 then "" else 
-> 	    (let next : Int <- i / 10 in
+>     i2a_aux(i : #1 IN
+> t) : Str#1 IN
+> g {
+>         #1 IF
+>  i = 0 then "" #1 ELSE
+>  
+> 	    (#1 LET
+>  next : #1 IN
+> t #1 ASSIGN
+>  i / 10 #1 IN
+> 
 > 		i2a_aux(next).concat(i2c(i - next * 10))
 > 	    )
 >         fi
@@ -2109,190 +2327,371 @@
 > 
 > };
 > 
-> class Main inherits IO {
+> #1 CLASS
+>  Ma#1 IN
+>  #1 INHERITS
+>  IO {
 >    
->    char : String;
+>    char : Str#1 IN
+> g;
 >    avar : A; 
 >    a_var : A;
->    flag : Bool <- true;
+>    flag : Bool #1 ASSIGN
+>  #1 BOOL_CONST true
+> ;
 > 
 > 
->    menu() : String {
+>    menu() : Str#1 IN
+> g {
 >       {
->          out_string("\n\tTo add a number to ");
->          print(avar);
->          out_string("...enter a:\n");
->          out_string("\tTo negate ");
->          print(avar);
->          out_string("...enter b:\n");
->          out_string("\tTo find the difference between ");
->          print(avar);
->          out_string("and another number...enter c:\n");
->          out_string("\tTo find the factorial of ");
->          print(avar);
->          out_string("...enter d:\n");
->          out_string("\tTo square ");
->          print(avar);
->          out_string("...enter e:\n");
->          out_string("\tTo cube ");
->          print(avar);
->          out_string("...enter f:\n");
->          out_string("\tTo find out if ");
->          print(avar);
->          out_string("is a multiple of 3...enter g:\n");
->          out_string("\tTo divide ");
->          print(avar);
->          out_string("by 8...enter h:\n");
-> 	 out_string("\tTo get a new number...enter j:\n");
-> 	 out_string("\tTo quit...enter q:\n\n");
->          in_string();
+>          out_str#1 IN
+> g("\n\tTo add a number to ");
+>          pr#1 IN
+> t(avar);
+>          out_str#1 IN
+> g("...enter a:\n");
+>          out_str#1 IN
+> g("\tTo negate ");
+>          pr#1 IN
+> t(avar);
+>          out_str#1 IN
+> g("...enter b:\n");
+>          out_str#1 IN
+> g("\tTo f#1 IN
+> d the d#1 IF
+> ference between ");
+>          pr#1 IN
+> t(avar);
+>          out_str#1 IN
+> g("and another number...enter c:\n");
+>          out_str#1 IN
+> g("\tTo f#1 IN
+> d the factorial #1 OF
+>  ");
+>          pr#1 IN
+> t(avar);
+>          out_str#1 IN
+> g("...enter d:\n");
+>          out_str#1 IN
+> g("\tTo square ");
+>          pr#1 IN
+> t(avar);
+>          out_str#1 IN
+> g("...enter e:\n");
+>          out_str#1 IN
+> g("\tTo cube ");
+>          pr#1 IN
+> t(avar);
+>          out_str#1 IN
+> g("...enter f:\n");
+>          out_str#1 IN
+> g("\tTo f#1 IN
+> d out #1 IF
+>  ");
+>          pr#1 IN
+> t(avar);
+>          out_str#1 IN
+> g("is a multiple #1 OF
+>  3...enter g:\n");
+>          out_str#1 IN
+> g("\tTo divide ");
+>          pr#1 IN
+> t(avar);
+>          out_str#1 IN
+> g("by 8...enter h:\n");
+> 	 out_str#1 IN
+> g("\tTo get a new number...enter j:\n");
+> 	 out_str#1 IN
+> g("\tTo quit...enter q:\n\n");
+>          #1 IN
+> _str#1 IN
+> g();
 >       }
 >    };
 > 
->    prompt() : String {
+>    prompt() : Str#1 IN
+> g {
 >       {
->          out_string("\n");
->          out_string("Please enter a number...  ");
->          in_string();
+>          out_str#1 IN
+> g("\n");
+>          out_str#1 IN
+> g("Please enter a number...  ");
+>          #1 IN
+> _str#1 IN
+> g();
 >       }
 >    };
 > 
->    get_int() : Int {
+>    get_#1 IN
+> t() : #1 IN
+> t {
 >       {
-> 	 (let z : A2I <- new A2I in
-> 	    (let s : String <- prompt() in
+> 	 (#1 LET
+>  z : A2I #1 ASSIGN
+>  new A2I #1 IN
+> 
+> 	    (#1 LET
+>  s : Str#1 IN
+> g #1 ASSIGN
+>  prompt() #1 IN
+> 
 > 	       z.a2i(s)
 > 	    )
 >          );
 >       }
 >    };
 > 
->    is_even(num : Int) : Bool {
->       (let x : Int <- num in
->             if x < 0 then is_even(~x) else
->             if 0 = x then true else
-> 	    if 1 = x then false else
+>    is_even(num : #1 IN
+> t) : Bool {
+>       (#1 LET
+>  x : #1 IN
+> t #1 ASSIGN
+>  num #1 IN
+> 
+>             #1 IF
+>  x < 0 then is_even(~x) #1 ELSE
+> 
+>             #1 IF
+>  0 = x then #1 BOOL_CONST true
+>  #1 ELSE
+> 
+> 	    #1 IF
+>  1 = x then #1 BOOL_CONST false
+>  #1 ELSE
+> 
 > 	          is_even(x - 2)
 > 	    fi fi fi
 >       )
 >    };
 > 
->    class_type(var : A) : SELF_TYPE {
->       case var of
+>    #1 CLASS
+> _type(var : A) : SELF_TYPE {
+>       #1 CASE
+>  var #1 OF
+> 
 > 	 a : A #1 DARROW
->  out_string("Class type is now A\n");
+>  out_str#1 IN
+> g("#1 CLASS
+>  type is now A\n");
 > 	 b : B #1 DARROW
->  out_string("Class type is now B\n");
+>  out_str#1 IN
+> g("#1 CLASS
+>  type is now B\n");
 > 	 c : C #1 DARROW
->  out_string("Class type is now C\n");
+>  out_str#1 IN
+> g("#1 CLASS
+>  type is now C\n");
 > 	 d : D #1 DARROW
->  out_string("Class type is now D\n");
+>  out_str#1 IN
+> g("#1 CLASS
+>  type is now D\n");
 > 	 e : E #1 DARROW
->  out_string("Class type is now E\n");
+>  out_str#1 IN
+> g("#1 CLASS
+>  type is now E\n");
 > 	 o : Object #1 DARROW
->  out_string("Oooops\n");
->       esac
+>  out_str#1 IN
+> g("Oooops\n");
+>       #1 ESAC
+> 
 >    };
 >  
->    print(var : A) : SELF_TYPE {
->      (let z : A2I <- new A2I in
+>    pr#1 IN
+> t(var : A) : SELF_TYPE {
+>      (#1 LET
+>  z : A2I #1 ASSIGN
+>  new A2I #1 IN
+> 
 > 	{
-> 	   out_string(z.i2a(var.value()));
-> 	   out_string(" ");
+> 	   out_str#1 IN
+> g(z.i2a(var.value()));
+> 	   out_str#1 IN
+> g(" ");
 > 	}
 >      )
 >    };
 > 
->    main() : Object {
+>    ma#1 IN
+> () : Object {
 >       {
->          avar <- (new A);
->          while flag loop
+>          avar #1 ASSIGN
+>  (new A);
+>          #1 WHILE
+>  flag #1 LOOP
+> 
 >             {
-> 	       -- avar <- (new A).set_var(get_int());
-> 	       out_string("number ");
-> 	       print(avar);
-> 	       if is_even(avar.value()) then
-> 	          out_string("is even!\n")
-> 	       else
-> 	          out_string("is odd!\n")
+> 	       -- avar #1 ASSIGN
+>  (new A).set_var(get_#1 IN
+> t());
+> 	       out_str#1 IN
+> g("number ");
+> 	       pr#1 IN
+> t(avar);
+> 	       #1 IF
+>  is_even(avar.value()) then
+> 	          out_str#1 IN
+> g("is even!\n")
+> 	       #1 ELSE
+> 
+> 	          out_str#1 IN
+> g("is odd!\n")
 > 	       fi;
-> 	       -- print(avar); -- prints out answer
-> 	       class_type(avar);
-> 	       char <- menu();
->                   if char = "a" then -- add
+> 	       -- pr#1 IN
+> t(avar); -- pr#1 IN
+> ts out answer
+> 	       #1 CLASS
+> _type(avar);
+> 	       char #1 ASSIGN
+>  menu();
+>                   #1 IF
+>  char = "a" then -- add
 >                      {
->                         a_var <- (new A).set_var(get_int());
-> 	                avar <- (new B).method2(avar.value(), a_var.value());
-> 	             } else
->                   if char = "b" then -- negate
->                      case avar of
+>                         a_var #1 ASSIGN
+>  (new A).set_var(get_#1 IN
+> t());
+> 	                avar #1 ASSIGN
+>  (new B).method2(avar.value(), a_var.value());
+> 	             } #1 ELSE
+> 
+>                   #1 IF
+>  char = "b" then -- negate
+>                      #1 CASE
+>  avar #1 OF
+> 
 > 	                   c : C #1 DARROW
->  avar <- c.method6(c.value());
+>  avar #1 ASSIGN
+>  c.method6(c.value());
 > 	                   a : A #1 DARROW
->  avar <- a.method3(a.value());
+>  avar #1 ASSIGN
+>  a.method3(a.value());
 > 	                   o : Object #1 DARROW
 >  {
-> 		                  out_string("Oooops\n");
+> 		                  out_str#1 IN
+> g("Oooops\n");
 > 		                  abort(); 0;
 > 		               };
->                      esac else
->                   if char = "c" then -- diff
+>                      #1 ESAC
+>  #1 ELSE
+> 
+>                   #1 IF
+>  char = "c" then -- d#1 IF
+> f
 >                      {
->                         a_var <- (new A).set_var(get_int());
-> 	                avar <- (new D).method4(avar.value(), a_var.value());
-> 	             } else
->                   if char = "d" then avar <- (new C)@A.method5(avar.value()) else
+>                         a_var #1 ASSIGN
+>  (new A).set_var(get_#1 IN
+> t());
+> 	                avar #1 ASSIGN
+>  (new D).method4(avar.value(), a_var.value());
+> 	             } #1 ELSE
+> 
+>                   #1 IF
+>  char = "d" then avar #1 ASSIGN
+>  (new C)@A.method5(avar.value()) #1 ELSE
+> 
 > 		          -- factorial
->                   if char = "e" then avar <- (new C)@B.method5(avar.value()) else
+>                   #1 IF
+>  char = "e" then avar #1 ASSIGN
+>  (new C)@B.method5(avar.value()) #1 ELSE
+> 
 > 			  -- square
->                   if char = "f" then avar <- (new C)@C.method5(avar.value()) else
+>                   #1 IF
+>  char = "f" then avar #1 ASSIGN
+>  (new C)@C.method5(avar.value()) #1 ELSE
+> 
 > 			  -- cube
->                   if char = "g" then -- multiple of 3?
-> 		      if ((new D).method7(avar.value()))
-> 		                       then -- avar <- (new A).method1(avar.value())
+>                   #1 IF
+>  char = "g" then -- multiple #1 OF
+>  3?
+> 		      #1 IF
+>  ((new D).method7(avar.value()))
+> 		                       then -- avar #1 ASSIGN
+>  (new A).method1(avar.value())
 > 			 {
-> 	                    out_string("number ");
-> 	                    print(avar);
-> 	                    out_string("is divisible by 3.\n");
+> 	                    out_str#1 IN
+> g("number ");
+> 	                    pr#1 IN
+> t(avar);
+> 	                    out_str#1 IN
+> g("is divisible by 3.\n");
 > 			 }
-> 			 else  -- avar <- (new A).set_var(0)
+> 			 #1 ELSE
+>   -- avar #1 ASSIGN
+>  (new A).set_var(0)
 > 			 {
-> 	                    out_string("number ");
-> 	                    print(avar);
-> 	                    out_string("is not divisible by 3.\n");
+> 	                    out_str#1 IN
+> g("number ");
+> 	                    pr#1 IN
+> t(avar);
+> 	                    out_str#1 IN
+> g("is not divisible by 3.\n");
 > 			 }
-> 		      fi else
->                   if char = "h" then 
-> 		      (let x : A in
+> 		      fi #1 ELSE
+> 
+>                   #1 IF
+>  char = "h" then 
+> 		      (#1 LET
+>  x : A #1 IN
+> 
 > 			 {
-> 		            x <- (new E).method6(avar.value());
-> 			    (let r : Int <- (avar.value() - (x.value() * 8)) in
+> 		            x #1 ASSIGN
+>  (new E).method6(avar.value());
+> 			    (#1 LET
+>  r : #1 IN
+> t #1 ASSIGN
+>  (avar.value() - (x.value() * 8)) #1 IN
+> 
 > 			       {
-> 			          out_string("number ");
-> 			          print(avar);
-> 			          out_string("is equal to ");
-> 			          print(x);
-> 			          out_string("times 8 with a remainder of ");
-> 				  (let a : A2I <- new A2I in
+> 			          out_str#1 IN
+> g("number ");
+> 			          pr#1 IN
+> t(avar);
+> 			          out_str#1 IN
+> g("is equal to ");
+> 			          pr#1 IN
+> t(x);
+> 			          out_str#1 IN
+> g("times 8 with a rema#1 IN
+> der #1 OF
+>  ");
+> 				  (#1 LET
+>  a : A2I #1 ASSIGN
+>  new A2I #1 IN
+> 
 > 				     {
-> 			                out_string(a.i2a(r));
-> 			                out_string("\n");
+> 			                out_str#1 IN
+> g(a.i2a(r));
+> 			                out_str#1 IN
+> g("\n");
 > 				     }
-> 				  ); -- end let a:
+> 				  ); -- end #1 LET
+>  a:
 > 			       }
->                             ); -- end let r:
-> 			    avar <- x;
+>                             ); -- end #1 LET
+>  r:
+> 			    avar #1 ASSIGN
+>  x;
 > 		         } 
-> 		      )  -- end let x:
-> 		      else
->                   if char = "j" then avar <- (new A)
-> 		      else
->                   if char = "q" then flag <- false
-> 		      else
->                       avar <- (new A).method1(avar.value()) -- divide/8
+> 		      )  -- end #1 LET
+>  x:
+> 		      #1 ELSE
+> 
+>                   #1 IF
+>  char = "j" then avar #1 ASSIGN
+>  (new A)
+> 		      #1 ELSE
+> 
+>                   #1 IF
+>  char = "q" then flag #1 ASSIGN
+>  #1 BOOL_CONST false
+> 
+> 		      #1 ELSE
+> 
+>                       avar #1 ASSIGN
+>  (new A).method1(avar.value()) -- divide/8
 >                   fi fi fi fi fi fi fi fi fi fi;
 >             }
->          pool;
+>          #1 POOL
+> ;
 >        }
 >    };
 > 
@@ -2300,7 +2699,7 @@
 > 
 pass!
 ---------  Test  ../../examples/atoi.cl  ---------
-2,461c2,109
+2,461c2,234
 < #13 CLASS
 < #13 TYPEID A2I
 < #13 '{'
@@ -2763,107 +3162,232 @@ pass!
 < #108 ';'
 ---
 > (*
->    The class A2I provides integer-to-string and string-to-integer
-> conversion routines.  To use these routines, either inherit them
-> in the class where needed, have a dummy variable bound to
-> something of type A2I, or simpl write (new A2I).method(argument).
+>    The #1 CLASS
+>  A2I provides #1 IN
+> teger-to-str#1 IN
+> g and str#1 IN
+> g-to-#1 IN
+> teger
+> conversion rout#1 IN
+> es.  To use these rout#1 IN
+> es, either #1 IN
+> herit them
+> #1 IN
+>  the #1 CLASS
+>  where needed, have a dummy variable bound to
+> someth#1 IN
+> g #1 OF
+>  type A2I, or simpl write (new A2I).method(argument).
 > *)
 > 
 > 
 > (*
->    c2i   Converts a 1-character string to an integer.  Aborts
->          if the string is not "0" through "9"
+>    c2i   Converts a 1-character str#1 IN
+> g to an #1 IN
+> teger.  Aborts
+>          #1 IF
+>  the str#1 IN
+> g is not "0" through "9"
 > *)
-> class A2I {
+> #1 CLASS
+>  A2I {
 > 
->      c2i(char : String) : Int {
-> 	if char = "0" then 0 else
-> 	if char = "1" then 1 else
-> 	if char = "2" then 2 else
->         if char = "3" then 3 else
->         if char = "4" then 4 else
->         if char = "5" then 5 else
->         if char = "6" then 6 else
->         if char = "7" then 7 else
->         if char = "8" then 8 else
->         if char = "9" then 9 else
+>      c2i(char : Str#1 IN
+> g) : #1 IN
+> t {
+> 	#1 IF
+>  char = "0" then 0 #1 ELSE
+> 
+> 	#1 IF
+>  char = "1" then 1 #1 ELSE
+> 
+> 	#1 IF
+>  char = "2" then 2 #1 ELSE
+> 
+>         #1 IF
+>  char = "3" then 3 #1 ELSE
+> 
+>         #1 IF
+>  char = "4" then 4 #1 ELSE
+> 
+>         #1 IF
+>  char = "5" then 5 #1 ELSE
+> 
+>         #1 IF
+>  char = "6" then 6 #1 ELSE
+> 
+>         #1 IF
+>  char = "7" then 7 #1 ELSE
+> 
+>         #1 IF
+>  char = "8" then 8 #1 ELSE
+> 
+>         #1 IF
+>  char = "9" then 9 #1 ELSE
+> 
 >         { abort(); 0; }  -- the 0 is needed to satisfy the typchecker
 >         fi fi fi fi fi fi fi fi fi fi
 >      };
 > 
 > (*
->    i2c is the inverse of c2i.
+>    i2c is the #1 IN
+> verse #1 OF
+>  c2i.
 > *)
->      i2c(i : Int) : String {
-> 	if i = 0 then "0" else
-> 	if i = 1 then "1" else
-> 	if i = 2 then "2" else
-> 	if i = 3 then "3" else
-> 	if i = 4 then "4" else
-> 	if i = 5 then "5" else
-> 	if i = 6 then "6" else
-> 	if i = 7 then "7" else
-> 	if i = 8 then "8" else
-> 	if i = 9 then "9" else
+>      i2c(i : #1 IN
+> t) : Str#1 IN
+> g {
+> 	#1 IF
+>  i = 0 then "0" #1 ELSE
+> 
+> 	#1 IF
+>  i = 1 then "1" #1 ELSE
+> 
+> 	#1 IF
+>  i = 2 then "2" #1 ELSE
+> 
+> 	#1 IF
+>  i = 3 then "3" #1 ELSE
+> 
+> 	#1 IF
+>  i = 4 then "4" #1 ELSE
+> 
+> 	#1 IF
+>  i = 5 then "5" #1 ELSE
+> 
+> 	#1 IF
+>  i = 6 then "6" #1 ELSE
+> 
+> 	#1 IF
+>  i = 7 then "7" #1 ELSE
+> 
+> 	#1 IF
+>  i = 8 then "8" #1 ELSE
+> 
+> 	#1 IF
+>  i = 9 then "9" #1 ELSE
+> 
 > 	{ abort(); ""; }  -- the "" is needed to satisfy the typchecker
 >         fi fi fi fi fi fi fi fi fi fi
 >      };
 > 
 > (*
->    a2i converts an ASCII string into an integer.  The empty string
-> is converted to 0.  Signed and unsigned strings are handled.  The
-> method aborts if the string does not represent an integer.  Very
-> long strings of digits produce strange answers because of arithmetic 
+>    a2i converts an ASCII str#1 IN
+> g #1 IN
+> to an #1 IN
+> teger.  The empty str#1 IN
+> g
+> is converted to 0.  Signed and unsigned str#1 IN
+> gs are handled.  The
+> method aborts #1 IF
+>  the str#1 IN
+> g does not represent an #1 IN
+> teger.  Very
+> long str#1 IN
+> gs #1 OF
+>  digits produce strange answers because #1 OF
+>  arithmetic 
 > overflow.
 > 
 > *)
->      a2i(s : String) : Int {
->         if s.length() = 0 then 0 else
-> 	if s.substr(0,1) = "-" then ~a2i_aux(s.substr(1,s.length()-1)) else
->         if s.substr(0,1) = "+" then a2i_aux(s.substr(1,s.length()-1)) else
+>      a2i(s : Str#1 IN
+> g) : #1 IN
+> t {
+>         #1 IF
+>  s.length() = 0 then 0 #1 ELSE
+> 
+> 	#1 IF
+>  s.substr(0,1) = "-" then ~a2i_aux(s.substr(1,s.length()-1)) #1 ELSE
+> 
+>         #1 IF
+>  s.substr(0,1) = "+" then a2i_aux(s.substr(1,s.length()-1)) #1 ELSE
+> 
 >            a2i_aux(s)
 >         fi fi fi
 >      };
 > 
 > (*
->   a2i_aux converts the usigned portion of the string.  As a programming
+>   a2i_aux converts the usigned portion #1 OF
+>  the str#1 IN
+> g.  As a programm#1 IN
+> g
 > example, this method is written iteratively.
 > *)
->      a2i_aux(s : String) : Int {
-> 	(let int : Int <- 0 in	
+>      a2i_aux(s : Str#1 IN
+> g) : #1 IN
+> t {
+> 	(#1 LET
+>  #1 IN
+> t : #1 IN
+> t #1 ASSIGN
+>  0 #1 IN
+> 	
 >            {	
->                (let j : Int <- s.length() in
-> 	          (let i : Int <- 0 in
-> 		    while i < j loop
+>                (#1 LET
+>  j : #1 IN
+> t #1 ASSIGN
+>  s.length() #1 IN
+> 
+> 	          (#1 LET
+>  i : #1 IN
+> t #1 ASSIGN
+>  0 #1 IN
+> 
+> 		    #1 WHILE
+>  i < j #1 LOOP
+> 
 > 			{
-> 			    int <- int * 10 + c2i(s.substr(i,1));
-> 			    i <- i + 1;
+> 			    #1 IN
+> t #1 ASSIGN
+>  #1 IN
+> t * 10 + c2i(s.substr(i,1));
+> 			    i #1 ASSIGN
+>  i + 1;
 > 			}
-> 		    pool
+> 		    #1 POOL
+> 
 > 		  )
 > 	       );
->               int;
+>               #1 IN
+> t;
 > 	    }
 >         )
 >      };
 > 
 > (*
->     i2a converts an integer to a string.  Positive and negative 
+>     i2a converts an #1 IN
+> teger to a str#1 IN
+> g.  Positive and negative 
 > numbers are handled correctly.  
 > *)
->     i2a(i : Int) : String {
-> 	if i = 0 then "0" else 
->         if 0 < i then i2a_aux(i) else
+>     i2a(i : #1 IN
+> t) : Str#1 IN
+> g {
+> 	#1 IF
+>  i = 0 then "0" #1 ELSE
+>  
+>         #1 IF
+>  0 < i then i2a_aux(i) #1 ELSE
+> 
 >           "-".concat(i2a_aux(i * ~1)) 
 >         fi fi
 >     };
 > 	
 > (*
->     i2a_aux is an example using recursion.
+>     i2a_aux is an example us#1 IN
+> g recursion.
 > *)		
->     i2a_aux(i : Int) : String {
->         if i = 0 then "" else 
-> 	    (let next : Int <- i / 10 in
+>     i2a_aux(i : #1 IN
+> t) : Str#1 IN
+> g {
+>         #1 IF
+>  i = 0 then "" #1 ELSE
+>  
+> 	    (#1 LET
+>  next : #1 IN
+> t #1 ASSIGN
+>  i / 10 #1 IN
+> 
 > 		i2a_aux(next).concat(i2c(i - next * 10))
 > 	    )
 >         fi
@@ -2872,7 +3396,7 @@ pass!
 > };
 pass!
 ---------  Test  ../../examples/atoi_test.cl  ---------
-2,130c2,47
+2,130c2,99
 < #9 CLASS
 < #9 TYPEID Main
 < #9 INHERITS
@@ -3004,54 +3528,106 @@ pass!
 < #46 ';'
 ---
 > (*
->    This method implements a driver for testing the ATOI class.
+>    This method implements a driver for test#1 IN
+> g the ATOI #1 CLASS
+> .
 > The program repeatedly asks the user to enter a number, which
-> is then coverted from its string form to an integer and back
-> again to a string.  The results of both conversions are printed
-> on the screen.  Typing "stop" at the prompt exits the program.
+> is then coverted from its str#1 IN
+> g form to an #1 IN
+> teger and back
+> aga#1 IN
+>  to a str#1 IN
+> g.  The results #1 OF
+>  both conversions are pr#1 IN
+> ted
+> on the screen.  Typ#1 IN
+> g "stop" at the prompt exits the program.
 > *)
 > 
-> class Main inherits IO {
->    newline() : Object {
-> 	out_string("\n")
+> #1 CLASS
+>  Ma#1 IN
+>  #1 INHERITS
+>  IO {
+>    newl#1 IN
+> e() : Object {
+> 	out_str#1 IN
+> g("\n")
 >    };
 > 
->    prompt() : String {
+>    prompt() : Str#1 IN
+> g {
 > 	{
-> 	   out_string("Enter a number>");
-> 	   in_string();
+> 	   out_str#1 IN
+> g("Enter a number>");
+> 	   #1 IN
+> _str#1 IN
+> g();
 > 	}
 >    };
 > 
->    main() : Object {
->    (* Since we didn't bother to inherit from the A2I class, we have
-> 	to have an object of type A2I in order to access the
-> 	methods of that class. *)
->      (let z : A2I <- new A2I in
-> 	while true loop  
-> 	   (let s : String <- prompt() in
-> 		if s = "stop" then 
-> 		    abort() -- we don't bother to terminate gracefully
-> 		else
-> 		   (let i : Int <- z.a2i(s) in
-> 			(let news : String <- z.i2a(i) in
+>    ma#1 IN
+> () : Object {
+>    (* S#1 IN
+> ce we didn't bother to #1 IN
+> herit from the A2I #1 CLASS
+> , we have
+> 	to have an object #1 OF
+>  type A2I #1 IN
+>  order to access the
+> 	methods #1 OF
+>  that #1 CLASS
+> . *)
+>      (#1 LET
+>  z : A2I #1 ASSIGN
+>  new A2I #1 IN
+> 
+> 	#1 WHILE
+>  #1 BOOL_CONST true
+>  #1 LOOP
+>   
+> 	   (#1 LET
+>  s : Str#1 IN
+> g #1 ASSIGN
+>  prompt() #1 IN
+> 
+> 		#1 IF
+>  s = "stop" then 
+> 		    abort() -- we don't bother to term#1 IN
+> ate gracefully
+> 		#1 ELSE
+> 
+> 		   (#1 LET
+>  i : #1 IN
+> t #1 ASSIGN
+>  z.a2i(s) #1 IN
+> 
+> 			(#1 LET
+>  news : Str#1 IN
+> g #1 ASSIGN
+>  z.i2a(i) #1 IN
+> 
 > 			   {
-> 			     out_int(i);
-> 			     newline();
-> 			     out_string(news);
-> 			     newline();
+> 			     out_#1 IN
+> t(i);
+> 			     newl#1 IN
+> e();
+> 			     out_str#1 IN
+> g(news);
+> 			     newl#1 IN
+> e();
 > 			   }
 > 	                )
 >                   )
 > 		fi
 > 	   )
->         pool
+>         #1 POOL
+> 
 >      )
 >    };
 > };
 pass!
 ---------  Test  ../../examples/book_list.cl  ---------
-2,481c2,135
+2,481c2,224
 < #3 CLASS
 < #3 TYPEID Book
 < #3 INHERITS
@@ -3533,90 +4109,148 @@ pass!
 < #132 '}'
 < #132 ';'
 ---
-> -- example of static and dynamic type differing for a dispatch
+> -- example #1 OF
+>  static and dynamic type d#1 IF
+> fer#1 IN
+> g for a dispatch
 > 
-> Class Book inherits IO {
->     title : String;
->     author : String;
+> #1 CLASS
+>  Book #1 INHERITS
+>  IO {
+>     title : Str#1 IN
+> g;
+>     author : Str#1 IN
+> g;
 > 
->     initBook(title_p : String, author_p : String) : Book {
+>     #1 IN
+> itBook(title_p : Str#1 IN
+> g, author_p : Str#1 IN
+> g) : Book {
 >         {
->             title <- title_p;
->             author <- author_p;
+>             title #1 ASSIGN
+>  title_p;
+>             author #1 ASSIGN
+>  author_p;
 >             self;
 >         }
 >     };
 > 
->     print() : Book {
+>     pr#1 IN
+> t() : Book {
 >         {
->             out_string("title:      ").out_string(title).out_string("\n");
->             out_string("author:     ").out_string(author).out_string("\n");
+>             out_str#1 IN
+> g("title:      ").out_str#1 IN
+> g(title).out_str#1 IN
+> g("\n");
+>             out_str#1 IN
+> g("author:     ").out_str#1 IN
+> g(author).out_str#1 IN
+> g("\n");
 >             self;
 >         }
 >     };
 > };
 > 
-> Class Article inherits Book {
->     per_title : String;
+> #1 CLASS
+>  Article #1 INHERITS
+>  Book {
+>     per_title : Str#1 IN
+> g;
 > 
->     initArticle(title_p : String, author_p : String,
-> 		per_title_p : String) : Article {
+>     #1 IN
+> itArticle(title_p : Str#1 IN
+> g, author_p : Str#1 IN
+> g,
+> 		per_title_p : Str#1 IN
+> g) : Article {
 >         {
->             initBook(title_p, author_p);
->             per_title <- per_title_p;
+>             #1 IN
+> itBook(title_p, author_p);
+>             per_title #1 ASSIGN
+>  per_title_p;
 >             self;
 >         }
 >     };
 > 
->     print() : Book {
+>     pr#1 IN
+> t() : Book {
 >         {
-> 	    self@Book.print();
->             out_string("periodical:  ").out_string(per_title).out_string("\n");
+> 	    self@Book.pr#1 IN
+> t();
+>             out_str#1 IN
+> g("periodical:  ").out_str#1 IN
+> g(per_title).out_str#1 IN
+> g("\n");
 >             self;
 >         }
 >     };
 > };
 > 
-> Class BookList inherits IO { 
->     (* Since abort "returns" type Object, we have to add
->        an expression of type Bool here to satisfy the typechecker.
->        This code is unreachable, since abort() halts the program.
+> #1 CLASS
+>  BookList #1 INHERITS
+>  IO { 
+>     (* S#1 IN
+> ce abort "returns" type Object, we have to add
+>        an expression #1 OF
+>  type Bool here to satisfy the typechecker.
+>        This code is unreachable, s#1 IN
+> ce abort() halts the program.
 >     *)
->     isNil() : Bool { { abort(); true; } };
+>     isNil() : Bool { { abort(); #1 BOOL_CONST true
+> ; } };
 >     
 >     cons(hd : Book) : Cons {
->         (let new_cell : Cons <- new Cons in
->             new_cell.init(hd,self)
+>         (#1 LET
+>  new_cell : Cons #1 ASSIGN
+>  new Cons #1 IN
+> 
+>             new_cell.#1 IN
+> it(hd,self)
 >         )
 >     };
 > 
->     (* Since abort "returns" type Object, we have to add
->        an expression of type Book here to satisfy the typechecker.
->        This code is unreachable, since abort() halts the program.
+>     (* S#1 IN
+> ce abort "returns" type Object, we have to add
+>        an expression #1 OF
+>  type Book here to satisfy the typechecker.
+>        This code is unreachable, s#1 IN
+> ce abort() halts the program.
 >     *)
 >     car() : Book { { abort(); new Book; } };
 >     
->     (* Since abort "returns" type Object, we have to add
->        an expression of type BookList here to satisfy the typechecker.
->        This code is unreachable, since abort() halts the program.
+>     (* S#1 IN
+> ce abort "returns" type Object, we have to add
+>        an expression #1 OF
+>  type BookList here to satisfy the typechecker.
+>        This code is unreachable, s#1 IN
+> ce abort() halts the program.
 >     *)
 >     cdr() : BookList { { abort(); new BookList; } };
 >     
->     print_list() : Object { abort() };
+>     pr#1 IN
+> t_list() : Object { abort() };
 > };
 > 
-> Class Cons inherits BookList {
->     xcar : Book;  -- We keep the car and cdr in attributes.
->     xcdr : BookList; -- Because methods and features must have different names,
+> #1 CLASS
+>  Cons #1 INHERITS
+>  BookList {
+>     xcar : Book;  -- We keep the car and cdr #1 IN
+>  attributes.
+>     xcdr : BookList; -- Because methods and features must have d#1 IF
+> ferent names,
 >     -- we use xcar and xcdr for the attributes and reserve
 >     -- car and cdr for the features.
 >     
->     isNil() : Bool { false };
+>     isNil() : Bool { #1 BOOL_CONST false
+>  };
 >     
->     init(hd : Book, tl : BookList) : Cons {
+>     #1 IN
+> it(hd : Book, tl : BookList) : Cons {
 >         {
->             xcar <- hd;
->             xcdr <- tl;
+>             xcar #1 ASSIGN
+>  hd;
+>             xcdr #1 ASSIGN
+>  tl;
 >             self;
 >         }
 >     };
@@ -3625,51 +4259,82 @@ pass!
 > 
 >     cdr() : BookList { xcdr };
 >     
->     print_list() : Object {
+>     pr#1 IN
+> t_list() : Object {
 >         {
->             case xcar.print() of
+>             #1 CASE
+>  xcar.pr#1 IN
+> t() #1 OF
+> 
 >                 dummy : Book #1 DARROW
->  out_string("- dynamic type was Book -\n");
+>  out_str#1 IN
+> g("- dynamic type was Book -\n");
 >                 dummy : Article #1 DARROW
->  out_string("- dynamic type was Article -\n");
->             esac;
->             xcdr.print_list();
+>  out_str#1 IN
+> g("- dynamic type was Article -\n");
+>             #1 ESAC
+> ;
+>             xcdr.pr#1 IN
+> t_list();
 >         }
 >     };
 > };
 > 
-> Class Nil inherits BookList {
->     isNil() : Bool { true };
+> #1 CLASS
+>  Nil #1 INHERITS
+>  BookList {
+>     isNil() : Bool { #1 BOOL_CONST true
+>  };
 > 
->     print_list() : Object { true };
+>     pr#1 IN
+> t_list() : Object { #1 BOOL_CONST true
+>  };
 > };
 > 
 > 
-> Class Main {
+> #1 CLASS
+>  Ma#1 IN
+>  {
 > 
 >     books : BookList;
 > 
->     main() : Object {
->         (let a_book : Book <-
->             (new Book).initBook("Compilers, Principles, Techniques, and Tools",
+>     ma#1 IN
+> () : Object {
+>         (#1 LET
+>  a_book : Book #1 ASSIGN
+> 
+>             (new Book).#1 IN
+> itBook("Compilers, Pr#1 IN
+> ciples, Techniques, and Tools",
 >                                 "Aho, Sethi, and Ullman")
->         in
->             (let an_article : Article <-
->                 (new Article).initArticle("The Top 100 CD_ROMs",
->                                           "Ulanoff",
->                                           "PC Magazine")
->             in
+>         #1 IN
+> 
+>             (#1 LET
+>  an_article : Article #1 ASSIGN
+> 
+>                 (new Article).#1 IN
+> itArticle("The Top 100 CD_ROMs",
+>                                           "Ulan#1 OF
+> f",
+>                                           "PC Magaz#1 IN
+> e")
+>             #1 IN
+> 
 >                 {
->                     books <- (new Nil).cons(a_book).cons(an_article);
->                     books.print_list();
+>                     books #1 ASSIGN
+>  (new Nil).cons(a_book).cons(an_article);
+>                     books.pr#1 IN
+> t_list();
 >                 }
->             )  -- end let an_article
->         )  -- end let a_book
+>             )  -- end #1 LET
+>  an_article
+>         )  -- end #1 LET
+>  a_book
 >     };
 > };
 pass!
 ---------  Test  ../../examples/cells.cl  ---------
-2,351c2,98
+2,351c2,164
 < #5 CLASS
 < #5 TYPEID CellularAutomaton
 < #5 INHERITS
@@ -4021,98 +4686,164 @@ pass!
 < #97 '}'
 < #97 ';'
 ---
-> (* models one-dimensional cellular automaton on a circle of finite radius
->    arrays are faked as Strings,
+> (* models one-dimensional cellular automaton on a circle #1 OF
+>  f#1 IN
+> ite radius
+>    arrays are faked as Str#1 IN
+> gs,
 >    X's respresent live cells, dots represent dead cells,
->    no error checking is done *)
-> class CellularAutomaton inherits IO {
->     population_map : String;
+>    no error check#1 IN
+> g is done *)
+> #1 CLASS
+>  CellularAutomaton #1 INHERITS
+>  IO {
+>     population_map : Str#1 IN
+> g;
 >    
->     init(map : String) : SELF_TYPE {
+>     #1 IN
+> it(map : Str#1 IN
+> g) : SELF_TYPE {
 >         {
->             population_map <- map;
+>             population_map #1 ASSIGN
+>  map;
 >             self;
 >         }
 >     };
 >    
->     print() : SELF_TYPE {
+>     pr#1 IN
+> t() : SELF_TYPE {
 >         {
->             out_string(population_map.concat("\n"));
+>             out_str#1 IN
+> g(population_map.concat("\n"));
 >             self;
 >         }
 >     };
 >    
->     num_cells() : Int {
+>     num_cells() : #1 IN
+> t {
 >         population_map.length()
 >     };
 >    
->     cell(position : Int) : String {
+>     cell(position : #1 IN
+> t) : Str#1 IN
+> g {
 >         population_map.substr(position, 1)
 >     };
 >    
->     cell_left_neighbor(position : Int) : String {
->         if position = 0 then
+>     cell_left_neighbor(position : #1 IN
+> t) : Str#1 IN
+> g {
+>         #1 IF
+>  position = 0 then
 >             cell(num_cells() - 1)
->         else
+>         #1 ELSE
+> 
 >             cell(position - 1)
 >         fi
 >     };
 >    
->     cell_right_neighbor(position : Int) : String {
->         if position = num_cells() - 1 then
+>     cell_right_neighbor(position : #1 IN
+> t) : Str#1 IN
+> g {
+>         #1 IF
+>  position = num_cells() - 1 then
 >             cell(0)
->         else
+>         #1 ELSE
+> 
 >             cell(position + 1)
 >         fi
 >     };
 >    
->     (* a cell will live if exactly 1 of itself and it's immediate
+>     (* a cell will live #1 IF
+>  exactly 1 #1 OF
+>  itself and it's immediate
 >        neighbors are alive *)
->     cell_at_next_evolution(position : Int) : String {
->         if (if cell(position) = "X" then 1 else 0 fi
->             + if cell_left_neighbor(position) = "X" then 1 else 0 fi
->             + if cell_right_neighbor(position) = "X" then 1 else 0 fi
+>     cell_at_next_evolution(position : #1 IN
+> t) : Str#1 IN
+> g {
+>         #1 IF
+>  (#1 IF
+>  cell(position) = "X" then 1 #1 ELSE
+>  0 fi
+>             + #1 IF
+>  cell_left_neighbor(position) = "X" then 1 #1 ELSE
+>  0 fi
+>             + #1 IF
+>  cell_right_neighbor(position) = "X" then 1 #1 ELSE
+>  0 fi
 >             = 1)
 >         then
 >             "X"
->         else
+>         #1 ELSE
+> 
 >             "."
 >         fi
 >     };
 >    
 >     evolve() : SELF_TYPE {
->         (let position : Int in
->         (let num : Int <- num_cells() in
->         (let temp : String in
+>         (#1 LET
+>  position : #1 IN
+> t #1 IN
+> 
+>         (#1 LET
+>  num : #1 IN
+> t #1 ASSIGN
+>  num_cells() #1 IN
+> 
+>         (#1 LET
+>  temp : Str#1 IN
+> g #1 IN
+> 
 >             {
->                 while position < num loop
+>                 #1 WHILE
+>  position < num #1 LOOP
+> 
 >                     {
->                         temp <- temp.concat(cell_at_next_evolution(position));
->                         position <- position + 1;
+>                         temp #1 ASSIGN
+>  temp.concat(cell_at_next_evolution(position));
+>                         position #1 ASSIGN
+>  position + 1;
 >                     }
->                 pool;
->                 population_map <- temp;
+>                 #1 POOL
+> ;
+>                 population_map #1 ASSIGN
+>  temp;
 >                 self;
 >             }
 >         ) ) )
 >     };
 > };
 > 
-> class Main {
+> #1 CLASS
+>  Ma#1 IN
+>  {
 >     cells : CellularAutomaton;
 >    
->     main() : SELF_TYPE {
+>     ma#1 IN
+> () : SELF_TYPE {
 >         {
->             cells <- (new CellularAutomaton).init("         X         ");
->             cells.print();
->             (let countdown : Int <- 20 in
->                 while 0 < countdown loop
+>             cells #1 ASSIGN
+>  (new CellularAutomaton).#1 IN
+> it("         X         ");
+>             cells.pr#1 IN
+> t();
+>             (#1 LET
+>  countdown : #1 IN
+> t #1 ASSIGN
+>  20 #1 IN
+> 
+>                 #1 WHILE
+>  0 < countdown #1 LOOP
+> 
 >                     {
 >                         cells.evolve();
->                         cells.print();
->                         countdown <- countdown - 1;
+>                         cells.pr#1 IN
+> t();
+>                         countdown #1 ASSIGN
+>  countdown - 1;
 >                     }
->                 pool
+>                 #1 POOL
+> 
 >             );
 >             self;
 >         }
@@ -4120,8 +4851,7 @@ pass!
 > };
 pass!
 ---------  Test  ../../examples/complex.cl  ---------
-2,198c2,53
-< #1 CLASS
+3,198c3,80
 < #1 TYPEID Main
 < #1 INHERITS
 < #1 TYPEID IO
@@ -4319,22 +5049,40 @@ pass!
 < #52 '}'
 < #52 ';'
 ---
-> class Main inherits IO {
->     main() : SELF_TYPE {
-> 	(let c : Complex <- (new Complex).init(1, 1) in
-> 	    if c.reflect_X().reflect_Y() = c.reflect_0()
-> 	    then out_string("=)\n")
-> 	    else out_string("=(\n")
+>  Ma#1 IN
+>  #1 INHERITS
+>  IO {
+>     ma#1 IN
+> () : SELF_TYPE {
+> 	(#1 LET
+>  c : Complex #1 ASSIGN
+>  (new Complex).#1 IN
+> it(1, 1) #1 IN
+> 
+> 	    #1 IF
+>  c.reflect_X().reflect_Y() = c.reflect_0()
+> 	    then out_str#1 IN
+> g("=)\n")
+> 	    #1 ELSE
+>  out_str#1 IN
+> g("=(\n")
 > 	    fi
 > 	)
 >     };
 > };
 > 
-> class Complex inherits IO {
->     x : Int;
->     y : Int;
+> #1 CLASS
+>  Complex #1 INHERITS
+>  IO {
+>     x : #1 IN
+> t;
+>     y : #1 IN
+> t;
 > 
->     init(a : Int, b : Int) : Complex {
+>     #1 IN
+> it(a : #1 IN
+> t, b : #1 IN
+> t) : Complex {
 > 	{
 > 	    x = a;
 > 	    y = b;
@@ -4342,10 +5090,18 @@ pass!
 > 	}
 >     };
 > 
->     print() : Object {
-> 	if y = 0
-> 	then out_int(x)
-> 	else out_int(x).out_string("+").out_int(y).out_string("I")
+>     pr#1 IN
+> t() : Object {
+> 	#1 IF
+>  y = 0
+> 	then out_#1 IN
+> t(x)
+> 	#1 ELSE
+>  out_#1 IN
+> t(x).out_str#1 IN
+> g("+").out_#1 IN
+> t(y).out_str#1 IN
+> g("I")
 > 	fi
 >     };
 > 
@@ -4373,8 +5129,7 @@ pass!
 > };
 pass!
 ---------  Test  ../../examples/cool.cl  ---------
-2,61c2,10
-< #1 CLASS
+3,61c3,17
 < #1 TYPEID Main
 < #1 INHERITS
 < #1 TYPEID IO
@@ -4435,18 +5190,24 @@ pass!
 < #9 '}'
 < #9 ';'
 ---
-> class Main inherits IO {
->     main() : SELF_TYPE {
+>  Ma#1 IN
+>  #1 INHERITS
+>  IO {
+>     ma#1 IN
+> () : SELF_TYPE {
 > 	{
-> 	    out_string((new Object).type_name().substr(4,1)).
-> 	    out_string((isvoid self).type_name().substr(1,3));
-> 	    out_string("\n");
+> 	    out_str#1 IN
+> g((new Object).type_name().substr(4,1)).
+> 	    out_str#1 IN
+> g((isvoid self).type_name().substr(1,3));
+> 	    out_str#1 IN
+> g("\n");
 > 	}
 >     };
 > };
 pass!
 ---------  Test  ../../examples/graph.cl  ---------
-2,1296c2,382
+2,1296c2,651
 < #38 CLASS
 < #38 TYPEID Graph
 < #38 '{'
@@ -5744,25 +6505,44 @@ pass!
 < #381 ';'
 ---
 > (*
->  *   Cool program reading descriptions of weighted directed graphs
->  *   from stdin. It builds up a graph objects with a list of vertices
->  *   and a list of edges. Every vertice has a list of outgoing edges.
+>  *   Cool program read#1 IN
+> g descriptions #1 OF
+>  weighted directed graphs
+>  *   from std#1 IN
+> . It builds up a graph objects with a list #1 OF
+>  vertices
+>  *   and a list #1 OF
+>  edges. Every vertice has a list #1 OF
+>  outgo#1 IN
+> g edges.
 >  *
->  *  INPUT FORMAT
->  *      Every line has the form		vertice successor*
->  *      Where vertice is an int, and successor is   vertice,weight
+>  *  #1 IN
+> PUT FORMAT
+>  *      Every l#1 IN
+> e has the form		vertice successor*
+>  *      Where vertice is an #1 IN
+> t, and successor is   vertice,weight
 >  *
->  *      An empty line or EOF terminates the input.
+>  *      An empty l#1 IN
+> e or E#1 OF
+>  term#1 IN
+> ates the #1 IN
+> put.
 >  *
->  *   The list of vertices and the edge list is printed out by the Main
->  *   class. 
+>  *   The list #1 OF
+>  vertices and the edge list is pr#1 IN
+> ted out by the Ma#1 IN
+> 
+>  *   #1 CLASS
+> . 
 >  *
 >  *  TEST
 >  *     Once compiled, the file g1.graph can be fed to the program.
 >  *     The output should look like this:
 > 
 > nautilus.CS.Berkeley.EDU 53# spim -file graph.s <g1.graph 
-> SPIM Version 5.4 of Jan. 17, 1994
+> SPIM Version 5.4 #1 OF
+>  Jan. 17, 1994
 > Copyright 1990-1994 by James R. Larus (larus@cs.wisc.edu).
 > All Rights Reserved.
 > See the file README a full copyright notice.
@@ -5780,33 +6560,52 @@ pass!
 > 
 > 
 > 
-> class Graph {
+> #1 CLASS
+>  Graph {
 > 
->    vertices : VList <- new VList;
->    edges    : EList <- new EList;
+>    vertices : VList #1 ASSIGN
+>  new VList;
+>    edges    : EList #1 ASSIGN
+>  new EList;
 > 
 >    add_vertice(v : Vertice) : Object { {
->       edges <- v.outgoing().append(edges);
->       vertices <- vertices.cons(v);
+>       edges #1 ASSIGN
+>  v.outgo#1 IN
+> g().append(edges);
+>       vertices #1 ASSIGN
+>  vertices.cons(v);
 >    } };
 > 
->    print_E() : Object { edges.print() };
->    print_V() : Object { vertices.print() };
+>    pr#1 IN
+> t_E() : Object { edges.pr#1 IN
+> t() };
+>    pr#1 IN
+> t_V() : Object { vertices.pr#1 IN
+> t() };
 > 
 > };
 > 
-> class Vertice inherits IO { 
+> #1 CLASS
+>  Vertice #1 INHERITS
+>  IO { 
 > 
->    num  : Int;
->    out  : EList <- new EList;
+>    num  : #1 IN
+> t;
+>    out  : EList #1 ASSIGN
+>  new EList;
 > 
->    outgoing() : EList { out };
+>    outgo#1 IN
+> g() : EList { out };
 > 
->    number() : Int { num };
+>    number() : #1 IN
+> t { num };
 > 
->    init(n : Int) : SELF_TYPE {
+>    #1 IN
+> it(n : #1 IN
+> t) : SELF_TYPE {
 >       {
->          num <- n;
+>          num #1 ASSIGN
+>  n;
 >          self;
 >       }
 >    };
@@ -5814,43 +6613,66 @@ pass!
 > 
 >    add_out(s : Edge) : SELF_TYPE {
 >       {
-> 	 out <- out.cons(s);
+> 	 out #1 ASSIGN
+>  out.cons(s);
 >          self;
 >       }
 >    };
 > 
->    print() : Object {
+>    pr#1 IN
+> t() : Object {
 >       {
->          out_int(num);
-> 	 out.print();
+>          out_#1 IN
+> t(num);
+> 	 out.pr#1 IN
+> t();
 >       }
 >    };
 > 
 > };
 > 
-> class Edge inherits IO {
+> #1 CLASS
+>  Edge #1 INHERITS
+>  IO {
 > 
->    from   : Int;
->    to     : Int;
->    weight : Int;
+>    from   : #1 IN
+> t;
+>    to     : #1 IN
+> t;
+>    weight : #1 IN
+> t;
 > 
->    init(f : Int, t : Int, w : Int) : SELF_TYPE {
+>    #1 IN
+> it(f : #1 IN
+> t, t : #1 IN
+> t, w : #1 IN
+> t) : SELF_TYPE {
 >       {
->          from <- f;
-> 	 to <- t;
-> 	 weight <- w;
+>          from #1 ASSIGN
+>  f;
+> 	 to #1 ASSIGN
+>  t;
+> 	 weight #1 ASSIGN
+>  w;
 > 	 self;
 >       }
 >    };
 > 
->    print() : Object {
+>    pr#1 IN
+> t() : Object {
 >       {
->          out_string(" (");
-> 	 out_int(from);
-> 	 out_string(",");
-> 	 out_int(to);
-> 	 out_string(")");
-> 	 out_int(weight);
+>          out_str#1 IN
+> g(" (");
+> 	 out_#1 IN
+> t(from);
+> 	 out_str#1 IN
+> g(",");
+> 	 out_#1 IN
+> t(to);
+> 	 out_str#1 IN
+> g(")");
+> 	 out_#1 IN
+> t(weight);
 >       }
 >    };
 > 
@@ -5858,76 +6680,117 @@ pass!
 > 
 > 
 > 
-> class EList inherits IO {
->    -- Define operations on empty lists of Edges.
+> #1 CLASS
+>  EList #1 INHERITS
+>  IO {
+>    -- Def#1 IN
+> e operations on empty lists #1 OF
+>  Edges.
 > 
 >    car : Edge;
 > 
->    isNil() : Bool { true };
+>    isNil() : Bool { #1 BOOL_CONST true
+>  };
 > 
 >    head()  : Edge { { abort(); car; } };
 > 
 >    tail()  : EList { { abort(); self; } };
 > 
 >    -- When we cons and element onto the empty list we get a non-empty
->    -- list. The (new Cons) expression creates a new list cell of class
->    -- Cons, which is initialized by a dispatch to init().
->    -- The result of init() is an element of class Cons, but it
->    -- conforms to the return type List, because Cons is a subclass of
+>    -- list. The (new Cons) expression creates a new list cell #1 OF
+>  #1 CLASS
+> 
+>    -- Cons, which is #1 IN
+> itialized by a dispatch to #1 IN
+> it().
+>    -- The result #1 OF
+>  #1 IN
+> it() is an element #1 OF
+>  #1 CLASS
+>  Cons, but it
+>    -- conforms to the return type List, because Cons is a sub#1 CLASS
+>  #1 OF
+> 
 >    -- List.
 > 
 >    cons(e : Edge) : EList {
->       (new ECons).init(e, self)
+>       (new ECons).#1 IN
+> it(e, self)
 >    };
 > 
 >    append(l : EList) : EList {
->      if self.isNil() then l
->      else tail().append(l).cons(head())
+>      #1 IF
+>  self.isNil() then l
+>      #1 ELSE
+>  tail().append(l).cons(head())
 >      fi
 >    };
 > 
->    print() : Object {
->      out_string("\n")
+>    pr#1 IN
+> t() : Object {
+>      out_str#1 IN
+> g("\n")
 >    };
 > 
 > };
 > 
 > 
 > (*
->  *  Cons inherits all operations from List. We can reuse only the cons
->  *  method though, because adding an element to the front of an emtpy
->  *  list is the same as adding it to the front of a non empty
->  *  list. All other methods have to be redefined, since the behaviour
->  *  for them is different from the empty list.
+>  *  Cons #1 INHERITS
+>  all operations from List. We can reuse only the cons
+>  *  method though, because add#1 IN
+> g an element to the front #1 OF
+>  an emtpy
+>  *  list is the same as add#1 IN
+> g it to the front #1 OF
+>  a non empty
+>  *  list. All other methods have to be redef#1 IN
+> ed, s#1 IN
+> ce the behaviour
+>  *  for them is d#1 IF
+> ferent from the empty list.
 >  *
->  *  Cons needs an extra attribute to hold the rest of the list.
+>  *  Cons needs an extra attribute to hold the rest #1 OF
+>  the list.
 >  *
->  *  The init() method is used by the cons() method to initialize the
+>  *  The #1 IN
+> it() method is used by the cons() method to #1 IN
+> itialize the
 >  *  cell.
 >  *)
 > 
-> class ECons inherits EList {
+> #1 CLASS
+>  ECons #1 INHERITS
+>  EList {
 > 
->    cdr : EList;	-- The rest of the list
+>    cdr : EList;	-- The rest #1 OF
+>  the list
 > 
->    isNil() : Bool { false };
+>    isNil() : Bool { #1 BOOL_CONST false
+>  };
 > 
 >    head()  : Edge { car };
 > 
 >    tail()  : EList { cdr };
 > 
->    init(e : Edge, rest : EList) : EList {
+>    #1 IN
+> it(e : Edge, rest : EList) : EList {
 >       {
-> 	 car <- e;
-> 	 cdr <- rest;
+> 	 car #1 ASSIGN
+>  e;
+> 	 cdr #1 ASSIGN
+>  rest;
 > 	 self;
 >       }
 >    };
 > 
->    print() : Object {
+>    pr#1 IN
+> t() : Object {
 >      {
->        car.print();
->        cdr.print();
+>        car.pr#1 IN
+> t();
+>        cdr.pr#1 IN
+> t();
 >      } 
 >    };
 > 
@@ -5936,162 +6799,314 @@ pass!
 > 
 > 
 > 
-> class VList inherits IO {
->    -- Define operations on empty lists of vertices.
+> #1 CLASS
+>  VList #1 INHERITS
+>  IO {
+>    -- Def#1 IN
+> e operations on empty lists #1 OF
+>  vertices.
 > 
 >    car : Vertice;
 > 
->    isNil() : Bool { true };
+>    isNil() : Bool { #1 BOOL_CONST true
+>  };
 > 
 >    head()  : Vertice { { abort(); car; } };
 > 
 >    tail()  : VList { { abort(); self; } };
 > 
 >    -- When we cons and element onto the empty list we get a non-empty
->    -- list. The (new Cons) expression creates a new list cell of class
->    -- ECons, which is initialized by a dispatch to init().
->    -- The result of init() is an element of class Cons, but it
->    -- conforms to the return type List, because Cons is a subclass of
+>    -- list. The (new Cons) expression creates a new list cell #1 OF
+>  #1 CLASS
+> 
+>    -- ECons, which is #1 IN
+> itialized by a dispatch to #1 IN
+> it().
+>    -- The result #1 OF
+>  #1 IN
+> it() is an element #1 OF
+>  #1 CLASS
+>  Cons, but it
+>    -- conforms to the return type List, because Cons is a sub#1 CLASS
+>  #1 OF
+> 
 >    -- List.
 > 
 >    cons(v : Vertice) : VList {
->       (new VCons).init(v, self)
+>       (new VCons).#1 IN
+> it(v, self)
 >    };
 > 
->    print() : Object { out_string("\n") };
+>    pr#1 IN
+> t() : Object { out_str#1 IN
+> g("\n") };
 > 
 > };
 > 
 > 
-> class VCons inherits VList {
+> #1 CLASS
+>  VCons #1 INHERITS
+>  VList {
 > 
->    cdr : VList;	-- The rest of the list
+>    cdr : VList;	-- The rest #1 OF
+>  the list
 > 
->    isNil() : Bool { false };
+>    isNil() : Bool { #1 BOOL_CONST false
+>  };
 > 
 >    head()  : Vertice { car };
 > 
 >    tail()  : VList { cdr };
 > 
->    init(v : Vertice, rest : VList) : VList {
+>    #1 IN
+> it(v : Vertice, rest : VList) : VList {
 >       {
-> 	 car <- v;
-> 	 cdr <- rest;
+> 	 car #1 ASSIGN
+>  v;
+> 	 cdr #1 ASSIGN
+>  rest;
 > 	 self;
 >       }
 >    };
 > 
->    print() : Object {
+>    pr#1 IN
+> t() : Object {
 >      {
->        car.print();
->        cdr.print();
+>        car.pr#1 IN
+> t();
+>        cdr.pr#1 IN
+> t();
 >      } 
 >    };
 > 
 > };
 > 
 > 
-> class Parse inherits IO {
+> #1 CLASS
+>  Parse #1 INHERITS
+>  IO {
 > 
 > 
->    boolop : BoolOp <- new BoolOp;
+>    boolop : BoolOp #1 ASSIGN
+>  new BoolOp;
 > 
->    -- Reads the input and parses the fields
+>    -- Reads the #1 IN
+> put and parses the fields
 > 
->    read_input() : Graph {
+>    read_#1 IN
+> put() : Graph {
 > 
->       (let g : Graph <- new Graph in {
->          (let line : String <- in_string() in
->             while (boolop.and(not line="\n", not line="")) loop {
-> 		-- out_string(line);
-> 		-- out_string("\n");
-> 		g.add_vertice(parse_line(line));
-> 		line <- in_string();
-> 	    } pool
+>       (#1 LET
+>  g : Graph #1 ASSIGN
+>  new Graph #1 IN
+>  {
+>          (#1 LET
+>  l#1 IN
+> e : Str#1 IN
+> g #1 ASSIGN
+>  #1 IN
+> _str#1 IN
+> g() #1 IN
+> 
+>             #1 WHILE
+>  (boolop.and(not l#1 IN
+> e="\n", not l#1 IN
+> e="")) #1 LOOP
+>  {
+> 		-- out_str#1 IN
+> g(l#1 IN
+> e);
+> 		-- out_str#1 IN
+> g("\n");
+> 		g.add_vertice(parse_l#1 IN
+> e(l#1 IN
+> e));
+> 		l#1 IN
+> e #1 ASSIGN
+>  #1 IN
+> _str#1 IN
+> g();
+> 	    } #1 POOL
+> 
 >          );
 > 	 g;
 >       } )
 >    };
 > 
 > 
->    parse_line(s : String) : Vertice {
->       (let v : Vertice <- (new Vertice).init(a2i(s)) in {
-> 	 while (not rest.length() = 0) loop {
-> 	       -- out_string(rest);
-> 	       -- out_string("\n");
-> 	       (let succ : Int <- a2i(rest) in (let
-> 	           weight : Int <- a2i(rest)
->                in
-> 	          v.add_out(new Edge.init(v.number(), 
+>    parse_l#1 IN
+> e(s : Str#1 IN
+> g) : Vertice {
+>       (#1 LET
+>  v : Vertice #1 ASSIGN
+>  (new Vertice).#1 IN
+> it(a2i(s)) #1 IN
+>  {
+> 	 #1 WHILE
+>  (not rest.length() = 0) #1 LOOP
+>  {
+> 	       -- out_str#1 IN
+> g(rest);
+> 	       -- out_str#1 IN
+> g("\n");
+> 	       (#1 LET
+>  succ : #1 IN
+> t #1 ASSIGN
+>  a2i(rest) #1 IN
+>  (#1 LET
+> 
+> 	           weight : #1 IN
+> t #1 ASSIGN
+>  a2i(rest)
+>                #1 IN
+> 
+> 	          v.add_out(new Edge.#1 IN
+> it(v.number(), 
 >                                           succ,
 > 					  weight))
 > 	       ) );
-> 	 } pool;
+> 	 } #1 POOL
+> ;
 > 	 v;
 >          }
 >       )
 >    };
 > 
->      c2i(char : String) : Int {
-> 	if char = "0" then 0 else
-> 	if char = "1" then 1 else
-> 	if char = "2" then 2 else
->         if char = "3" then 3 else
->         if char = "4" then 4 else
->         if char = "5" then 5 else
->         if char = "6" then 6 else
->         if char = "7" then 7 else
->         if char = "8" then 8 else
->         if char = "9" then 9 else
+>      c2i(char : Str#1 IN
+> g) : #1 IN
+> t {
+> 	#1 IF
+>  char = "0" then 0 #1 ELSE
+> 
+> 	#1 IF
+>  char = "1" then 1 #1 ELSE
+> 
+> 	#1 IF
+>  char = "2" then 2 #1 ELSE
+> 
+>         #1 IF
+>  char = "3" then 3 #1 ELSE
+> 
+>         #1 IF
+>  char = "4" then 4 #1 ELSE
+> 
+>         #1 IF
+>  char = "5" then 5 #1 ELSE
+> 
+>         #1 IF
+>  char = "6" then 6 #1 ELSE
+> 
+>         #1 IF
+>  char = "7" then 7 #1 ELSE
+> 
+>         #1 IF
+>  char = "8" then 8 #1 ELSE
+> 
+>         #1 IF
+>  char = "9" then 9 #1 ELSE
+> 
 >         { abort(); 0; }  -- the 0 is needed to satisfy the typchecker
 >         fi fi fi fi fi fi fi fi fi fi
 >      };
 > 
->      rest : String;
+>      rest : Str#1 IN
+> g;
 > 
->      a2i(s : String) : Int {
->         if s.length() = 0 then 0 else
-> 	if s.substr(0,1) = "-" then ~a2i_aux(s.substr(1,s.length()-1)) else
->         if s.substr(0,1) = " " then a2i(s.substr(1,s.length()-1)) else
+>      a2i(s : Str#1 IN
+> g) : #1 IN
+> t {
+>         #1 IF
+>  s.length() = 0 then 0 #1 ELSE
+> 
+> 	#1 IF
+>  s.substr(0,1) = "-" then ~a2i_aux(s.substr(1,s.length()-1)) #1 ELSE
+> 
+>         #1 IF
+>  s.substr(0,1) = " " then a2i(s.substr(1,s.length()-1)) #1 ELSE
+> 
 >            a2i_aux(s)
 >         fi fi fi
 >      };
 > 
 > (*
->   a2i_aux converts the usigned portion of the string.  As a programming
+>   a2i_aux converts the usigned portion #1 OF
+>  the str#1 IN
+> g.  As a programm#1 IN
+> g
 > example, this method is written iteratively.
 >   The conversion stops at a space or comma.
->   As a side effect, r is set to the remaining string (without the comma).
+>   As a side effect, r is set to the rema#1 IN
+> #1 IN
+> g str#1 IN
+> g (without the comma).
 > *)
->      a2i_aux(s : String) : Int {
-> 	(let int : Int <- 0 in	
+>      a2i_aux(s : Str#1 IN
+> g) : #1 IN
+> t {
+> 	(#1 LET
+>  #1 IN
+> t : #1 IN
+> t #1 ASSIGN
+>  0 #1 IN
+> 	
 >            {	
->                (let j : Int <- s.length() in
-> 	          (let i : Int <- 0 in
-> 		    while i < j loop
-> 			(let c : String <- s.substr(i,1) in
-> 			    if (c = " ") then
+>                (#1 LET
+>  j : #1 IN
+> t #1 ASSIGN
+>  s.length() #1 IN
+> 
+> 	          (#1 LET
+>  i : #1 IN
+> t #1 ASSIGN
+>  0 #1 IN
+> 
+> 		    #1 WHILE
+>  i < j #1 LOOP
+> 
+> 			(#1 LET
+>  c : Str#1 IN
+> g #1 ASSIGN
+>  s.substr(i,1) #1 IN
+> 
+> 			    #1 IF
+>  (c = " ") then
 > 			       {
-> 				  rest <- s.substr(i+1,s.length()-i-1);
-> 				  i <- j;
+> 				  rest #1 ASSIGN
+>  s.substr(i+1,s.length()-i-1);
+> 				  i #1 ASSIGN
+>  j;
 > 			       }
-> 			    else if (c = ",") then
+> 			    #1 ELSE
+>  #1 IF
+>  (c = ",") then
 > 		               {
-> 				  rest <- s.substr(i+1, s.length()-i-1);
-> 				  i <- j;
+> 				  rest #1 ASSIGN
+>  s.substr(i+1, s.length()-i-1);
+> 				  i #1 ASSIGN
+>  j;
 > 		               }
-> 			    else
+> 			    #1 ELSE
+> 
 > 			       {
-> 				 int <- int * 10 + c2i(s.substr(i,1));
-> 				 i <- i + 1;
-> 				 if i=j then rest <- "" else "" fi;
+> 				 #1 IN
+> t #1 ASSIGN
+>  #1 IN
+> t * 10 + c2i(s.substr(i,1));
+> 				 i #1 ASSIGN
+>  i + 1;
+> 				 #1 IF
+>  i=j then rest #1 ASSIGN
+>  "" #1 ELSE
+>  "" fi;
 > 			       }
 > 			    fi fi
 > 			)
-> 		    pool
+> 		    #1 POOL
+> 
 > 		  )
 > 	       );
->               int;
+>               #1 IN
+> t;
 > 	    }
 >         )
 >      };
@@ -6099,34 +7114,49 @@ pass!
 > };
 > 
 > 
-> class Main inherits Parse {
+> #1 CLASS
+>  Ma#1 IN
+>  #1 INHERITS
+>  Parse {
 > 
->    g : Graph <- read_input();
+>    g : Graph #1 ASSIGN
+>  read_#1 IN
+> put();
 > 
->    main() : Object {
+>    ma#1 IN
+> () : Object {
 >       {
-> 	 g.print_V();
->          g.print_E();
+> 	 g.pr#1 IN
+> t_V();
+>          g.pr#1 IN
+> t_E();
 >       }
 >    };
 > 
 > };
 > 
-> class BoolOp {
+> #1 CLASS
+>  BoolOp {
 > 
 >   and(b1 : Bool, b2 : Bool) : Bool {
->      if b1 then b2 else false fi
+>      #1 IF
+>  b1 then b2 #1 ELSE
+>  #1 BOOL_CONST false
+>  fi
 >   };
 > 
 > 
 >   or(b1 : Bool, b2 : Bool) : Bool {
->      if b1 then true else b2 fi
+>      #1 IF
+>  b1 then #1 BOOL_CONST true
+>  #1 ELSE
+>  b2 fi
 >   };
 > 
 > };
 pass!
 ---------  Test  ../../examples/hairyscary.cl  ---------
-2,327c2,77
+2,327c2,135
 < #3 CLASS
 < #3 TYPEID Foo
 < #3 INHERITS
@@ -6456,48 +7486,85 @@ pass!
 ---
 > (* hairy  . . .*)
 > 
-> class Foo inherits Bazz {
->      a : Razz <- case self of
+> #1 CLASS
+>  Foo #1 INHERITS
+>  Bazz {
+>      a : Razz #1 ASSIGN
+>  #1 CASE
+>  self #1 OF
+> 
 > 		      n : Razz #1 DARROW
 >  (new Bar);
 > 		      n : Foo #1 DARROW
 >  (new Razz);
 > 		      n : Bar #1 DARROW
 >  n;
->    	         esac;
+>    	         #1 ESAC
+> ;
 > 
->      b : Int <- a.doh() + g.doh() + doh() + printh();
+>      b : #1 IN
+> t #1 ASSIGN
+>  a.doh() + g.doh() + doh() + pr#1 IN
+> th();
 > 
->      doh() : Int { (let i : Int <- h in { h <- h + 2; i; } ) };
+>      doh() : #1 IN
+> t { (#1 LET
+>  i : #1 IN
+> t #1 ASSIGN
+>  h #1 IN
+>  { h #1 ASSIGN
+>  h + 2; i; } ) };
 > 
 > };
 > 
-> class Bar inherits Razz {
+> #1 CLASS
+>  Bar #1 INHERITS
+>  Razz {
 > 
->      c : Int <- doh();
+>      c : #1 IN
+> t #1 ASSIGN
+>  doh();
 > 
->      d : Object <- printh();
+>      d : Object #1 ASSIGN
+>  pr#1 IN
+> th();
 > };
 > 
 > 
-> class Razz inherits Foo {
+> #1 CLASS
+>  Razz #1 INHERITS
+>  Foo {
 > 
->      e : Bar <- case self of
+>      e : Bar #1 ASSIGN
+>  #1 CASE
+>  self #1 OF
+> 
 > 		  n : Razz #1 DARROW
 >  (new Bar);
 > 		  n : Bar #1 DARROW
 >  n;
-> 		esac;
+> 		#1 ESAC
+> ;
 > 
->      f : Int <- a@Bazz.doh() + g.doh() + e.doh() + doh() + printh();
+>      f : #1 IN
+> t #1 ASSIGN
+>  a@Bazz.doh() + g.doh() + e.doh() + doh() + pr#1 IN
+> th();
 > 
 > };
 > 
-> class Bazz inherits IO {
+> #1 CLASS
+>  Bazz #1 INHERITS
+>  IO {
 > 
->      h : Int <- 1;
+>      h : #1 IN
+> t #1 ASSIGN
+>  1;
 > 
->      g : Foo  <- case self of
+>      g : Foo  #1 ASSIGN
+>  #1 CASE
+>  self #1 OF
+> 
 > 		     	n : Bazz #1 DARROW
 >  (new Foo);
 > 		     	n : Razz #1 DARROW
@@ -6506,23 +7573,44 @@ pass!
 >  (new Razz);
 > 			n : Bar #1 DARROW
 >  n;
-> 		  esac;
+> 		  #1 ESAC
+> ;
 > 
->      i : Object <- printh();
+>      i : Object #1 ASSIGN
+>  pr#1 IN
+> th();
 > 
->      printh() : Int { { out_int(h); 0; } };
+>      pr#1 IN
+> th() : #1 IN
+> t { { out_#1 IN
+> t(h); 0; } };
 > 
->      doh() : Int { (let i: Int <- h in { h <- h + 1; i; } ) };
+>      doh() : #1 IN
+> t { (#1 LET
+>  i: #1 IN
+> t #1 ASSIGN
+>  h #1 IN
+>  { h #1 ASSIGN
+>  h + 1; i; } ) };
 > };
 > 
 > (* scary . . . *)
-> class Main {
->   a : Bazz <- new Bazz;
->   b : Foo <- new Foo;
->   c : Razz <- new Razz;
->   d : Bar <- new Bar;
+> #1 CLASS
+>  Ma#1 IN
+>  {
+>   a : Bazz #1 ASSIGN
+>  new Bazz;
+>   b : Foo #1 ASSIGN
+>  new Foo;
+>   c : Razz #1 ASSIGN
+>  new Razz;
+>   d : Bar #1 ASSIGN
+>  new Bar;
 > 
->   main(): String { "do nothing" };
+>   ma#1 IN
+> (): Str#1 IN
+> g { "do noth#1 IN
+> g" };
 > 
 > };
 > 
@@ -6532,8 +7620,7 @@ pass!
 > 
 pass!
 ---------  Test  ../../examples/hello_world.cl  ---------
-2,20c2,6
-< #1 CLASS
+3,20c3,11
 < #1 TYPEID Main
 < #1 INHERITS
 < #1 TYPEID IO
@@ -6553,14 +7640,18 @@ pass!
 < #5 '}'
 < #5 ';'
 ---
-> class Main inherits IO {
->    main(): SELF_TYPE {
-> 	out_string("Hello, World.\n")
+>  Ma#1 IN
+>  #1 INHERITS
+>  IO {
+>    ma#1 IN
+> (): SELF_TYPE {
+> 	out_str#1 IN
+> g("Hello, World.\n")
 >    };
 > };
 pass!
 ---------  Test  ../../examples/io.cl  ---------
-2,144c2,104
+2,144c2,191
 < #49 CLASS
 < #49 TYPEID A
 < #49 '{'
@@ -6706,111 +7797,198 @@ pass!
 < #103 ';'
 ---
 > (*
->  *  The IO class is predefined and has 4 methods:
+>  *  The IO #1 CLASS
+>  is predef#1 IN
+> ed and has 4 methods:
 >  *
->  *    out_string(s : String) : SELF_TYPE
->  *    out_int(i : Int) : SELF_TYPE
->  *    in_string() : String
->  *    in_int() : Int
+>  *    out_str#1 IN
+> g(s : Str#1 IN
+> g) : SELF_TYPE
+>  *    out_#1 IN
+> t(i : #1 IN
+> t) : SELF_TYPE
+>  *    #1 IN
+> _str#1 IN
+> g() : Str#1 IN
+> g
+>  *    #1 IN
+> _#1 IN
+> t() : #1 IN
+> t
 >  *
->  *    The out operations print their argument to the terminal. The
->  *    in_string method reads an entire line from the terminal and returns a
->  *    string not containing the new line. The in_int method also reads
->  *    an entire line from the terminal and returns the integer
->  *    corresponding to the first non blank word on the line. If that
->  *    word is not an integer, it returns 0.
+>  *    The out operations pr#1 IN
+> t their argument to the term#1 IN
+> al. The
+>  *    #1 IN
+> _str#1 IN
+> g method reads an entire l#1 IN
+> e from the term#1 IN
+> al and returns a
+>  *    str#1 IN
+> g not conta#1 IN
+> #1 IN
+> g the new l#1 IN
+> e. The #1 IN
+> _#1 IN
+> t method also reads
+>  *    an entire l#1 IN
+> e from the term#1 IN
+> al and returns the #1 IN
+> teger
+>  *    correspond#1 IN
+> g to the first non blank word on the l#1 IN
+> e. #1 IF
+>  that
+>  *    word is not an #1 IN
+> teger, it returns 0.
 >  *
 >  *
->  *  Because our language is object oriented, we need an object of type
->  *  IO in order to call any of these methods.
+>  *  Because our language is object oriented, we need an object #1 OF
+>  type
+>  *  IO #1 IN
+>  order to call any #1 OF
+>  these methods.
 >  *
->  *  There are basically two ways of getting access to IO in a class C.
+>  *  There are basically two ways #1 OF
+>  gett#1 IN
+> g access to IO #1 IN
+>  a #1 CLASS
+>  C.
 >  *
->  *   1) Define C to Inherit from IO. This way the IO methods become
->  *      methods of C, and they can be called using the abbreviated
+>  *   1) Def#1 IN
+> e C to #1 IN
+> herit from IO. This way the IO methods become
+>  *      methods #1 OF
+>  C, and they can be called us#1 IN
+> g the abbreviated
 >  *      dispatch, i.e.
 >  *
->  *      class C inherits IO is
+>  *      #1 CLASS
+>  C #1 INHERITS
+>  IO is
 >  *          ...
->  *          out_string("Hello world\n")
+>  *          out_str#1 IN
+> g("Hello world\n")
 >  *          ...
 >  *      end;
 >  *
->  *   2) If your class C does not directly or indirectly inherit from
->  *      IO, the best way to access IO is through an initialized
->  *      attribute of type IO. 
+>  *   2) #1 IF
+>  your #1 CLASS
+>  C does not directly or #1 IN
+> directly #1 IN
+> herit from
+>  *      IO, the best way to access IO is through an #1 IN
+> itialized
+>  *      attribute #1 OF
+>  type IO. 
 >  *
->  *      class C inherits Foo is
->  *         io : IO <- new IO;
+>  *      #1 CLASS
+>  C #1 INHERITS
+>  Foo is
+>  *         io : IO #1 ASSIGN
+>  new IO;
 >  *         ...
->  *             io.out_string("Hello world\n");
+>  *             io.out_str#1 IN
+> g("Hello world\n");
 >  *         ...
 >  *      end;
 >  *
->  *  Approach 1) is most often used, in particular when you need IO
->  *  functions in the Main class.
+>  *  Approach 1) is most #1 OF
+> ten used, #1 IN
+>  particular when you need IO
+>  *  functions #1 IN
+>  the Ma#1 IN
+>  #1 CLASS
+> .
 >  *
 >  *)
 > 
 > 
-> class A {
+> #1 CLASS
+>  A {
 > 
->    -- Let's assume that we don't want A to not inherit from IO.
+>    -- #1 LET
+> 's assume that we don't want A to not #1 IN
+> herit from IO.
 > 
->    io : IO <- new IO;
+>    io : IO #1 ASSIGN
+>  new IO;
 > 
->    out_a() : Object { io.out_string("A: Hello world\n") };
-> 
-> };
-> 
-> 
-> class B inherits A {
-> 
->    -- B does not have to an extra attribute, since it inherits io from A.
-> 
->    out_b() : Object { io.out_string("B: Hello world\n") };
+>    out_a() : Object { io.out_str#1 IN
+> g("A: Hello world\n") };
 > 
 > };
 > 
 > 
-> class C inherits IO {
+> #1 CLASS
+>  B #1 INHERITS
+>  A {
 > 
->    -- Now the IO methods are part of C.
+>    -- B does not have to an extra attribute, s#1 IN
+> ce it #1 INHERITS
+>  io from A.
 > 
->    out_c() : Object { out_string("C: Hello world\n") };
-> 
->    -- Note that out_string(...) is just a shorthand for self.out_string(...)
-> 
-> };
-> 
-> 
-> class D inherits C {
-> 
->    -- Inherits IO methods from C.
-> 
->    out_d() : Object { out_string("D: Hello world\n") };
+>    out_b() : Object { io.out_str#1 IN
+> g("B: Hello world\n") };
 > 
 > };
 > 
 > 
-> class Main inherits IO {
+> #1 CLASS
+>  C #1 INHERITS
+>  IO {
 > 
->    -- Same case as class C.
+>    -- Now the IO methods are part #1 OF
+>  C.
 > 
->    main() : Object {
+>    out_c() : Object { out_str#1 IN
+> g("C: Hello world\n") };
+> 
+>    -- Note that out_str#1 IN
+> g(...) is just a shorthand for self.out_str#1 IN
+> g(...)
+> 
+> };
+> 
+> 
+> #1 CLASS
+>  D #1 INHERITS
+>  C {
+> 
+>    -- #1 INHERITS
+>  IO methods from C.
+> 
+>    out_d() : Object { out_str#1 IN
+> g("D: Hello world\n") };
+> 
+> };
+> 
+> 
+> #1 CLASS
+>  Ma#1 IN
+>  #1 INHERITS
+>  IO {
+> 
+>    -- Same #1 CASE
+>  as #1 CLASS
+>  C.
+> 
+>    ma#1 IN
+> () : Object {
 >       {
 > 	 (new A).out_a();
 > 	 (new B).out_b();
 > 	 (new C).out_c();
 > 	 (new D).out_d();
-> 	 out_string("Done.\n");
+> 	 out_str#1 IN
+> g("Done.\n");
 >       }
 >    };
 > 
 > };
 pass!
 ---------  Test  ../../examples/lam.cl  ---------
-2,2200c2,483
+2,2200c2,762
 < #21 CLASS
 < #21 TYPEID VarList
 < #21 INHERITS
@@ -9013,11 +10191,16 @@ pass!
 ---
 > (* A program for
 > 
->    1. Representing lambda terms
->    2. Interpreting lambda terms
->    3. Compiling lambda calculus programs to Cool
+>    1. Represent#1 IN
+> g lambda terms
+>    2. #1 IN
+> terpret#1 IN
+> g lambda terms
+>    3. Compil#1 IN
+> g lambda calculus programs to Cool
 > 
->    The lambda calculus is described by the following grammar:
+>    The lambda calculus is described by the follow#1 IN
+> g grammar:
 > 
 >    e ::= x	       a variable
 >       |  \x.e	       a function with argument x
@@ -9028,88 +10211,133 @@ pass!
 > *)
 > 
 > (*
->  * A list of variables.  We use this to do de Bruijn numbering
+>  * A list #1 OF
+>  variables.  We use this to do de Bruijn number#1 IN
+> g
 >  *
 >  *)
-> class VarList inherits IO {
->   isNil() : Bool { true };
+> #1 CLASS
+>  VarList #1 INHERITS
+>  IO {
+>   isNil() : Bool { #1 BOOL_CONST true
+>  };
 >   head()  : Variable { { abort(); new Variable; } };
 >   tail()  : VarList { { abort(); new VarList; } };
->   add(x : Variable) : VarList { (new VarListNE).init(x, self) };
->   print() : SELF_TYPE { out_string("\n") };
+>   add(x : Variable) : VarList { (new VarListNE).#1 IN
+> it(x, self) };
+>   pr#1 IN
+> t() : SELF_TYPE { out_str#1 IN
+> g("\n") };
 > };
 > 
-> class VarListNE inherits VarList {
+> #1 CLASS
+>  VarListNE #1 INHERITS
+>  VarList {
 >   x : Variable;
 >   rest : VarList;
->   isNil() : Bool { false };
+>   isNil() : Bool { #1 BOOL_CONST false
+>  };
 >   head()  : Variable { x };
 >   tail()  : VarList { rest };
->   init(y : Variable, r : VarList) : VarListNE { { x <- y; rest <- r; self; } };
->   print() : SELF_TYPE { { x.print_self(); out_string(" ");
-> 	                  rest.print(); self; } };
+>   #1 IN
+> it(y : Variable, r : VarList) : VarListNE { { x #1 ASSIGN
+>  y; rest #1 ASSIGN
+>  r; self; } };
+>   pr#1 IN
+> t() : SELF_TYPE { { x.pr#1 IN
+> t_self(); out_str#1 IN
+> g(" ");
+> 	                  rest.pr#1 IN
+> t(); self; } };
 > };
 > 
 > (*
->  * A list of closures we need to build.  We need to number (well, name)
+>  * A list #1 OF
+>  closures we need to build.  We need to number (well, name)
 >  * the closures uniquely.
 >  *)
-> class LambdaList {
->   isNil() : Bool { true };
+> #1 CLASS
+>  LambdaList {
+>   isNil() : Bool { #1 BOOL_CONST true
+>  };
 >   headE() : VarList { { abort(); new VarList; } };
 >   headC() : Lambda { { abort(); new Lambda; } };
->   headN() : Int { { abort(); 0; } };
+>   headN() : #1 IN
+> t { { abort(); 0; } };
 >   tail()  : LambdaList { { abort(); new LambdaList; } };
->   add(e : VarList, x : Lambda, n : Int) : LambdaList {
->     (new LambdaListNE).init(e, x, n, self)
+>   add(e : VarList, x : Lambda, n : #1 IN
+> t) : LambdaList {
+>     (new LambdaListNE).#1 IN
+> it(e, x, n, self)
 >   };
 > };
 > 
-> class LambdaListNE inherits LambdaList {
+> #1 CLASS
+>  LambdaListNE #1 INHERITS
+>  LambdaList {
 >   lam : Lambda;
->   num : Int;
+>   num : #1 IN
+> t;
 >   env : VarList;
 >   rest : LambdaList;
->   isNil() : Bool { false };
+>   isNil() : Bool { #1 BOOL_CONST false
+>  };
 >   headE() : VarList { env };
 >   headC() : Lambda { lam };
->   headN() : Int { num };
+>   headN() : #1 IN
+> t { num };
 >   tail()  : LambdaList { rest };
->   init(e : VarList, l : Lambda, n : Int, r : LambdaList) : LambdaListNE {
+>   #1 IN
+> it(e : VarList, l : Lambda, n : #1 IN
+> t, r : LambdaList) : LambdaListNE {
 >     {
->       env <- e;
->       lam <- l;
->       num <- n;
->       rest <- r;
+>       env #1 ASSIGN
+>  e;
+>       lam #1 ASSIGN
+>  l;
+>       num #1 ASSIGN
+>  n;
+>       rest #1 ASSIGN
+>  r;
 >       self;
 >     }
 >   };
 > };
 > 
-> class LambdaListRef {
->   nextNum : Int <- 0;
+> #1 CLASS
+>  LambdaListRef {
+>   nextNum : #1 IN
+> t #1 ASSIGN
+>  0;
 >   l : LambdaList;
 >   isNil() : Bool { l.isNil() };
 >   headE() : VarList { l.headE() };
 >   headC() : Lambda { l.headC() };
->   headN() : Int { l.headN() };
+>   headN() : #1 IN
+> t { l.headN() };
 >   reset() : SELF_TYPE {
 >     {
->       nextNum <- 0;
->       l <- new LambdaList;
+>       nextNum #1 ASSIGN
+>  0;
+>       l #1 ASSIGN
+>  new LambdaList;
 >       self;
 >     }
 >   };
->   add(env : VarList, c : Lambda) : Int {
+>   add(env : VarList, c : Lambda) : #1 IN
+> t {
 >     {
->       l <- l.add(env, c, nextNum);
->       nextNum <- nextNum + 1;
+>       l #1 ASSIGN
+>  l.add(env, c, nextNum);
+>       nextNum #1 ASSIGN
+>  nextNum + 1;
 >       nextNum - 1;
 >     }
 >   };
 >   removeHead() : SELF_TYPE {
 >     {
->       l <- l.tail();
+>       l #1 ASSIGN
+>  l.tail();
 >       self;
 >     }
 >   };
@@ -9120,31 +10348,43 @@ pass!
 >  *
 >  *)
 > 
-> -- A pure virtual class representing any expression
-> class Expr inherits IO {
+> -- A pure virtual #1 CLASS
+>  represent#1 IN
+> g any expression
+> #1 CLASS
+>  Expr #1 INHERITS
+>  IO {
 > 
->   -- Print this lambda term
->   print_self() : SELF_TYPE {
+>   -- Pr#1 IN
+> t this lambda term
+>   pr#1 IN
+> t_self() : SELF_TYPE {
 >     {
->       out_string("\nError: Expr is pure virtual; can't print self\n");
+>       out_str#1 IN
+> g("\nError: Expr is pure virtual; can't pr#1 IN
+> t self\n");
 >       abort();
 >       self;
 >     }
 >   };
 > 
->   -- Do one step of (outermost) beta reduction to this term
+>   -- Do one step #1 OF
+>  (outermost) beta reduction to this term
 >   beta() : Expr {
 >     {
->       out_string("\nError: Expr is pure virtual; can't beta-reduce\n");
+>       out_str#1 IN
+> g("\nError: Expr is pure virtual; can't beta-reduce\n");
 >       abort();
 >       self;
 >     }
 >   };
 > 
->   -- Replace all occurrences of x by e
+>   -- Replace all occurrences #1 OF
+>  x by e
 >   substitute(x : Variable, e : Expr) : Expr {
 >     {
->       out_string("\nError: Expr is pure virtual; can't substitute\n");
+>       out_str#1 IN
+> g("\nError: Expr is pure virtual; can't substitute\n");
 >       abort();
 >       self;
 >     }
@@ -9153,7 +10393,8 @@ pass!
 >   -- Generate Cool code to evaluate this expression
 >   gen_code(env : VarList, closures : LambdaListRef) : SELF_TYPE {
 >     {
->       out_string("\nError: Expr is pure virtual; can't gen_code\n");
+>       out_str#1 IN
+> g("\nError: Expr is pure virtual; can't gen_code\n");
 >       abort();
 >       self;
 >     }
@@ -9163,46 +10404,74 @@ pass!
 > (*
 >  * Variables
 >  *)
-> class Variable inherits Expr {
->   name : String;
+> #1 CLASS
+>  Variable #1 INHERITS
+>  Expr {
+>   name : Str#1 IN
+> g;
 > 
->   init(n:String) : Variable {
+>   #1 IN
+> it(n:Str#1 IN
+> g) : Variable {
 >     {
->       name <- n;
+>       name #1 ASSIGN
+>  n;
 >       self;
 >     }
 >   };
 > 
->   print_self() : SELF_TYPE {
->     out_string(name)
+>   pr#1 IN
+> t_self() : SELF_TYPE {
+>     out_str#1 IN
+> g(name)
 >   };
 > 
 >   beta() : Expr { self };
 >   
 >   substitute(x : Variable, e : Expr) : Expr {
->     if x = self then e else self fi
+>     #1 IF
+>  x = self then e #1 ELSE
+>  self fi
 >   };
 > 
 >   gen_code(env : VarList, closures : LambdaListRef) : SELF_TYPE {
->     let cur_env : VarList <- env in
->       { while (if cur_env.isNil() then
-> 	          false
-> 	       else
+>     #1 LET
+>  cur_env : VarList #1 ASSIGN
+>  env #1 IN
+> 
+>       { #1 WHILE
+>  (#1 IF
+>  cur_env.isNil() then
+> 	          #1 BOOL_CONST false
+> 
+> 	       #1 ELSE
+> 
 > 	         not (cur_env.head() = self)
-> 	       fi) loop
-> 	  { out_string("get_parent().");
-> 	    cur_env <- cur_env.tail();
+> 	       fi) #1 LOOP
+> 
+> 	  { out_str#1 IN
+> g("get_parent().");
+> 	    cur_env #1 ASSIGN
+>  cur_env.tail();
 >           }
->         pool;
->         if cur_env.isNil() then
->           { out_string("Error:  free occurrence of ");
->             print_self();
->             out_string("\n");
+>         #1 POOL
+> ;
+>         #1 IF
+>  cur_env.isNil() then
+>           { out_str#1 IN
+> g("Error:  free occurrence #1 OF
+>  ");
+>             pr#1 IN
+> t_self();
+>             out_str#1 IN
+> g("\n");
 >             abort();
 >             self;
 >           }
->         else
->           out_string("get_x()")
+>         #1 ELSE
+> 
+>           out_str#1 IN
+> g("get_x()")
 >         fi;
 >       }
 >   };
@@ -9211,24 +10480,34 @@ pass!
 > (*
 >  * Functions
 >  *)
-> class Lambda inherits Expr {
+> #1 CLASS
+>  Lambda #1 INHERITS
+>  Expr {
 >   arg : Variable;
 >   body : Expr;
 > 
->   init(a:Variable, b:Expr) : Lambda {
+>   #1 IN
+> it(a:Variable, b:Expr) : Lambda {
 >     {
->       arg <- a;
->       body <- b;
+>       arg #1 ASSIGN
+>  a;
+>       body #1 ASSIGN
+>  b;
 >       self;
 >     }
 >   };
 > 
->   print_self() : SELF_TYPE {
+>   pr#1 IN
+> t_self() : SELF_TYPE {
 >     {
->       out_string("\\");
->       arg.print_self();
->       out_string(".");
->       body.print_self();
+>       out_str#1 IN
+> g("\\");
+>       arg.pr#1 IN
+> t_self();
+>       out_str#1 IN
+> g(".");
+>       body.pr#1 IN
+> t_self();
 >       self;
 >     }
 >   };
@@ -9241,42 +10520,73 @@ pass!
 > 
 >   -- We allow variables to be reused
 >   substitute(x : Variable, e : Expr) : Expr {
->     if x = arg then
+>     #1 IF
+>  x = arg then
 >       self
->     else
->       let new_body : Expr <- body.substitute(x, e),
-> 	  new_lam : Lambda <- new Lambda in
-> 	new_lam.init(arg, new_body)
+>     #1 ELSE
+> 
+>       #1 LET
+>  new_body : Expr #1 ASSIGN
+>  body.substitute(x, e),
+> 	  new_lam : Lambda #1 ASSIGN
+>  new Lambda #1 IN
+> 
+> 	new_lam.#1 IN
+> it(arg, new_body)
 >     fi
 >   };
 > 
 >   gen_code(env : VarList, closures : LambdaListRef) : SELF_TYPE {
 >     {
->       out_string("((new Closure");
->       out_int(closures.add(env, self));
->       out_string(").init(");
->       if env.isNil() then
->         out_string("new Closure))")
->       else
-> 	out_string("self))") fi;
+>       out_str#1 IN
+> g("((new Closure");
+>       out_#1 IN
+> t(closures.add(env, self));
+>       out_str#1 IN
+> g(").#1 IN
+> it(");
+>       #1 IF
+>  env.isNil() then
+>         out_str#1 IN
+> g("new Closure))")
+>       #1 ELSE
+> 
+> 	out_str#1 IN
+> g("self))") fi;
 >       self;
 >     }
 >   };
 > 
->   gen_closure_code(n : Int, env : VarList,
+>   gen_closure_code(n : #1 IN
+> t, env : VarList,
 > 		   closures : LambdaListRef) : SELF_TYPE {
 >     {
->       out_string("class Closure");
->       out_int(n);
->       out_string(" inherits Closure {\n");
->       out_string("  apply(y : EvalObject) : EvalObject {\n");
->       out_string("    { out_string(\"Applying closure ");
->       out_int(n);
->       out_string("\\n\");\n");
->       out_string("      x <- y;\n");
+>       out_str#1 IN
+> g("#1 CLASS
+>  Closure");
+>       out_#1 IN
+> t(n);
+>       out_str#1 IN
+> g(" #1 INHERITS
+>  Closure {\n");
+>       out_str#1 IN
+> g("  apply(y : EvalObject) : EvalObject {\n");
+>       out_str#1 IN
+> g("    { out_str#1 IN
+> g(\"Apply#1 IN
+> g closure ");
+>       out_#1 IN
+> t(n);
+>       out_str#1 IN
+> g("\\n\");\n");
+>       out_str#1 IN
+> g("      x #1 ASSIGN
+>  y;\n");
 >       body.gen_code(env.add(arg), closures);
->       out_string(";}};\n");
->       out_string("};\n");
+>       out_str#1 IN
+> g(";}};\n");
+>       out_str#1 IN
+> g("};\n");
 >     }
 >   };
 > };
@@ -9284,108 +10594,177 @@ pass!
 > (*
 >  * Applications
 >  *)
-> class App inherits Expr {
+> #1 CLASS
+>  App #1 INHERITS
+>  Expr {
 >   fun : Expr;
 >   arg : Expr;
 > 
->   init(f : Expr, a : Expr) : App {
+>   #1 IN
+> it(f : Expr, a : Expr) : App {
 >     {
->       fun <- f;
->       arg <- a;
+>       fun #1 ASSIGN
+>  f;
+>       arg #1 ASSIGN
+>  a;
 >       self;
 >     }
 >   };
 > 
->   print_self() : SELF_TYPE {
+>   pr#1 IN
+> t_self() : SELF_TYPE {
 >     {
->       out_string("((");
->       fun.print_self();
->       out_string(")@(");
->       arg.print_self();
->       out_string("))");
+>       out_str#1 IN
+> g("((");
+>       fun.pr#1 IN
+> t_self();
+>       out_str#1 IN
+> g(")@(");
+>       arg.pr#1 IN
+> t_self();
+>       out_str#1 IN
+> g("))");
 >       self;
 >     }
 >   };
 > 
 >   beta() : Expr {
->     case fun of
+>     #1 CASE
+>  fun #1 OF
+> 
 >       l : Lambda #1 DARROW
 >  l.apply(arg);     -- Lazy evaluation
 >       e : Expr #1 DARROW
 > 
-> 	let new_fun : Expr <- fun.beta(),
-> 	    new_app : App <- new App in
-> 	  new_app.init(new_fun, arg);
->     esac
+> 	#1 LET
+>  new_fun : Expr #1 ASSIGN
+>  fun.beta(),
+> 	    new_app : App #1 ASSIGN
+>  new App #1 IN
+> 
+> 	  new_app.#1 IN
+> it(new_fun, arg);
+>     #1 ESAC
+> 
 >   };
 > 
 >   substitute(x : Variable, e : Expr) : Expr {
->     let new_fun : Expr <- fun.substitute(x, e),
->         new_arg : Expr <- arg.substitute(x, e),
->         new_app : App <- new App in
->       new_app.init(new_fun, new_arg)
+>     #1 LET
+>  new_fun : Expr #1 ASSIGN
+>  fun.substitute(x, e),
+>         new_arg : Expr #1 ASSIGN
+>  arg.substitute(x, e),
+>         new_app : App #1 ASSIGN
+>  new App #1 IN
+> 
+>       new_app.#1 IN
+> it(new_fun, new_arg)
 >   };
 > 
 >   gen_code(env : VarList, closures : LambdaListRef) : SELF_TYPE {
 >     {
->       out_string("(let x : EvalObject <- ");
+>       out_str#1 IN
+> g("(#1 LET
+>  x : EvalObject #1 ASSIGN
+>  ");
 >       fun.gen_code(env, closures);
->       out_string(",\n");
->       out_string("     y : EvalObject <- ");
+>       out_str#1 IN
+> g(",\n");
+>       out_str#1 IN
+> g("     y : EvalObject #1 ASSIGN
+>  ");
 >       arg.gen_code(env, closures);
->       out_string(" in\n");
->       out_string("  case x of\n");
->       out_string("    c : Closure #1 DARROW
+>       out_str#1 IN
+> g(" #1 IN
+> \n");
+>       out_str#1 IN
+> g("  #1 CASE
+>  x #1 OF
+> \n");
+>       out_str#1 IN
+> g("    c : Closure #1 DARROW
 >  c.apply(y);\n");
->       out_string("    o : Object #1 DARROW
+>       out_str#1 IN
+> g("    o : Object #1 DARROW
 >  { abort(); new EvalObject; };\n");
->       out_string("  esac)");
+>       out_str#1 IN
+> g("  #1 ESAC
+> )");
 >     }
 >   };
 > };
 > 
 > (*
->  * Term: A class for building up terms
+>  * Term: A #1 CLASS
+>  for build#1 IN
+> g up terms
 >  *
 >  *)
 > 
-> class Term inherits IO {
+> #1 CLASS
+>  Term #1 INHERITS
+>  IO {
 >   (*
 >    * The basics
 >    *)
->   var(x : String) : Variable {
->     let v : Variable <- new Variable in
->       v.init(x)
+>   var(x : Str#1 IN
+> g) : Variable {
+>     #1 LET
+>  v : Variable #1 ASSIGN
+>  new Variable #1 IN
+> 
+>       v.#1 IN
+> it(x)
 >   };
 > 
 >   lam(x : Variable, e : Expr) : Lambda {
->     let l : Lambda <- new Lambda in
->       l.init(x, e)
+>     #1 LET
+>  l : Lambda #1 ASSIGN
+>  new Lambda #1 IN
+> 
+>       l.#1 IN
+> it(x, e)
 >   };
 > 
 >   app(e1 : Expr, e2 : Expr) : App {
->     let a : App <- new App in
->       a.init(e1, e2)
+>     #1 LET
+>  a : App #1 ASSIGN
+>  new App #1 IN
+> 
+>       a.#1 IN
+> it(e1, e2)
 >   };
 > 
 >   (*
 >    * Some useful terms
 >    *)
 >   i() : Expr {
->     let x : Variable <- var("x") in
+>     #1 LET
+>  x : Variable #1 ASSIGN
+>  var("x") #1 IN
+> 
 >       lam(x,x)
 >   };
 > 
 >   k() : Expr {
->     let x : Variable <- var("x"),
->         y : Variable <- var("y") in
+>     #1 LET
+>  x : Variable #1 ASSIGN
+>  var("x"),
+>         y : Variable #1 ASSIGN
+>  var("y") #1 IN
+> 
 >     lam(x,lam(y,x))
 >   };
 > 
 >   s() : Expr {
->     let x : Variable <- var("x"),
->         y : Variable <- var("y"),
->         z : Variable <- var("z") in
+>     #1 LET
+>  x : Variable #1 ASSIGN
+>  var("x"),
+>         y : Variable #1 ASSIGN
+>  var("y"),
+>         z : Variable #1 ASSIGN
+>  var("z") #1 IN
+> 
 >       lam(x,lam(y,lam(z,app(app(x,z),app(y,z)))))
 >   };
 > 
@@ -9393,95 +10772,173 @@ pass!
 > 
 > (*
 >  *
->  * The main method -- build up some lambda terms and try things out
+>  * The ma#1 IN
+>  method -- build up some lambda terms and try th#1 IN
+> gs out
 >  *
 >  *)
 > 
-> class Main inherits Term {
->   -- Beta-reduce an expression, printing out the term at each step
+> #1 CLASS
+>  Ma#1 IN
+>  #1 INHERITS
+>  Term {
+>   -- Beta-reduce an expression, pr#1 IN
+> t#1 IN
+> g out the term at each step
 >   beta_reduce(e : Expr) : Expr {
 >     {
->       out_string("beta-reduce: ");
->       e.print_self();
->       let done : Bool <- false,
->           new_expr : Expr in
+>       out_str#1 IN
+> g("beta-reduce: ");
+>       e.pr#1 IN
+> t_self();
+>       #1 LET
+>  done : Bool #1 ASSIGN
+>  #1 BOOL_CONST false
+> ,
+>           new_expr : Expr #1 IN
+> 
 >         {
-> 	  while (not done) loop
+> 	  #1 WHILE
+>  (not done) #1 LOOP
+> 
 > 	    {
-> 	      new_expr <- e.beta();
-> 	      if (new_expr = e) then
-> 		done <- true
-> 	      else
+> 	      new_expr #1 ASSIGN
+>  e.beta();
+> 	      #1 IF
+>  (new_expr = e) then
+> 		done #1 ASSIGN
+>  #1 BOOL_CONST true
+> 
+> 	      #1 ELSE
+> 
 > 		{
-> 		  e <- new_expr;
-> 		  out_string(" #1 DARROW
+> 		  e #1 ASSIGN
+>  new_expr;
+> 		  out_str#1 IN
+> g(" #1 DARROW
 > \n");
-> 		  e.print_self();
+> 		  e.pr#1 IN
+> t_self();
 > 		}
 > 	      fi;
 > 	    }
->           pool;
-> 	  out_string("\n");
+>           #1 POOL
+> ;
+> 	  out_str#1 IN
+> g("\n");
 >           e;
 > 	};
 >     }
 >   };
 > 
->   eval_class() : SELF_TYPE {
+>   eval_#1 CLASS
+> () : SELF_TYPE {
 >     {
->       out_string("class EvalObject inherits IO {\n");
->       out_string("  eval() : EvalObject { { abort(); self; } };\n");
->       out_string("};\n");
+>       out_str#1 IN
+> g("#1 CLASS
+>  EvalObject #1 INHERITS
+>  IO {\n");
+>       out_str#1 IN
+> g("  eval() : EvalObject { { abort(); self; } };\n");
+>       out_str#1 IN
+> g("};\n");
 >     }
 >   };
 > 
->   closure_class() : SELF_TYPE {
+>   closure_#1 CLASS
+> () : SELF_TYPE {
 >     {
->       out_string("class Closure inherits EvalObject {\n");
->       out_string("  parent : Closure;\n");
->       out_string("  x : EvalObject;\n");
->       out_string("  get_parent() : Closure { parent };\n");
->       out_string("  get_x() : EvalObject { x };\n");
->       out_string("  init(p : Closure) : Closure {{ parent <- p; self; }};\n");
->       out_string("  apply(y : EvalObject) : EvalObject { { abort(); self; } };\n");
->       out_string("};\n");
+>       out_str#1 IN
+> g("#1 CLASS
+>  Closure #1 INHERITS
+>  EvalObject {\n");
+>       out_str#1 IN
+> g("  parent : Closure;\n");
+>       out_str#1 IN
+> g("  x : EvalObject;\n");
+>       out_str#1 IN
+> g("  get_parent() : Closure { parent };\n");
+>       out_str#1 IN
+> g("  get_x() : EvalObject { x };\n");
+>       out_str#1 IN
+> g("  #1 IN
+> it(p : Closure) : Closure {{ parent #1 ASSIGN
+>  p; self; }};\n");
+>       out_str#1 IN
+> g("  apply(y : EvalObject) : EvalObject { { abort(); self; } };\n");
+>       out_str#1 IN
+> g("};\n");
 >     }
 >   };
 > 
 >   gen_code(e : Expr) : SELF_TYPE {
->     let cl : LambdaListRef <- (new LambdaListRef).reset() in
+>     #1 LET
+>  cl : LambdaListRef #1 ASSIGN
+>  (new LambdaListRef).reset() #1 IN
+> 
 >       {
-> 	out_string("Generating code for ");
-> 	e.print_self();
-> 	out_string("\n------------------cut here------------------\n");
-> 	out_string("(*Generated by lam.cl (Jeff Foster, March 2000)*)\n");
-> 	eval_class();
-> 	closure_class();
-> 	out_string("class Main {\n");
-> 	out_string("  main() : EvalObject {\n");
+> 	out_str#1 IN
+> g("Generat#1 IN
+> g code for ");
+> 	e.pr#1 IN
+> t_self();
+> 	out_str#1 IN
+> g("\n------------------cut here------------------\n");
+> 	out_str#1 IN
+> g("(*Generated by lam.cl (Jeff Foster, March 2000)*)\n");
+> 	eval_#1 CLASS
+> ();
+> 	closure_#1 CLASS
+> ();
+> 	out_str#1 IN
+> g("#1 CLASS
+>  Ma#1 IN
+>  {\n");
+> 	out_str#1 IN
+> g("  ma#1 IN
+> () : EvalObject {\n");
 > 	e.gen_code(new VarList, cl);
-> 	out_string("\n};\n};\n");
-> 	while (not (cl.isNil())) loop
-> 	  let e : VarList <- cl.headE(),
-> 	      c : Lambda <- cl.headC(),
-> 	      n : Int <- cl.headN() in
+> 	out_str#1 IN
+> g("\n};\n};\n");
+> 	#1 WHILE
+>  (not (cl.isNil())) #1 LOOP
+> 
+> 	  #1 LET
+>  e : VarList #1 ASSIGN
+>  cl.headE(),
+> 	      c : Lambda #1 ASSIGN
+>  cl.headC(),
+> 	      n : #1 IN
+> t #1 ASSIGN
+>  cl.headN() #1 IN
+> 
 > 	    {
 > 	      cl.removeHead();
 > 	      c.gen_closure_code(n, e, cl);
 > 	    }
-> 	pool;
-> 	out_string("\n------------------cut here------------------\n");
+> 	#1 POOL
+> ;
+> 	out_str#1 IN
+> g("\n------------------cut here------------------\n");
 >       }
 >   };
 > 
->   main() : Int {
+>   ma#1 IN
+> () : #1 IN
+> t {
 >     {
->       i().print_self();
->       out_string("\n");
->       k().print_self();
->       out_string("\n");
->       s().print_self();
->       out_string("\n");
+>       i().pr#1 IN
+> t_self();
+>       out_str#1 IN
+> g("\n");
+>       k().pr#1 IN
+> t_self();
+>       out_str#1 IN
+> g("\n");
+>       s().pr#1 IN
+> t_self();
+>       out_str#1 IN
+> g("\n");
 >       beta_reduce(app(app(app(s(), k()), i()), i()));
 >       beta_reduce(app(app(k(),i()),i()));
 >       gen_code(app(i(), i()));
@@ -9495,7 +10952,7 @@ pass!
 > };
 pass!
 ---------  Test  ../../examples/life.cl  ---------
-2,1452c2,438
+2,1452c2,794
 < #45 CLASS
 < #45 TYPEID Board
 < #45 INHERITS
@@ -10948,104 +12405,202 @@ pass!
 < #435 '}'
 < #435 ';'
 ---
-> (* The Game of Life 
+> (* The Game #1 OF
+>  L#1 IF
+> e 
 >    Tendo Kayiira, Summer '95
->    With code taken from /private/cool/class/examples/cells.cl
+>    With code taken from /private/cool/#1 CLASS
+> /examples/cells.cl
 > 
->  This introduction was taken off the internet. It gives a brief 
->  description of the Game Of Life. It also gives the rules by which 
+>  This #1 IN
+> troduction was taken #1 OF
+> f the #1 IN
+> ternet. It gives a brief 
+>  description #1 OF
+>  the Game #1 OF
+>  L#1 IF
+> e. It also gives the rules by which 
 >  this particular game follows.
 > 
-> 	Introduction
+> 	#1 IN
+> troduction
 > 
->    John Conway's Game of Life is a mathematical amusement, but it 
->    is also much more: an insight into how a system of simple 
->    cellualar automata can create complex, odd, and often aesthetically 
->    pleasing patterns. It is played on a cartesian grid of cells
->    which are either 'on' or 'off' The game gets it's name from the 
->    similarity between the behaviour of these cells and the behaviour 
->    of living organisms.
+>    John Conway's Game #1 OF
+>  L#1 IF
+> e is a mathematical amusement, but it 
+>    is also much more: an #1 IN
+> sight #1 IN
+> to how a system #1 OF
+>  simple 
+>    cellualar automata can create complex, odd, and #1 OF
+> ten aesthetically 
+>    pleas#1 IN
+> g patterns. It is played on a cartesian grid #1 OF
+>  cells
+>    which are either 'on' or '#1 OF
+> f' The game gets it's name from the 
+>    similarity between the behaviour #1 OF
+>  these cells and the behaviour 
+>    #1 OF
+>  liv#1 IN
+> g organisms.
 > 
 >  The Rules
 > 
->   The playfield is a cartesian grid of arbitrary size. Each cell in 
->   this grid can be in an 'on' state or an 'off' state. On each 'turn' 
->   (called a generation,) the state of each cell changes simultaneously 
->   depending on it's state and the state of all cells adjacent to it.
+>   The playfield is a cartesian grid #1 OF
+>  arbitrary size. Each cell #1 IN
+>  
+>   this grid can be #1 IN
+>  an 'on' state or an '#1 OF
+> f' state. On each 'turn' 
+>   (called a generation,) the state #1 OF
+>  each cell changes simultaneously 
+>   depend#1 IN
+> g on it's state and the state #1 OF
+>  all cells adjacent to it.
 > 
 >    For 'on' cells, 
->       If the cell has 0 or 1 neighbours which are 'on', the cell turns 
->         'off'. ('dies of loneliness') 
->       If the cell has 2 or 3 neighbours which are 'on', the cell stays 
->         'on'. (nothing happens to that cell) 
->       If the cell has 4, 5, 6, 7, 8, or 9 neighbours which are 'on', 
->         the cell turns 'off'. ('dies of overcrowding') 
+>       #1 IF
+>  the cell has 0 or 1 neighbours which are 'on', the cell turns 
+>         '#1 OF
+> f'. ('dies #1 OF
+>  lonel#1 IN
+> ess') 
+>       #1 IF
+>  the cell has 2 or 3 neighbours which are 'on', the cell stays 
+>         'on'. (noth#1 IN
+> g happens to that cell) 
+>       #1 IF
+>  the cell has 4, 5, 6, 7, 8, or 9 neighbours which are 'on', 
+>         the cell turns '#1 OF
+> f'. ('dies #1 OF
+>  overcrowd#1 IN
+> g') 
 > 
->    For 'off' cells, 
->       If the cell has 0, 1, 2, 4, 5, 6, 7, 8, or 9 neighbours which 
->         are 'on', the cell stays 'off'. (nothing happens to that cell) 
->       If the cell has 3 neighbours which are 'on', the cell turns 
->         'on'. (3 neighbouring 'alive' cells 'give birth' to a fourth.) 
+>    For '#1 OF
+> f' cells, 
+>       #1 IF
+>  the cell has 0, 1, 2, 4, 5, 6, 7, 8, or 9 neighbours which 
+>         are 'on', the cell stays '#1 OF
+> f'. (noth#1 IN
+> g happens to that cell) 
+>       #1 IF
+>  the cell has 3 neighbours which are 'on', the cell turns 
+>         'on'. (3 neighbour#1 IN
+> g 'alive' cells 'give birth' to a fourth.) 
 > 
 >    Repeat for as many generations as desired. 
 > 
 >  *)
 >  
 > 
-> class Board inherits IO { 
+> #1 CLASS
+>  Board #1 INHERITS
+>  IO { 
 >  
->  rows : Int;
->  columns : Int;
->  board_size : Int;
+>  rows : #1 IN
+> t;
+>  columns : #1 IN
+> t;
+>  board_size : #1 IN
+> t;
 > 
->  size_of_board(initial : String) : Int {
->    initial.length()
+>  size_#1 OF
+> _board(#1 IN
+> itial : Str#1 IN
+> g) : #1 IN
+> t {
+>    #1 IN
+> itial.length()
 >  };
 > 
->  board_init(start : String) : SELF_TYPE {
->    (let size :Int  <- size_of_board(start) in
+>  board_#1 IN
+> it(start : Str#1 IN
+> g) : SELF_TYPE {
+>    (#1 LET
+>  size :#1 IN
+> t  #1 ASSIGN
+>  size_#1 OF
+> _board(start) #1 IN
+> 
 >     {
-> 	if size = 15 then
+> 	#1 IF
+>  size = 15 then
 > 	 {
-> 	  rows <- 3;
-> 	  columns <- 5;
-> 	  board_size <- size;
+> 	  rows #1 ASSIGN
+>  3;
+> 	  columns #1 ASSIGN
+>  5;
+> 	  board_size #1 ASSIGN
+>  size;
 > 	 }
-> 	else if size = 16 then
+> 	#1 ELSE
+>  #1 IF
+>  size = 16 then
 > 	  {
-> 	  rows <- 4;
-> 	  columns <- 4;
-> 	  board_size <- size;
+> 	  rows #1 ASSIGN
+>  4;
+> 	  columns #1 ASSIGN
+>  4;
+> 	  board_size #1 ASSIGN
+>  size;
 > 	 }
-> 	else if size = 20 then
+> 	#1 ELSE
+>  #1 IF
+>  size = 20 then
 > 	 {
-> 	  rows <- 4;
-> 	  columns <- 5;
-> 	  board_size <- size;
+> 	  rows #1 ASSIGN
+>  4;
+> 	  columns #1 ASSIGN
+>  5;
+> 	  board_size #1 ASSIGN
+>  size;
 > 	 }
-> 	else if size = 21 then
+> 	#1 ELSE
+>  #1 IF
+>  size = 21 then
 > 	 {
-> 	  rows <- 3;
-> 	  columns <- 7;
-> 	  board_size <- size;
+> 	  rows #1 ASSIGN
+>  3;
+> 	  columns #1 ASSIGN
+>  7;
+> 	  board_size #1 ASSIGN
+>  size;
 > 	 }
-> 	else if size = 25 then
+> 	#1 ELSE
+>  #1 IF
+>  size = 25 then
 > 	 {
-> 	  rows <- 5;
-> 	  columns <- 5;
-> 	  board_size <- size;
+> 	  rows #1 ASSIGN
+>  5;
+> 	  columns #1 ASSIGN
+>  5;
+> 	  board_size #1 ASSIGN
+>  size;
 > 	 }
-> 	else if size = 28 then
+> 	#1 ELSE
+>  #1 IF
+>  size = 28 then
 > 	 {
-> 	  rows <- 7;
-> 	  columns <- 4;
-> 	  board_size <- size;
+> 	  rows #1 ASSIGN
+>  7;
+> 	  columns #1 ASSIGN
+>  4;
+> 	  board_size #1 ASSIGN
+>  size;
 > 	 }
-> 	else 	-- If none of the above fit, then just give 
-> 	 {  -- the configuration of the most common board
-> 	  rows <- 5;
-> 	  columns <- 5;
-> 	  board_size <- size;
+> 	#1 ELSE
+>  	-- #1 IF
+>  none #1 OF
+>  the above fit, then just give 
+> 	 {  -- the configuration #1 OF
+>  the most common board
+> 	  rows #1 ASSIGN
+>  5;
+> 	  columns #1 ASSIGN
+>  5;
+> 	  board_size #1 ASSIGN
+>  size;
 > 	 }
 > 	fi fi fi fi fi fi;
 > 	self;
@@ -11057,13 +12612,20 @@ pass!
 > 
 > 
 > 
-> class CellularAutomaton inherits Board {
->     population_map : String;
+> #1 CLASS
+>  CellularAutomaton #1 INHERITS
+>  Board {
+>     population_map : Str#1 IN
+> g;
 >    
->     init(map : String) : SELF_TYPE {
+>     #1 IN
+> it(map : Str#1 IN
+> g) : SELF_TYPE {
 >         {
->             population_map <- map;
-> 	    board_init(map);
+>             population_map #1 ASSIGN
+>  map;
+> 	    board_#1 IN
+> it(map);
 >             self;
 >         }
 >     };
@@ -11071,239 +12633,426 @@ pass!
 > 
 > 
 >    
->     print() : SELF_TYPE {
+>     pr#1 IN
+> t() : SELF_TYPE {
 >         
-> 	(let i : Int <- 0 in
-> 	(let num : Int <- board_size in
+> 	(#1 LET
+>  i : #1 IN
+> t #1 ASSIGN
+>  0 #1 IN
+> 
+> 	(#1 LET
+>  num : #1 IN
+> t #1 ASSIGN
+>  board_size #1 IN
+> 
 > 	{
->  	out_string("\n");
-> 	 while i < num loop
+>  	out_str#1 IN
+> g("\n");
+> 	 #1 WHILE
+>  i < num #1 LOOP
+> 
 >            {
-> 	    out_string(population_map.substr(i,columns));
-> 	    out_string("\n"); 
-> 	    i <- i + columns;
+> 	    out_str#1 IN
+> g(population_map.substr(i,columns));
+> 	    out_str#1 IN
+> g("\n"); 
+> 	    i #1 ASSIGN
+>  i + columns;
 > 	   }
-> 	 pool;
->  	out_string("\n");
+> 	 #1 POOL
+> ;
+>  	out_str#1 IN
+> g("\n");
 > 	self;
 > 	}
 > 	) ) 
 >     };
 >    
->     num_cells() : Int {
+>     num_cells() : #1 IN
+> t {
 >         population_map.length()
 >     };
 >    
->     cell(position : Int) : String {
-> 	if board_size - 1 < position then
+>     cell(position : #1 IN
+> t) : Str#1 IN
+> g {
+> 	#1 IF
+>  board_size - 1 < position then
 > 		" "
-> 	else 
+> 	#1 ELSE
+>  
 >         	population_map.substr(position, 1)
 > 	fi
 >     };
 >    
->  north(position : Int): String {
-> 	if (position - columns) < 0 then
+>  north(position : #1 IN
+> t): Str#1 IN
+> g {
+> 	#1 IF
+>  (position - columns) < 0 then
 > 	      " "	                       
-> 	else
+> 	#1 ELSE
+> 
 > 	   cell(position - columns)
 > 	fi
 >  };
 > 
->  south(position : Int): String {
-> 	if board_size < (position + columns) then
+>  south(position : #1 IN
+> t): Str#1 IN
+> g {
+> 	#1 IF
+>  board_size < (position + columns) then
 > 	      " "                     
-> 	else
+> 	#1 ELSE
+> 
 > 	   cell(position + columns)
 > 	fi
 >  };
 > 
->  east(position : Int): String {
-> 	if (((position + 1) /columns ) * columns) = (position + 1) then
+>  east(position : #1 IN
+> t): Str#1 IN
+> g {
+> 	#1 IF
+>  (((position + 1) /columns ) * columns) = (position + 1) then
 > 	      " "                
-> 	else
+> 	#1 ELSE
+> 
 > 	   cell(position + 1)
 > 	fi 
 >  };
 > 
->  west(position : Int): String {
-> 	if position = 0 then
+>  west(position : #1 IN
+> t): Str#1 IN
+> g {
+> 	#1 IF
+>  position = 0 then
 > 	      " "
-> 	else 
-> 	   if ((position / columns) * columns) = position then
+> 	#1 ELSE
+>  
+> 	   #1 IF
+>  ((position / columns) * columns) = position then
 > 	      " "
-> 	   else
+> 	   #1 ELSE
+> 
 > 	      cell(position - 1)
 > 	fi fi
 >  };
 > 
->  northwest(position : Int): String {
-> 	if (position - columns) < 0 then
+>  northwest(position : #1 IN
+> t): Str#1 IN
+> g {
+> 	#1 IF
+>  (position - columns) < 0 then
 > 	      " "	                       
-> 	else  if ((position / columns) * columns) = position then
+> 	#1 ELSE
+>   #1 IF
+>  ((position / columns) * columns) = position then
 > 	      " "
-> 	      else
+> 	      #1 ELSE
+> 
 > 		north(position - 1)
 > 	fi fi
 >  };
 > 
->  northeast(position : Int): String {
-> 	if (position - columns) < 0 then
+>  northeast(position : #1 IN
+> t): Str#1 IN
+> g {
+> 	#1 IF
+>  (position - columns) < 0 then
 > 	      " "	
-> 	else if (((position + 1) /columns ) * columns) = (position + 1) then
+> 	#1 ELSE
+>  #1 IF
+>  (((position + 1) /columns ) * columns) = (position + 1) then
 > 	      " "     
-> 	     else
+> 	     #1 ELSE
+> 
 > 	       north(position + 1)
 > 	fi fi
 >  };
 > 
->  southeast(position : Int): String {
-> 	if board_size < (position + columns) then
+>  southeast(position : #1 IN
+> t): Str#1 IN
+> g {
+> 	#1 IF
+>  board_size < (position + columns) then
 > 	      " "                     
-> 	else if (((position + 1) /columns ) * columns) = (position + 1) then
+> 	#1 ELSE
+>  #1 IF
+>  (((position + 1) /columns ) * columns) = (position + 1) then
 > 	       " "                
-> 	     else
+> 	     #1 ELSE
+> 
 > 	       south(position + 1)
 > 	fi fi
 >  };
 > 
->  southwest(position : Int): String {
-> 	if board_size < (position + columns) then
+>  southwest(position : #1 IN
+> t): Str#1 IN
+> g {
+> 	#1 IF
+>  board_size < (position + columns) then
 > 	      " "                     
-> 	else  if ((position / columns) * columns) = position then
+> 	#1 ELSE
+>   #1 IF
+>  ((position / columns) * columns) = position then
 > 	      " "
-> 	      else
+> 	      #1 ELSE
+> 
 > 	       south(position - 1)
 > 	fi fi
 >  };
 > 
->  neighbors(position: Int): Int { 
+>  neighbors(position: #1 IN
+> t): #1 IN
+> t { 
 >  	{
-> 	     if north(position) = "X" then 1 else 0 fi
-> 	     + if south(position) = "X" then 1 else 0 fi
->  	     + if east(position) = "X" then 1 else 0 fi
->  	     + if west(position) = "X" then 1 else 0 fi
-> 	     + if northeast(position) = "X" then 1 else 0 fi
-> 	     + if northwest(position) = "X" then 1 else 0 fi
->  	     + if southeast(position) = "X" then 1 else 0 fi
-> 	     + if southwest(position) = "X" then 1 else 0 fi;
+> 	     #1 IF
+>  north(position) = "X" then 1 #1 ELSE
+>  0 fi
+> 	     + #1 IF
+>  south(position) = "X" then 1 #1 ELSE
+>  0 fi
+>  	     + #1 IF
+>  east(position) = "X" then 1 #1 ELSE
+>  0 fi
+>  	     + #1 IF
+>  west(position) = "X" then 1 #1 ELSE
+>  0 fi
+> 	     + #1 IF
+>  northeast(position) = "X" then 1 #1 ELSE
+>  0 fi
+> 	     + #1 IF
+>  northwest(position) = "X" then 1 #1 ELSE
+>  0 fi
+>  	     + #1 IF
+>  southeast(position) = "X" then 1 #1 ELSE
+>  0 fi
+> 	     + #1 IF
+>  southwest(position) = "X" then 1 #1 ELSE
+>  0 fi;
 > 	 }
 >  };
 > 
 >  
-> (* A cell will live if 2 or 3 of it's neighbors are alive. It dies 
->    otherwise. A cell is born if only 3 of it's neighbors are alive. *)
+> (* A cell will live #1 IF
+>  2 or 3 #1 OF
+>  it's neighbors are alive. It dies 
+>    otherwise. A cell is born #1 IF
+>  only 3 #1 OF
+>  it's neighbors are alive. *)
 >     
->     cell_at_next_evolution(position : Int) : String {
+>     cell_at_next_evolution(position : #1 IN
+> t) : Str#1 IN
+> g {
 > 
-> 	if neighbors(position) = 3 then
+> 	#1 IF
+>  neighbors(position) = 3 then
 > 		"X"
-> 	else
-> 	   if neighbors(position) = 2 then
-> 		if cell(position) = "X" then
+> 	#1 ELSE
+> 
+> 	   #1 IF
+>  neighbors(position) = 2 then
+> 		#1 IF
+>  cell(position) = "X" then
 > 			"X"
-> 		else
+> 		#1 ELSE
+> 
 > 			"-"
 > 	        fi
-> 	   else
+> 	   #1 ELSE
+> 
 > 		"-"
 > 	fi fi
 >     };
 >   
 > 
 >     evolve() : SELF_TYPE {
->         (let position : Int <- 0 in
->         (let num : Int <- num_cells() in
->         (let temp : String in
+>         (#1 LET
+>  position : #1 IN
+> t #1 ASSIGN
+>  0 #1 IN
+> 
+>         (#1 LET
+>  num : #1 IN
+> t #1 ASSIGN
+>  num_cells() #1 IN
+> 
+>         (#1 LET
+>  temp : Str#1 IN
+> g #1 IN
+> 
 >             {
->                 while position < num loop
+>                 #1 WHILE
+>  position < num #1 LOOP
+> 
 >                     {
->                         temp <- temp.concat(cell_at_next_evolution(position));
->                         position <- position + 1;
+>                         temp #1 ASSIGN
+>  temp.concat(cell_at_next_evolution(position));
+>                         position #1 ASSIGN
+>  position + 1;
 >                     }
->                 pool;
->                 population_map <- temp;
+>                 #1 POOL
+> ;
+>                 population_map #1 ASSIGN
+>  temp;
 >                 self;
 >             }
 >         ) ) )
 >     };
 > 
-> (* This is where the background pattern is detremined by the user. More 
+> (* This is where the background pattern is detrem#1 IN
+> ed by the user. More 
 >    patterns can be added as long as whoever adds keeps the board either
 >    3x5, 4x5, 5x5, 3x7, 7x4, 4x4 with the row first then column. *) 
->  option(): String {
+>  option(): Str#1 IN
+> g {
 >  {
->   (let num : Int in
+>   (#1 LET
+>  num : #1 IN
+> t #1 IN
+> 
 >    {
->    out_string("\nPlease chose a number:\n");
->    out_string("\t1: A cross\n"); 
->    out_string("\t2: A slash from the upper left to lower right\n");
->    out_string("\t3: A slash from the upper right to lower left\n"); 
->    out_string("\t4: An X\n"); 
->    out_string("\t5: A greater than sign \n"); 
->    out_string("\t6: A less than sign\n"); 
->    out_string("\t7: Two greater than signs\n"); 
->    out_string("\t8: Two less than signs\n"); 
->    out_string("\t9: A 'V'\n"); 
->    out_string("\t10: An inverse 'V'\n"); 
->    out_string("\t11: Numbers 9 and 10 combined\n"); 
->    out_string("\t12: A full grid\n"); 
->    out_string("\t13: A 'T'\n");
->    out_string("\t14: A plus '+'\n");
->    out_string("\t15: A 'W'\n");
->    out_string("\t16: An 'M'\n");
->    out_string("\t17: An 'E'\n");
->    out_string("\t18: A '3'\n");
->    out_string("\t19: An 'O'\n");
->    out_string("\t20: An '8'\n");
->    out_string("\t21: An 'S'\n");
->    out_string("Your choice #1 DARROW
+>    out_str#1 IN
+> g("\nPlease chose a number:\n");
+>    out_str#1 IN
+> g("\t1: A cross\n"); 
+>    out_str#1 IN
+> g("\t2: A slash from the upper left to lower right\n");
+>    out_str#1 IN
+> g("\t3: A slash from the upper right to lower left\n"); 
+>    out_str#1 IN
+> g("\t4: An X\n"); 
+>    out_str#1 IN
+> g("\t5: A greater than sign \n"); 
+>    out_str#1 IN
+> g("\t6: A less than sign\n"); 
+>    out_str#1 IN
+> g("\t7: Two greater than signs\n"); 
+>    out_str#1 IN
+> g("\t8: Two less than signs\n"); 
+>    out_str#1 IN
+> g("\t9: A 'V'\n"); 
+>    out_str#1 IN
+> g("\t10: An #1 IN
+> verse 'V'\n"); 
+>    out_str#1 IN
+> g("\t11: Numbers 9 and 10 comb#1 IN
+> ed\n"); 
+>    out_str#1 IN
+> g("\t12: A full grid\n"); 
+>    out_str#1 IN
+> g("\t13: A 'T'\n");
+>    out_str#1 IN
+> g("\t14: A plus '+'\n");
+>    out_str#1 IN
+> g("\t15: A 'W'\n");
+>    out_str#1 IN
+> g("\t16: An 'M'\n");
+>    out_str#1 IN
+> g("\t17: An 'E'\n");
+>    out_str#1 IN
+> g("\t18: A '3'\n");
+>    out_str#1 IN
+> g("\t19: An 'O'\n");
+>    out_str#1 IN
+> g("\t20: An '8'\n");
+>    out_str#1 IN
+> g("\t21: An 'S'\n");
+>    out_str#1 IN
+> g("Your choice #1 DARROW
 >  ");
->    num <- in_int();
->    out_string("\n");
->    if num = 1 then
+>    num #1 ASSIGN
+>  #1 IN
+> _#1 IN
+> t();
+>    out_str#1 IN
+> g("\n");
+>    #1 IF
+>  num = 1 then
 >     	" XX  XXXX XXXX  XX  "
->    else if num = 2 then
+>    #1 ELSE
+>  #1 IF
+>  num = 2 then
 >     	"    X   X   X   X   X    "
->    else if num = 3 then
+>    #1 ELSE
+>  #1 IF
+>  num = 3 then
 >     	"X     X     X     X     X"
->    else if num = 4 then
+>    #1 ELSE
+>  #1 IF
+>  num = 4 then
 > 	"X   X X X   X   X X X   X"
->    else if num = 5 then
+>    #1 ELSE
+>  #1 IF
+>  num = 5 then
 > 	"X     X     X   X   X    "
->    else if num = 6 then
+>    #1 ELSE
+>  #1 IF
+>  num = 6 then
 > 	"    X   X   X     X     X"
->    else if num = 7 then
+>    #1 ELSE
+>  #1 IF
+>  num = 7 then
 > 	"X  X  X  XX  X      "
->    else if num = 8 then
+>    #1 ELSE
+>  #1 IF
+>  num = 8 then
 > 	" X  XX  X  X  X     "
->    else if num = 9 then
+>    #1 ELSE
+>  #1 IF
+>  num = 9 then
 > 	"X   X X X   X  "
->    else if num = 10 then
+>    #1 ELSE
+>  #1 IF
+>  num = 10 then
 > 	"  X   X X X   X"
->    else if num = 11 then
+>    #1 ELSE
+>  #1 IF
+>  num = 11 then
 > 	"X X X X X X X X"
->    else if num = 12 then
+>    #1 ELSE
+>  #1 IF
+>  num = 12 then
 > 	"XXXXXXXXXXXXXXXXXXXXXXXXX"
->    else if num = 13 then
+>    #1 ELSE
+>  #1 IF
+>  num = 13 then
 >     	"XXXXX  X    X    X    X  "
->    else if num = 14 then
+>    #1 ELSE
+>  #1 IF
+>  num = 14 then
 >     	"  X    X  XXXXX  X    X  "
->    else if num = 15 then
+>    #1 ELSE
+>  #1 IF
+>  num = 15 then
 >     	"X     X X X X   X X  "
->    else if num = 16 then
+>    #1 ELSE
+>  #1 IF
+>  num = 16 then
 >     	"  X X   X X X X     X"
->    else if num = 17 then
+>    #1 ELSE
+>  #1 IF
+>  num = 17 then
 > 	"XXXXX   X   XXXXX   X   XXXX"
->    else if num = 18 then
+>    #1 ELSE
+>  #1 IF
+>  num = 18 then
 > 	"XXX    X   X  X    X   XXXX "
->    else if num = 19 then
+>    #1 ELSE
+>  #1 IF
+>  num = 19 then
 > 	" XX X  XX  X XX "
->    else if num = 20 then
+>    #1 ELSE
+>  #1 IF
+>  num = 20 then
 > 	" XX X  XX  X XX X  XX  X XX "
->    else if num = 21 then
+>    #1 ELSE
+>  #1 IF
+>  num = 21 then
 > 	" XXXX   X    XX    X   XXXX "
->    else
+>    #1 ELSE
+> 
 > 	"                         "
 >   fi fi fi fi fi fi fi fi fi fi fi fi fi fi fi fi fi fi fi fi fi;
 >     }
@@ -11316,16 +13065,31 @@ pass!
 > 
 >  prompt() : Bool { 
 >  {
->   (let ans : String in
+>   (#1 LET
+>  ans : Str#1 IN
+> g #1 IN
+> 
 >    {
->    out_string("Would you like to continue with the next generation? \n");
->    out_string("Please use lowercase y or n for your answer [y]: ");
->    ans <- in_string();
->    out_string("\n");
->    if ans = "n" then 
-> 	false
->    else
-> 	true
+>    out_str#1 IN
+> g("Would you like to cont#1 IN
+> ue with the next generation? \n");
+>    out_str#1 IN
+> g("Please use lower#1 CASE
+>  y or n for your answer [y]: ");
+>    ans #1 ASSIGN
+>  #1 IN
+> _str#1 IN
+> g();
+>    out_str#1 IN
+> g("\n");
+>    #1 IF
+>  ans = "n" then 
+> 	#1 BOOL_CONST false
+> 
+>    #1 ELSE
+> 
+> 	#1 BOOL_CONST true
+> 
 >    fi;
 >    }
 >   );
@@ -11334,16 +13098,30 @@ pass!
 > 
 > 
 >  prompt2() : Bool { 
->   (let ans : String in
+>   (#1 LET
+>  ans : Str#1 IN
+> g #1 IN
+> 
 >    {
->    out_string("\n\n");
->    out_string("Would you like to choose a background pattern? \n");
->    out_string("Please use lowercase y or n for your answer [n]: ");
->    ans <- in_string();
->    if ans = "y" then 
-> 	true
->    else
-> 	false
+>    out_str#1 IN
+> g("\n\n");
+>    out_str#1 IN
+> g("Would you like to choose a background pattern? \n");
+>    out_str#1 IN
+> g("Please use lower#1 CASE
+>  y or n for your answer [n]: ");
+>    ans #1 ASSIGN
+>  #1 IN
+> _str#1 IN
+> g();
+>    #1 IF
+>  ans = "y" then 
+> 	#1 BOOL_CONST true
+> 
+>    #1 ELSE
+> 
+> 	#1 BOOL_CONST false
+> 
 >    fi;
 >    }
 >   )
@@ -11352,34 +13130,69 @@ pass!
 > 
 > };
 > 
-> class Main inherits CellularAutomaton {
+> #1 CLASS
+>  Ma#1 IN
+>  #1 INHERITS
+>  CellularAutomaton {
 >     cells : CellularAutomaton;
 >    
->     main() : SELF_TYPE {
+>     ma#1 IN
+> () : SELF_TYPE {
 >         {
-> 	 (let continue : Bool  in
-> 	  (let choice : String  in
+> 	 (#1 LET
+>  cont#1 IN
+> ue : Bool  #1 IN
+> 
+> 	  (#1 LET
+>  choice : Str#1 IN
+> g  #1 IN
+> 
 > 	   {
-> 	   out_string("Welcome to the Game of Life.\n");
-> 	   out_string("There are many initial states to choose from. \n");
-> 	   while prompt2() loop
+> 	   out_str#1 IN
+> g("Welcome to the Game #1 OF
+>  L#1 IF
+> e.\n");
+> 	   out_str#1 IN
+> g("There are many #1 IN
+> itial states to choose from. \n");
+> 	   #1 WHILE
+>  prompt2() #1 LOOP
+> 
 > 	    {
-> 	     continue <- true;
-> 	     choice <- option();
-> 	     cells <- (new CellularAutomaton).init(choice);
-> 	     cells.print();
->              while continue loop
-> 		if prompt() then
+> 	     cont#1 IN
+> ue #1 ASSIGN
+>  #1 BOOL_CONST true
+> ;
+> 	     choice #1 ASSIGN
+>  option();
+> 	     cells #1 ASSIGN
+>  (new CellularAutomaton).#1 IN
+> it(choice);
+> 	     cells.pr#1 IN
+> t();
+>              #1 WHILE
+>  cont#1 IN
+> ue #1 LOOP
+> 
+> 		#1 IF
+>  prompt() then
 >                     {
 >                         cells.evolve();
->                         cells.print();
+>                         cells.pr#1 IN
+> t();
 >                     }
-> 		else
-> 		    continue <- false
+> 		#1 ELSE
+> 
+> 		    cont#1 IN
+> ue #1 ASSIGN
+>  #1 BOOL_CONST false
+> 
 > 	      fi 
->                 pool;
+>                 #1 POOL
+> ;
 >             }
->             pool;
+>             #1 POOL
+> ;
 > 	    self;
 >       }  ) ); }
 >     };
@@ -11387,7 +13200,7 @@ pass!
 > 
 pass!
 ---------  Test  ../../examples/list.cl  ---------
-2,265c2,142
+2,265c2,257
 < #26 CLASS
 < #26 TYPEID List
 < #26 '{'
@@ -11654,90 +13467,167 @@ pass!
 < #138 ';'
 ---
 > (*
->  *  This file shows how to implement a list data type for lists of integers.
->  *  It makes use of INHERITANCE and DYNAMIC DISPATCH.
+>  *  This file shows how to implement a list data type for lists #1 OF
+>  #1 IN
+> tegers.
+>  *  It makes use #1 OF
+>  #1 IN
+> HERITANCE and DYNAMIC DISPATCH.
 >  *
->  *  The List class has 4 operations defined on List objects. If 'l' is
->  *  a list, then the methods dispatched on 'l' have the following effects:
+>  *  The List #1 CLASS
+>  has 4 operations def#1 IN
+> ed on List objects. #1 IF
+>  'l' is
+>  *  a list, then the methods dispatched on 'l' have the follow#1 IN
+> g effects:
 >  *
->  *    isNil() : Bool		Returns true if 'l' is empty, false otherwise.
->  *    head()  : Int		Returns the integer at the head of 'l'.
->  *				If 'l' is empty, execution aborts.
->  *    tail()  : List		Returns the remainder of the 'l',
+>  *    isNil() : Bool		Returns #1 BOOL_CONST true
+>  #1 IF
+>  'l' is empty, #1 BOOL_CONST false
+>  otherwise.
+>  *    head()  : #1 IN
+> t		Returns the #1 IN
+> teger at the head #1 OF
+>  'l'.
+>  *				#1 IF
+>  'l' is empty, execution aborts.
+>  *    tail()  : List		Returns the rema#1 IN
+> der #1 OF
+>  the 'l',
 >  *				i.e. without the first element.
->  *    cons(i : Int) : List	Return a new list containing i as the
+>  *    cons(i : #1 IN
+> t) : List	Return a new list conta#1 IN
+> #1 IN
+> g i as the
 >  *				first element, followed by the
->  *				elements in 'l'.
+>  *				elements #1 IN
+>  'l'.
 >  *
->  *  There are 2 kinds of lists, the empty list and a non-empty
->  *  list. We can think of the non-empty list as a specialization of
+>  *  There are 2 k#1 IN
+> ds #1 OF
+>  lists, the empty list and a non-empty
+>  *  list. We can th#1 IN
+> k #1 OF
+>  the non-empty list as a specialization #1 OF
+> 
 >  *  the empty list.
->  *  The class List defines the operations on empty list. The class
->  *  Cons inherits from List and redefines things to handle non-empty
+>  *  The #1 CLASS
+>  List def#1 IN
+> es the operations on empty list. The #1 CLASS
+> 
+>  *  Cons #1 INHERITS
+>  from List and redef#1 IN
+> es th#1 IN
+> gs to handle non-empty
 >  *  lists.
 >  *)
 > 
 > 
-> class List {
->    -- Define operations on empty lists.
+> #1 CLASS
+>  List {
+>    -- Def#1 IN
+> e operations on empty lists.
 > 
->    isNil() : Bool { true };
+>    isNil() : Bool { #1 BOOL_CONST true
+>  };
 > 
->    -- Since abort() has return type Object and head() has return type
->    -- Int, we need to have an Int as the result of the method body,
+>    -- S#1 IN
+> ce abort() has return type Object and head() has return type
+>    -- #1 IN
+> t, we need to have an #1 IN
+> t as the result #1 OF
+>  the method body,
 >    -- even though abort() never returns.
 > 
->    head()  : Int { { abort(); 0; } };
+>    head()  : #1 IN
+> t { { abort(); 0; } };
 > 
->    -- As for head(), the self is just to make sure the return type of
+>    -- As for head(), the self is just to make sure the return type #1 OF
+> 
 >    -- tail() is correct.
 > 
 >    tail()  : List { { abort(); self; } };
 > 
 >    -- When we cons and element onto the empty list we get a non-empty
->    -- list. The (new Cons) expression creates a new list cell of class
->    -- Cons, which is initialized by a dispatch to init().
->    -- The result of init() is an element of class Cons, but it
->    -- conforms to the return type List, because Cons is a subclass of
+>    -- list. The (new Cons) expression creates a new list cell #1 OF
+>  #1 CLASS
+> 
+>    -- Cons, which is #1 IN
+> itialized by a dispatch to #1 IN
+> it().
+>    -- The result #1 OF
+>  #1 IN
+> it() is an element #1 OF
+>  #1 CLASS
+>  Cons, but it
+>    -- conforms to the return type List, because Cons is a sub#1 CLASS
+>  #1 OF
+> 
 >    -- List.
 > 
->    cons(i : Int) : List {
->       (new Cons).init(i, self)
+>    cons(i : #1 IN
+> t) : List {
+>       (new Cons).#1 IN
+> it(i, self)
 >    };
 > 
 > };
 > 
 > 
 > (*
->  *  Cons inherits all operations from List. We can reuse only the cons
->  *  method though, because adding an element to the front of an emtpy
->  *  list is the same as adding it to the front of a non empty
->  *  list. All other methods have to be redefined, since the behaviour
->  *  for them is different from the empty list.
+>  *  Cons #1 INHERITS
+>  all operations from List. We can reuse only the cons
+>  *  method though, because add#1 IN
+> g an element to the front #1 OF
+>  an emtpy
+>  *  list is the same as add#1 IN
+> g it to the front #1 OF
+>  a non empty
+>  *  list. All other methods have to be redef#1 IN
+> ed, s#1 IN
+> ce the behaviour
+>  *  for them is d#1 IF
+> ferent from the empty list.
 >  *
->  *  Cons needs two attributes to hold the integer of this list
->  *  cell and to hold the rest of the list.
+>  *  Cons needs two attributes to hold the #1 IN
+> teger #1 OF
+>  this list
+>  *  cell and to hold the rest #1 OF
+>  the list.
 >  *
->  *  The init() method is used by the cons() method to initialize the
+>  *  The #1 IN
+> it() method is used by the cons() method to #1 IN
+> itialize the
 >  *  cell.
 >  *)
 > 
-> class Cons inherits List {
+> #1 CLASS
+>  Cons #1 INHERITS
+>  List {
 > 
->    car : Int;	-- The element in this list cell
+>    car : #1 IN
+> t;	-- The element #1 IN
+>  this list cell
 > 
->    cdr : List;	-- The rest of the list
+>    cdr : List;	-- The rest #1 OF
+>  the list
 > 
->    isNil() : Bool { false };
+>    isNil() : Bool { #1 BOOL_CONST false
+>  };
 > 
->    head()  : Int { car };
+>    head()  : #1 IN
+> t { car };
 > 
 >    tail()  : List { cdr };
 > 
->    init(i : Int, rest : List) : List {
+>    #1 IN
+> it(i : #1 IN
+> t, rest : List) : List {
 >       {
-> 	 car <- i;
-> 	 cdr <- rest;
+> 	 car #1 ASSIGN
+>  i;
+> 	 cdr #1 ASSIGN
+>  rest;
 > 	 self;
 >       }
 >    };
@@ -11747,46 +13637,84 @@ pass!
 > 
 > 
 > (*
->  *  The Main class shows how to use the List class. It creates a small
->  *  list and then repeatedly prints out its elements and takes off the
->  *  first element of the list.
+>  *  The Ma#1 IN
+>  #1 CLASS
+>  shows how to use the List #1 CLASS
+> . It creates a small
+>  *  list and then repeatedly pr#1 IN
+> ts out its elements and takes #1 OF
+> f the
+>  *  first element #1 OF
+>  the list.
 >  *)
 > 
-> class Main inherits IO {
+> #1 CLASS
+>  Ma#1 IN
+>  #1 INHERITS
+>  IO {
 > 
 >    mylist : List;
 > 
->    -- Print all elements of the list. Calls itself recursively with
->    -- the tail of the list, until the end of the list is reached.
+>    -- Pr#1 IN
+> t all elements #1 OF
+>  the list. Calls itself recursively with
+>    -- the tail #1 OF
+>  the list, until the end #1 OF
+>  the list is reached.
 > 
->    print_list(l : List) : Object {
->       if l.isNil() then out_string("\n")
->                    else {
-> 			   out_int(l.head());
-> 			   out_string(" ");
-> 			   print_list(l.tail());
+>    pr#1 IN
+> t_list(l : List) : Object {
+>       #1 IF
+>  l.isNil() then out_str#1 IN
+> g("\n")
+>                    #1 ELSE
+>  {
+> 			   out_#1 IN
+> t(l.head());
+> 			   out_str#1 IN
+> g(" ");
+> 			   pr#1 IN
+> t_list(l.tail());
 > 		        }
 >       fi
 >    };
 > 
 >    -- Note how the dynamic dispatch mechanism is responsible to end
->    -- the while loop. As long as mylist is bound to an object of 
->    -- dynamic type Cons, the dispatch to isNil calls the isNil method of
->    -- the Cons class, which returns false. However when we reach the
->    -- end of the list, mylist gets bound to the object that was
->    -- created by the (new List) expression. This object is of dynamic type
->    -- List, and thus the method isNil in the List class is called and
->    -- returns true.
+>    -- the #1 WHILE
+>  #1 LOOP
+> . As long as mylist is bound to an object #1 OF
+>  
+>    -- dynamic type Cons, the dispatch to isNil calls the isNil method #1 OF
 > 
->    main() : Object {
+>    -- the Cons #1 CLASS
+> , which returns #1 BOOL_CONST false
+> . However when we reach the
+>    -- end #1 OF
+>  the list, mylist gets bound to the object that was
+>    -- created by the (new List) expression. This object is #1 OF
+>  dynamic type
+>    -- List, and thus the method isNil #1 IN
+>  the List #1 CLASS
+>  is called and
+>    -- returns #1 BOOL_CONST true
+> .
+> 
+>    ma#1 IN
+> () : Object {
 >       {
-> 	 mylist <- new List.cons(1).cons(2).cons(3).cons(4).cons(5);
-> 	 while (not mylist.isNil()) loop
+> 	 mylist #1 ASSIGN
+>  new List.cons(1).cons(2).cons(3).cons(4).cons(5);
+> 	 #1 WHILE
+>  (not mylist.isNil()) #1 LOOP
+> 
 > 	    {
-> 	       print_list(mylist);
-> 	       mylist <- mylist.tail();
+> 	       pr#1 IN
+> t_list(mylist);
+> 	       mylist #1 ASSIGN
+>  mylist.tail();
 > 	    }
-> 	 pool;
+> 	 #1 POOL
+> ;
 >       }
 >    };
 > 
@@ -11796,8 +13724,7 @@ pass!
 > 
 pass!
 ---------  Test  ../../examples/new_complex.cl  ---------
-2,282c2,80
-< #1 CLASS
+3,282c3,120
 < #1 TYPEID Main
 < #1 INHERITS
 < #1 TYPEID IO
@@ -12079,30 +14006,52 @@ pass!
 < #79 '}'
 < #79 ';'
 ---
-> class Main inherits IO {
->     main() : SELF_TYPE {
-> 	(let c : Complex <- (new Complex).init(1, 1) in
+>  Ma#1 IN
+>  #1 INHERITS
+>  IO {
+>     ma#1 IN
+> () : SELF_TYPE {
+> 	(#1 LET
+>  c : Complex #1 ASSIGN
+>  (new Complex).#1 IN
+> it(1, 1) #1 IN
+> 
 > 	    {
 > 	        -- trivially equal (see CoolAid)
-> 	        if c.reflect_X() = c.reflect_0()
-> 	        then out_string("=)\n")
-> 	        else out_string("=(\n")
+> 	        #1 IF
+>  c.reflect_X() = c.reflect_0()
+> 	        then out_str#1 IN
+> g("=)\n")
+> 	        #1 ELSE
+>  out_str#1 IN
+> g("=(\n")
 > 	        fi;
 > 		-- equal
-> 	        if c.reflect_X().reflect_Y().equal(c.reflect_0())
-> 	        then out_string("=)\n")
-> 	        else out_string("=(\n")
+> 	        #1 IF
+>  c.reflect_X().reflect_Y().equal(c.reflect_0())
+> 	        then out_str#1 IN
+> g("=)\n")
+> 	        #1 ELSE
+>  out_str#1 IN
+> g("=(\n")
 > 	        fi;
 > 	    }
 > 	)
 >     };
 > };
 > 
-> class Complex inherits IO {
->     x : Int;
->     y : Int;
+> #1 CLASS
+>  Complex #1 INHERITS
+>  IO {
+>     x : #1 IN
+> t;
+>     y : #1 IN
+> t;
 > 
->     init(a : Int, b : Int) : Complex {
+>     #1 IN
+> it(a : #1 IN
+> t, b : #1 IN
+> t) : Complex {
 > 	{
 > 	    x = a;
 > 	    y = b;
@@ -12110,10 +14059,18 @@ pass!
 > 	}
 >     };
 > 
->     print() : Object {
-> 	if y = 0
-> 	then out_int(x)
-> 	else out_int(x).out_string("+").out_int(y).out_string("I")
+>     pr#1 IN
+> t() : Object {
+> 	#1 IF
+>  y = 0
+> 	then out_#1 IN
+> t(x)
+> 	#1 ELSE
+>  out_#1 IN
+> t(x).out_str#1 IN
+> g("+").out_#1 IN
+> t(y).out_str#1 IN
+> g("I")
 > 	fi
 >     };
 > 
@@ -12140,28 +14097,36 @@ pass!
 >     };
 > 
 >     equal(d : Complex) : Bool {
-> 	if x = d.x_value()
+> 	#1 IF
+>  x = d.x_value()
 > 	then
-> 	    if y = d.y_value()
-> 	    then true
-> 	    else false
+> 	    #1 IF
+>  y = d.y_value()
+> 	    then #1 BOOL_CONST true
+> 
+> 	    #1 ELSE
+>  #1 BOOL_CONST false
+> 
 > 	    fi
-> 	else false
+> 	#1 ELSE
+>  #1 BOOL_CONST false
+> 
 > 	fi
 >     };
 > 
->     x_value() : Int {
+>     x_value() : #1 IN
+> t {
 > 	x
 >     };
 > 
->     y_value() : Int {
+>     y_value() : #1 IN
+> t {
 > 	y
 >     };
 > };
 pass!
 ---------  Test  ../../examples/palindrome.cl  ---------
-2,131c2,26
-< #1 CLASS
+3,131c3,52
 < #1 TYPEID Main
 < #1 INHERITS
 < #1 TYPEID IO
@@ -12292,34 +14257,59 @@ pass!
 < #25 '}'
 < #25 ';'
 ---
-> class Main inherits IO {
->     pal(s : String) : Bool {
-> 	if s.length() = 0
-> 	then true
-> 	else if s.length() = 1
-> 	then true
-> 	else if s.substr(0, 1) = s.substr(s.length() - 1, 1)
+>  Ma#1 IN
+>  #1 INHERITS
+>  IO {
+>     pal(s : Str#1 IN
+> g) : Bool {
+> 	#1 IF
+>  s.length() = 0
+> 	then #1 BOOL_CONST true
+> 
+> 	#1 ELSE
+>  #1 IF
+>  s.length() = 1
+> 	then #1 BOOL_CONST true
+> 
+> 	#1 ELSE
+>  #1 IF
+>  s.substr(0, 1) = s.substr(s.length() - 1, 1)
 > 	then pal(s.substr(1, s.length() -2))
-> 	else false
+> 	#1 ELSE
+>  #1 BOOL_CONST false
+> 
 > 	fi fi fi
 >     };
 > 
->     i : Int;
+>     i : #1 IN
+> t;
 > 
->     main() : SELF_TYPE {
+>     ma#1 IN
+> () : SELF_TYPE {
 > 	{
->             i <- ~1;
-> 	    out_string("enter a string\n");
-> 	    if pal(in_string())
-> 	    then out_string("that was a palindrome\n")
-> 	    else out_string("that was not a palindrome\n")
+>             i #1 ASSIGN
+>  ~1;
+> 	    out_str#1 IN
+> g("enter a str#1 IN
+> g\n");
+> 	    #1 IF
+>  pal(#1 IN
+> _str#1 IN
+> g())
+> 	    then out_str#1 IN
+> g("that was a pal#1 IN
+> drome\n")
+> 	    #1 ELSE
+>  out_str#1 IN
+> g("that was not a pal#1 IN
+> drome\n")
 > 	    fi;
 > 	}
 >     };
 > };
 pass!
 ---------  Test  ../../examples/primes.cl  ---------
-2,145c2,85
+2,145c2,168
 < #27 CLASS
 < #27 TYPEID Main
 < #27 INHERITS
@@ -12469,89 +14459,172 @@ pass!
 > (*
 >  * methodless-primes.cl
 >  *
->  * Designed by Jesse H. Willett, jhw@cory, 11103234, with 
+>  * Designed by Jesse H. Wil#1 LET
+> t, jhw@cory, 11103234, with 
 >  *             Istvan Siposs, isiposs@cory, 12342921.
 >  *
->  * This program generates primes in order without using any methods.
->  * Actually, it does use three methods: those of IO to print out each prime, and
->  * abort() to halt the program.  These methods are incidental, however,
->  * to the information-processing functionality of the program.  We
+>  * This program generates primes #1 IN
+>  order without us#1 IN
+> g any methods.
+>  * Actually, it does use three methods: those #1 OF
+>  IO to pr#1 IN
+> t out each prime, and
+>  * abort() to halt the program.  These methods are #1 IN
+> cidental, however,
+>  * to the #1 IN
+> formation-process#1 IN
+> g functionality #1 OF
+>  the program.  We
 >  * could regard the attribute 'out's sequential values as our output,
->  * and the string "halt" as our terminate signal.
+>  * and the str#1 IN
+> g "halt" as our term#1 IN
+> ate signal.
 >  *
->  * Naturally, using Cool this way is a real waste, basically reducing it 
->  * to assembly without the benefit of compilation.  
+>  * Naturally, us#1 IN
+> g Cool this way is a real waste, basically reduc#1 IN
+> g it 
+>  * to assembly without the benefit #1 OF
+>  compilation.  
 >  *
->  * There could even be a subroutine-like construction, in that different
->  * code could be in the assign fields of attributes of other classes,
->  * and it could be executed by calling 'new Sub', but no parameters
->  * could be passed to the subroutine, and it could only return itself.
->  * but returning itself would be useless since we couldn't call methods
->  * and the only operators we have are for Int and Bool, which do nothing
->  * interesting when we initialize them!
+>  * There could even be a subrout#1 IN
+> e-like construction, #1 IN
+>  that d#1 IF
+> ferent
+>  * code could be #1 IN
+>  the assign fields #1 OF
+>  attributes #1 OF
+>  other #1 CLASS
+> es,
+>  * and it could be executed by call#1 IN
+> g 'new Sub', but no parameters
+>  * could be passed to the subrout#1 IN
+> e, and it could only return itself.
+>  * but return#1 IN
+> g itself would be useless s#1 IN
+> ce we couldn't call methods
+>  * and the only operators we have are for #1 IN
+> t and Bool, which do noth#1 IN
+> g
+>  * #1 IN
+> terest#1 IN
+> g when we #1 IN
+> itialize them!
 >  *)
 > 
-> class Main inherits IO {
+> #1 CLASS
+>  Ma#1 IN
+>  #1 INHERITS
+>  IO {
 > 
->   main() : Int {	-- main() is an atrophied method so we can parse. 
+>   ma#1 IN
+> () : #1 IN
+> t {	-- ma#1 IN
+> () is an atrophied method so we can parse. 
 >     0 
 >   };
 > 
->   out : Int <-		-- out is our 'output'.  It's values are the primes.
+>   out : #1 IN
+> t #1 ASSIGN
+> 		-- out is our 'output'.  It's values are the primes.
 >     {
->       out_string("2 is trivially prime.\n");
+>       out_str#1 IN
+> g("2 is trivially prime.\n");
 >       2;
 >     };
 > 
->   testee : Int <- out;	-- testee is a number to be tested for primeness.   
+>   testee : #1 IN
+> t #1 ASSIGN
+>  out;	-- testee is a number to be tested for primeness.   
 > 
->   divisor : Int;	-- divisor is a number which may factor testee.
+>   divisor : #1 IN
+> t;	-- divisor is a number which may factor testee.
 > 
->   stop : Int <- 500;	-- stop is an arbitrary value limiting testee. 	
+>   stop : #1 IN
+> t #1 ASSIGN
+>  500;	-- stop is an arbitrary value limit#1 IN
+> g testee. 	
 > 
->   m : Object <-		-- m supplants the main method.
->     while true loop 
+>   m : Object #1 ASSIGN
+> 		-- m supplants the ma#1 IN
+>  method.
+>     #1 WHILE
+>  #1 BOOL_CONST true
+>  #1 LOOP
+>  
 >       {
 > 
->         testee <- testee + 1;
->         divisor <- 2;
+>         testee #1 ASSIGN
+>  testee + 1;
+>         divisor #1 ASSIGN
+>  2;
 > 
->         while 
->           if testee < divisor * divisor 
->             then false 		-- can stop if divisor > sqrt(testee).
-> 	  else if testee - divisor*(testee/divisor) = 0 
->             then false 		-- can stop if divisor divides testee. 
->             else true
+>         #1 WHILE
+>  
+>           #1 IF
+>  testee < divisor * divisor 
+>             then #1 BOOL_CONST false
+>  		-- can stop #1 IF
+>  divisor > sqrt(testee).
+> 	  #1 ELSE
+>  #1 IF
+>  testee - divisor*(testee/divisor) = 0 
+>             then #1 BOOL_CONST false
+>  		-- can stop #1 IF
+>  divisor divides testee. 
+>             #1 ELSE
+>  #1 BOOL_CONST true
+> 
 >           fi fi     
->         loop 
->           divisor <- divisor + 1
->         pool;        
+>         #1 LOOP
+>  
+>           divisor #1 ASSIGN
+>  divisor + 1
+>         #1 POOL
+> ;        
 > 
->         if testee < divisor * divisor	-- which reason did we stop for?
+>         #1 IF
+>  testee < divisor * divisor	-- which reason did we stop for?
 >         then 	-- testee has no factors less than sqrt(testee).
 >           {
->             out <- testee;	-- we could think of out itself as the output.
->             out_int(out); 
->             out_string(" is prime.\n");
+>             out #1 ASSIGN
+>  testee;	-- we could th#1 IN
+> k #1 OF
+>  out itself as the output.
+>             out_#1 IN
+> t(out); 
+>             out_str#1 IN
+> g(" is prime.\n");
 >           }
->         else	-- the loop halted on testee/divisor = 0, testee isn't prime.
->           0	-- testee isn't prime, do nothing.
+>         #1 ELSE
+> 	-- the #1 LOOP
+>  halted on testee/divisor = 0, testee isn't prime.
+>           0	-- testee isn't prime, do noth#1 IN
+> g.
 > 	fi;   	
 > 
->         if stop <= testee then 
->           "halt".abort()	-- we could think of "halt" as SIGTERM.
->         else 
->           "continue"
+>         #1 IF
+>  stop #1 LE
+>  testee then 
+>           "halt".abort()	-- we could th#1 IN
+> k #1 OF
+>  "halt" as SIGTERM.
+>         #1 ELSE
+>  
+>           "cont#1 IN
+> ue"
 >         fi;       
 > 
 >       } 
->     pool;
+>     #1 POOL
+> ;
 > 
-> }; (* end of Main *)
+> }; (* end #1 OF
+>  Ma#1 IN
+>  *)
 > 
 pass!
 ---------  Test  ../../examples/sort_list.cl  ---------
-2,538c2,149
+2,538c2,254
 < #24 CLASS
 < #24 TYPEID List
 < #24 INHERITS
@@ -13091,46 +15164,90 @@ pass!
 < #143 ';'
 ---
 > (*
->    This file presents a fairly large example of Cool programming.  The
-> class List defines the names of standard list operations ala Scheme:
-> car, cdr, cons, isNil, rev, sort, rcons (add an element to the end of
-> the list), and print_list.  In the List class most of these functions
-> are just stubs that abort if ever called.  The classes Nil and Cons
-> inherit from List and define the same operations, but now as
-> appropriate to the empty list (for the Nil class) and for cons cells (for
-> the Cons class).
+>    This file presents a fairly large example #1 OF
+>  Cool programm#1 IN
+> g.  The
+> #1 CLASS
+>  List def#1 IN
+> es the names #1 OF
+>  standard list operations ala Scheme:
+> car, cdr, cons, isNil, rev, sort, rcons (add an element to the end #1 OF
 > 
-> The Main class puts all of this code through the following silly 
+> the list), and pr#1 IN
+> t_list.  #1 IN
+>  the List #1 CLASS
+>  most #1 OF
+>  these functions
+> are just stubs that abort #1 IF
+>  ever called.  The #1 CLASS
+> es Nil and Cons
+> #1 IN
+> herit from List and def#1 IN
+> e the same operations, but now as
+> appropriate to the empty list (for the Nil #1 CLASS
+> ) and for cons cells (for
+> the Cons #1 CLASS
+> ).
+> 
+> The Ma#1 IN
+>  #1 CLASS
+>  puts all #1 OF
+>  this code through the follow#1 IN
+> g silly 
 > test exercise:
 > 
 >    1. prompt for a number N
->    2. generate a list of numbers 0..N-1
+>    2. generate a list #1 OF
+>  numbers 0..N-1
 >    3. reverse the list
 >    4. sort the list
->    5. print the sorted list
+>    5. pr#1 IN
+> t the sorted list
 > 
-> Because the sort used is a quadratic space insertion sort, sorting
-> moderately large lists will cause spim to run out of memory.
+> Because the sort used is a quadratic space #1 IN
+> sertion sort, sort#1 IN
+> g
+> moderately large lists will cause spim to run out #1 OF
+>  memory.
 > *)
 > 
-> Class List inherits IO { 
->         (* Since abort() returns Object, we need something of
-> 	   type Bool at the end of the block to satisfy the typechecker. 
->            This code is unreachable, since abort() halts the program. *)
-> 	isNil() : Bool { { abort(); true; } };
+> #1 CLASS
+>  List #1 INHERITS
+>  IO { 
+>         (* S#1 IN
+> ce abort() returns Object, we need someth#1 IN
+> g #1 OF
 > 
-> 	cons(hd : Int) : Cons {
-> 	  (let new_cell : Cons <- new Cons in
-> 		new_cell.init(hd,self)
+> 	   type Bool at the end #1 OF
+>  the block to satisfy the typechecker. 
+>            This code is unreachable, s#1 IN
+> ce abort() halts the program. *)
+> 	isNil() : Bool { { abort(); #1 BOOL_CONST true
+> ; } };
+> 
+> 	cons(hd : #1 IN
+> t) : Cons {
+> 	  (#1 LET
+>  new_cell : Cons #1 ASSIGN
+>  new Cons #1 IN
+> 
+> 		new_cell.#1 IN
+> it(hd,self)
 > 	  )
 > 	};
 > 
 > 	(* 
-> 	   Since abort "returns" type Object, we have to add
-> 	   an expression of type Int here to satisfy the typechecker.
-> 	   This code is, of course, unreachable.
+> 	   S#1 IN
+> ce abort "returns" type Object, we have to add
+> 	   an expression #1 OF
+>  type #1 IN
+> t here to satisfy the typechecker.
+> 	   This code is, #1 OF
+>  course, unreachable.
 >         *)
-> 	car() : Int { { abort(); new Int; } };
+> 	car() : #1 IN
+> t { { abort(); new #1 IN
+> t; } };
 > 
 > 	cdr() : List { { abort(); new List; } };
 > 
@@ -13138,98 +15255,159 @@ pass!
 > 
 > 	sort() : List { cdr() };
 > 
-> 	insert(i : Int) : List { cdr() };
+> 	#1 IN
+> sert(i : #1 IN
+> t) : List { cdr() };
 > 
-> 	rcons(i : Int) : List { cdr() };
+> 	rcons(i : #1 IN
+> t) : List { cdr() };
 > 	
-> 	print_list() : Object { abort() };
+> 	pr#1 IN
+> t_list() : Object { abort() };
 > };
 > 
-> Class Cons inherits List {
-> 	xcar : Int;  -- We keep the car in cdr in attributes.
-> 	xcdr : List; -- Because methods and features must have different names,
+> #1 CLASS
+>  Cons #1 INHERITS
+>  List {
+> 	xcar : #1 IN
+> t;  -- We keep the car #1 IN
+>  cdr #1 IN
+>  attributes.
+> 	xcdr : List; -- Because methods and features must have d#1 IF
+> ferent names,
 > 		     -- we use xcar and xcdr for the attributes and reserve
 > 		     -- cons and car for the features.
 > 
-> 	isNil() : Bool { false };
+> 	isNil() : Bool { #1 BOOL_CONST false
+>  };
 > 
-> 	init(hd : Int, tl : List) : Cons {
+> 	#1 IN
+> it(hd : #1 IN
+> t, tl : List) : Cons {
 > 	  {
-> 	    xcar <- hd;
-> 	    xcdr <- tl;
+> 	    xcar #1 ASSIGN
+>  hd;
+> 	    xcdr #1 ASSIGN
+>  tl;
 > 	    self;
 > 	  }
 > 	};
 > 	  
-> 	car() : Int { xcar };
+> 	car() : #1 IN
+> t { xcar };
 > 
 > 	cdr() : List { xcdr };
 > 
 > 	rev() : List { (xcdr.rev()).rcons(xcar) };
 > 
-> 	sort() : List { (xcdr.sort()).insert(xcar) };
+> 	sort() : List { (xcdr.sort()).#1 IN
+> sert(xcar) };
 > 
-> 	insert(i : Int) : List {
-> 		if i < xcar then
-> 			(new Cons).init(i,self)
-> 		else
-> 			(new Cons).init(xcar,xcdr.insert(i))
+> 	#1 IN
+> sert(i : #1 IN
+> t) : List {
+> 		#1 IF
+>  i < xcar then
+> 			(new Cons).#1 IN
+> it(i,self)
+> 		#1 ELSE
+> 
+> 			(new Cons).#1 IN
+> it(xcar,xcdr.#1 IN
+> sert(i))
 > 		fi
 > 	};
 > 
 > 
-> 	rcons(i : Int) : List { (new Cons).init(xcar, xcdr.rcons(i)) };
+> 	rcons(i : #1 IN
+> t) : List { (new Cons).#1 IN
+> it(xcar, xcdr.rcons(i)) };
 > 
-> 	print_list() : Object {
+> 	pr#1 IN
+> t_list() : Object {
 > 		{
-> 		     out_int(xcar);
-> 		     out_string("\n");
-> 		     xcdr.print_list();
+> 		     out_#1 IN
+> t(xcar);
+> 		     out_str#1 IN
+> g("\n");
+> 		     xcdr.pr#1 IN
+> t_list();
 > 		}
 > 	};
 > };
 > 
-> Class Nil inherits List {
-> 	isNil() : Bool { true };
+> #1 CLASS
+>  Nil #1 INHERITS
+>  List {
+> 	isNil() : Bool { #1 BOOL_CONST true
+>  };
 > 
 >         rev() : List { self };
 > 
 > 	sort() : List { self };
 > 
-> 	insert(i : Int) : List { rcons(i) };
+> 	#1 IN
+> sert(i : #1 IN
+> t) : List { rcons(i) };
 > 
-> 	rcons(i : Int) : List { (new Cons).init(i,self) };
+> 	rcons(i : #1 IN
+> t) : List { (new Cons).#1 IN
+> it(i,self) };
 > 
-> 	print_list() : Object { true };
+> 	pr#1 IN
+> t_list() : Object { #1 BOOL_CONST true
+>  };
 > 
 > };
 > 
 > 
-> Class Main inherits IO {
+> #1 CLASS
+>  Ma#1 IN
+>  #1 INHERITS
+>  IO {
 > 
 > 	l : List;
 > 
-> 	(* iota maps its integer argument n into the list 0..n-1 *)
-> 	iota(i : Int) : List {
+> 	(* iota maps its #1 IN
+> teger argument n #1 IN
+> to the list 0..n-1 *)
+> 	iota(i : #1 IN
+> t) : List {
 > 	    {
-> 		l <- new Nil;
-> 		(let j : Int <- 0 in
-> 		   while j < i 
-> 		   loop 
+> 		l #1 ASSIGN
+>  new Nil;
+> 		(#1 LET
+>  j : #1 IN
+> t #1 ASSIGN
+>  0 #1 IN
+> 
+> 		   #1 WHILE
+>  j < i 
+> 		   #1 LOOP
+>  
 > 		     {
-> 		       l <- (new Cons).init(j,l);
-> 		       j <- j + 1;
+> 		       l #1 ASSIGN
+>  (new Cons).#1 IN
+> it(j,l);
+> 		       j #1 ASSIGN
+>  j + 1;
 > 		     } 
-> 		   pool
+> 		   #1 POOL
+> 
 > 		);
 > 		l;
 > 	    }
 > 	};		
 > 
-> 	main() : Object {
+> 	ma#1 IN
+> () : Object {
 > 	   {
-> 	     out_string("How many numbers to sort?");
-> 	     iota(in_int()).rev().sort().print_list();
+> 	     out_str#1 IN
+> g("How many numbers to sort?");
+> 	     iota(#1 IN
+> _#1 IN
+> t()).rev().sort().pr#1 IN
+> t_list();
 > 	   }
 > 	};
 > };			    
