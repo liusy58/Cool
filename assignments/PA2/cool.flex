@@ -33,6 +33,8 @@ extern FILE *fin; /* we read from this file */
 
 char string_buf[MAX_STR_CONST]; /* to assemble string constants */
 char *string_buf_ptr;
+static int string_buf_index = 0;
+
 
 extern int curr_lineno;
 extern int verbose_flag;
@@ -49,6 +51,8 @@ extern YYSTYPE cool_yylval;
  * Define names for regular expressions here.
  */
 
+%x BLOCK_COMMENT LINE_COMMENT TYPE_DECLARE STRING
+
 DARROW          =>
 LE              <=
 ASSIGN          <-
@@ -64,8 +68,13 @@ WHILE           ?i:while
 CASE            ?i:case
 ESAC            ?i:esac
 OF              ?i:of
+NEW             ?i:new
+FI              ?i:fi
 TRUE            true
 FALSE           false
+
+
+
 %%
 
  /*
@@ -98,6 +107,8 @@ FALSE           false
 <INITIAL>{CASE}  {return (CASE);}
 <INITIAL>{ESAC}  {return (ESAC);}
 <INITIAL>{OF}  {return (OF);}
+<INITIAL>{NEW}  {return (NEW);}
+<INITIAL>{FI}  {return (FI);}
 
 
 <INITIAL>{TRUE}  {cool_yylval.boolean = true;return (BOOL_CONST);}
@@ -110,6 +121,7 @@ FALSE           false
 <INITIAL>\*      {return '*';}
 <INITIAL>=      {return '=';}
 <INITIAL><      {return '<';}
+<INITIAL>>      {return '<';}
 <INITIAL>\.      {return '.';}
 <INITIAL>~      {return '~';}
 <INITIAL>,      {return ',';}
@@ -120,5 +132,49 @@ FALSE           false
 <INITIAL>@      {return '@';}
 <INITIAL>\{      {return '{';}
 <INITIAL>\}      {return '}';}
+<INITIAL>\[      {return '[';}
+<INITIAL>\]      {return ']';}
+
+
+<INITIAL>\(\*    {BEGIN(BLOCK_COMMENT);}
+<INITIAL>\n      {curr_lineno++;}
+<INITIAL>\f     {continue;}
+<INITIAL>\r     {continue;}
+<INITIAL>\t     {continue;}
+<INITIAL>\v     {continue;}
+<INITIAL>" "    {continue;}
+<INITIAL>--     {BEGIN(LINE_COMMENT);}
+<LINE_COMMENT>\n      {curr_lineno++;BEGIN(INITIAL);}
+<LINE_COMMENT>.       {continue;}
+
+
+<INITIAL>IO   {cool_yylval.symbol = idtable.add_string(yytext, yyleng);return(TYPEID);}
+<INITIAL>Object   {cool_yylval.symbol = idtable.add_string(yytext, yyleng);return(TYPEID);}
+<INITIAL>Int   {cool_yylval.symbol = idtable.add_string(yytext, yyleng);return(TYPEID);}
+<INITIAL>String   {cool_yylval.symbol = idtable.add_string(yytext, yyleng);return(TYPEID);}
+<INITIAL>Bool   {cool_yylval.symbol = idtable.add_string(yytext, yyleng);return(TYPEID);}
+<INITIAL>SELF_TYPE   {cool_yylval.symbol = idtable.add_string(yytext, yyleng);return(TYPEID);}
+
+
+
+<INITIAL>[a-zA-Z][a-zA-Z0-9_]*   {cool_yylval.symbol = idtable.add_string(yytext, yyleng);return(OBJECTID);}
+<INITIAL>[0-9]*   {cool_yylval.symbol = inttable.add_string(yytext, yyleng);return(INT_CONST);}
+
+
+<INITIAL>"\""    {string_buf_index = 0;memset(string_buf,'\0',sizeof(string_buf));BEGIN(STRING);}
+<STRING>"\""     {
+                    BEGIN(INITIAL);
+                    string_buf[string_buf_index++] = '\0';
+                    printf("in STRING and the string is %s\n",string_buf);
+                    cool_yylval.symbol = stringtable.add_string(string_buf,MAX_STR_CONST);
+                    return (STR_CONST); }
+<STRING>.        {
+                    string_buf[string_buf_index++] = *yytext;}
+
+
+<BLOCK_COMMENT>\*\)    {BEGIN(INITIAL);}
+<BLOCK_COMMENT>\n      {curr_lineno++;}
+<BLOCK_COMMENT>.       {}
+
 
 %%
