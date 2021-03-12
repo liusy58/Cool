@@ -70,6 +70,9 @@ ESAC            ?i:esac
 OF              ?i:of
 NEW             ?i:new
 FI              ?i:fi
+THEN            ?i:then
+NOT             ?i:not
+ISVOID          ?i:isvoid
 TRUE            true
 FALSE           false
 
@@ -95,11 +98,11 @@ FALSE           false
   * Keywords are case-insensitive except for the values true and false,
   * which must begin with a lower-case letter.
   */
-<INITIAL>{CLASS}  { return (CLASS);}
+<INITIAL>{CLASS}  { BEGIN(TYPE_DECLARE);return (CLASS);}
 <INITIAL>{ELSE}  {return (ELSE);}
 <INITIAL>{IF}  {return (IF);}
 <INITIAL>{IN}  {return (IN);}
-<INITIAL>{INHERITS}  {return (INHERITS);}
+<INITIAL>{INHERITS}  {BEGIN(TYPE_DECLARE);return (INHERITS);}
 <INITIAL>{LET}  {return (LET);}
 <INITIAL>{LOOP}  {return (LOOP);}
 <INITIAL>{POOL}  {return (POOL);}
@@ -107,9 +110,11 @@ FALSE           false
 <INITIAL>{CASE}  {return (CASE);}
 <INITIAL>{ESAC}  {return (ESAC);}
 <INITIAL>{OF}  {return (OF);}
-<INITIAL>{NEW}  {return (NEW);}
+<INITIAL>{NEW}  {BEGIN(TYPE_DECLARE);return (NEW);}
 <INITIAL>{FI}  {return (FI);}
-
+<INITIAL>{THEN}  {return (THEN);}
+<INITIAL>{NOT}  {return (NOT);}
+<INITIAL>{ISVOID}  {return (ISVOID);}
 
 <INITIAL>{TRUE}  {cool_yylval.boolean = true;return (BOOL_CONST);}
 <INITIAL>{FALSE}  {cool_yylval.boolean = false;return (BOOL_CONST);}
@@ -121,19 +126,16 @@ FALSE           false
 <INITIAL>\*      {return '*';}
 <INITIAL>=      {return '=';}
 <INITIAL><      {return '<';}
-<INITIAL>>      {return '<';}
 <INITIAL>\.      {return '.';}
 <INITIAL>~      {return '~';}
 <INITIAL>,      {return ',';}
 <INITIAL>;      {return ';';}
-<INITIAL>:      {return ':';}
+<INITIAL>:      {BEGIN(TYPE_DECLARE);return ':';}
 <INITIAL>\(      {return '(';}
 <INITIAL>\)      {return ')';}
-<INITIAL>@      {return '@';}
+<INITIAL>@      {BEGIN(TYPE_DECLARE);return '@';}
 <INITIAL>\{      {return '{';}
 <INITIAL>\}      {return '}';}
-<INITIAL>\[      {return '[';}
-<INITIAL>\]      {return ']';}
 
 
 <INITIAL>\(\*    {BEGIN(BLOCK_COMMENT);}
@@ -144,8 +146,6 @@ FALSE           false
 <INITIAL>\v     {continue;}
 <INITIAL>" "    {continue;}
 <INITIAL>--     {BEGIN(LINE_COMMENT);}
-<LINE_COMMENT>\n      {curr_lineno++;BEGIN(INITIAL);}
-<LINE_COMMENT>.       {continue;}
 
 
 <INITIAL>IO   {cool_yylval.symbol = idtable.add_string(yytext, yyleng);return(TYPEID);}
@@ -162,19 +162,53 @@ FALSE           false
 
 
 <INITIAL>"\""    {string_buf_index = 0;memset(string_buf,'\0',sizeof(string_buf));BEGIN(STRING);}
+<INITIAL>\*\)       {
+            char *msg = (char*)malloc(128);
+            strncpy(msg,"Unmatched *)",128);
+            cool_yylval.error_msg = msg;
+            return{ERROR};}
+<INITIAL>.       {cool_yylval.error_msg = yytext;return{ERROR};}
+
+
 <STRING>"\""     {
                     BEGIN(INITIAL);
                     string_buf[string_buf_index++] = '\0';
-                    printf("in STRING and the string is %s\n",string_buf);
                     cool_yylval.symbol = stringtable.add_string(string_buf,MAX_STR_CONST);
                     return (STR_CONST); }
-<STRING>.        {
-                    string_buf[string_buf_index++] = *yytext;}
+<STRING>\\n        {string_buf[string_buf_index++] = '\n';}
+<STRING>\\t        {string_buf[string_buf_index++] = '\t';}
+<STRING>\\b        {string_buf[string_buf_index++] = '\b';}
+<STRING>\\f        {string_buf[string_buf_index++] = '\f';}
+<STRING>\\.         {string_buf[string_buf_index++] = yytext[1];}
+<STRING><EOF>      {
+                    char *msg = (char*)malloc(128);
+                    strncpy(msg,"EOF in string constant",128);
+                    cool_yylval.error_msg = msg;
+                    return{ERROR};}
+<STRING>.        {string_buf[string_buf_index++] = *yytext;}
+
+
+<LINE_COMMENT>\n      {curr_lineno++;BEGIN(INITIAL);}
+<LINE_COMMENT>.       {continue;}
 
 
 <BLOCK_COMMENT>\*\)    {BEGIN(INITIAL);}
 <BLOCK_COMMENT>\n      {curr_lineno++;}
+<BLOCK_COMMENT><<EOF>>      {
+                        BEGIN(INITIAL);
+                        char *msg = (char*)malloc(128);
+                        strncpy(msg,"EOF in comment",128);
+                        cool_yylval.error_msg = msg;
+                        return{ERROR};}
 <BLOCK_COMMENT>.       {}
+
+
+<TYPE_DECLARE>\f     {continue;}
+<TYPE_DECLARE>\r     {continue;}
+<TYPE_DECLARE>\t     {continue;}
+<TYPE_DECLARE>\v     {continue;}
+<TYPE_DECLARE>" "    {continue;}
+<TYPE_DECLARE>[a-zA-Z][a-zA-Z0-9_]*   {BEGIN(INITIAL);cool_yylval.symbol = idtable.add_string(yytext, yyleng);return(TYPEID);}
 
 
 %%

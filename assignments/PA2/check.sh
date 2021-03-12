@@ -6,9 +6,9 @@ for filename in ../../examples/*.cl;do
     ./lexer $filename > myout
     if diff refout myout;
     then
-        echo "error!"
+        echo "pass!"
     else
-      echo "pass!"
+      echo "error!"
     fi
 done
 
