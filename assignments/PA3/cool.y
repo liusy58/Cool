@@ -157,17 +157,52 @@
     ;
     
     /* If no parent is specified, the class inherits from the Object class. */
-    class	: CLASS TYPEID '{' dummy_feature_list '}' ';'
+    class	: CLASS TYPEID '{' feature_list '}' ';'
     { $$ = class_($2,idtable.add_string("Object"),$4,
     stringtable.add_string(curr_filename)); }
-    | CLASS TYPEID INHERITS TYPEID '{' dummy_feature_list '}' ';'
+    | CLASS TYPEID INHERITS TYPEID '{' feature_list '}' ';'
     { $$ = class_($2,$4,$6,stringtable.add_string(curr_filename)); }
     ;
-    
+
+    /*
+    * $$ represent the result reference of the current expression's evaluation.
+    */
+    feature_list:       /* empty */
+    {$$ = nil_Features();}
+    | feature_list feature	/* several features */
+    { $$ = append_Features($1,single_Features($2)); };
+
+    feature: OBJECTID '(' formal_list ')' ':' TYPEID '{' expression_list  '}'
+    { $$ = method($1,$3,$6,$8);}
+    | OBJECTID ':' TYPEID
+    { $$ = formal($1,$3);}
+    | OBJECTID ':' TYPEID ASSIGN expression_list
+    { $$ = attr($1,$3,$5);}
+
+    formal_list:
+    { $$ = nil_Formals();}
+    formal_list formal_
+    { $$ = append_Formals($1,$2);}
+
+    formal_:
+    OBJECTID ':' TYPEID
+    {$$ = formal($1,$3);}
+
+
+    expression_list:
+    {$$ = no_expr();}
+    | OBJECTID ASSIGN expression_list
+    { $$ = assign($1,$3);}
+    |
+
+
+
+
+
     /* Feature list may be empty, but no empty features in list. */
     dummy_feature_list:		/* empty */
     {  $$ = nil_Features(); }
-    
+
     
     /* end of grammar */
     %%

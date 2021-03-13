@@ -170,8 +170,7 @@ FALSE           false
 <INITIAL>.       {cool_yylval.error_msg = yytext;return{ERROR};}
 
 
-<STRING>"\""     {
-                    BEGIN(INITIAL);
+<STRING>"\""     {  BEGIN(INITIAL);
                     string_buf[string_buf_index++] = '\0';
                     cool_yylval.symbol = stringtable.add_string(string_buf,MAX_STR_CONST);
                     return (STR_CONST); }
@@ -179,13 +178,13 @@ FALSE           false
 <STRING>\\t        {string_buf[string_buf_index++] = '\t';}
 <STRING>\\b        {string_buf[string_buf_index++] = '\b';}
 <STRING>\\f        {string_buf[string_buf_index++] = '\f';}
-<STRING>\\.         {string_buf[string_buf_index++] = yytext[1];}
-<STRING><EOF>      {
+<STRING>\\.        {string_buf[string_buf_index++] = yytext[1];}
+<STRING><<EOF>>     {
                     char *msg = (char*)malloc(128);
                     strncpy(msg,"EOF in string constant",128);
                     cool_yylval.error_msg = msg;
                     return{ERROR};}
-<STRING>.        {string_buf[string_buf_index++] = *yytext;}
+<STRING>.           {string_buf[string_buf_index++] = *yytext;}
 
 
 <LINE_COMMENT>\n      {curr_lineno++;BEGIN(INITIAL);}
