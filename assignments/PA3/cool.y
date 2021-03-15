@@ -133,10 +133,17 @@
     %type <program> program
     %type <classes> class_list
     %type <class_> class
-    
+
+
     /* You will want to change the following line. */
-    %type <features> dummy_feature_list
-    
+    %type <features> feature_list
+    %type <feature> feature
+    %type <expressions> expression_list;
+    %type <expression> expression
+    %type <formals> formal_list;
+    %type <formal> formal_;
+
+
     /* Precedence declarations go here. */
     
     
@@ -144,7 +151,9 @@
     /* 
     Save the root of the abstract syntax tree in a global variable.
     */
-    program	: class_list	{ @$ = @1; ast_root = program($1); }
+    program
+    : class_list
+    { @$ = @1; ast_root = program($1); }
     ;
     
     class_list
@@ -157,7 +166,8 @@
     ;
     
     /* If no parent is specified, the class inherits from the Object class. */
-    class	: CLASS TYPEID '{' feature_list '}' ';'
+    class
+    : CLASS TYPEID '{' feature_list '}' ';'
     { $$ = class_($2,idtable.add_string("Object"),$4,
     stringtable.add_string(curr_filename)); }
     | CLASS TYPEID INHERITS TYPEID '{' feature_list '}' ';'
@@ -167,41 +177,82 @@
     /*
     * $$ represent the result reference of the current expression's evaluation.
     */
-    feature_list:       /* empty */
+    feature_list
+    :       /* empty */
     {$$ = nil_Features();}
     | feature_list feature	/* several features */
-    { $$ = append_Features($1,single_Features($2)); };
+    { $$ = append_Features($1,single_Features($2)); }
+    ;
 
-    feature: OBJECTID '(' formal_list ')' ':' TYPEID '{' expression_list  '}'
-    { $$ = method($1,$3,$6,$8);}
+    feature
+    : OBJECTID '(' formal_list ')' ':' TYPEID '{' expression  '}'
+    { $$ = method($1,$3,$6,$8);};
     | OBJECTID ':' TYPEID
-    { $$ = formal($1,$3);}
-    | OBJECTID ':' TYPEID ASSIGN expression_list
+    { $$ = method($1,nil_Formals(),$3,no_expr());};
+    | OBJECTID ':' TYPEID ASSIGN expression
     { $$ = attr($1,$3,$5);}
-
-    formal_list:
-    { $$ = nil_Formals();}
-    formal_list formal_
-    { $$ = append_Formals($1,$2);}
-
-    formal_:
-    OBJECTID ':' TYPEID
-    {$$ = formal($1,$3);}
+    ;
 
 
-    expression_list:
-    {$$ = no_expr();}
-    | OBJECTID ASSIGN expression_list
-    { $$ = assign($1,$3);}
-    |
+    formal_
+    : OBJECTID ':' TYPEID
+    { $$ = formal($1,$3);}
+    ;
 
+
+    formal_list
+    :
+    { $$ = nil_Formals();};
+    | formal_list formal_
+    { $$ = append_Formals($1,single_Formals($2));}
+    ;
 
 
 
+    expression
+    :
+    { $$ = no_expr();};
+    | OBJECTID ASSIGN expression
+    { $$ = assign($1,$3);};
+    | IF expression THEN expression ELSE expression FI
+    { $$ = cond($2,$4,$6);};
+    | WHILE expression LOOP expression POOL
+    { $$ = loop($2,$4);};
+    | NEW TYPEID
+    { $$ = new_($2);};
+    | ISVOID expression
+    { $$ = isvoid($2);};
+    | expression '+' expression
+    { $$ = plus($1,$3);};
+    | expression '−' expression
+    { $$ = sub($1,$3);};
+    | expression '∗' expression
+    { $$ = mul($1,$3);};
+    | expression '/' expression
+    { $$ = divide($1,$3);};
+    |  '~' expression
+    { $$ = neg($2);};
+    | expression '<' expression
+    { $$ = lt($1,$3);};
+    | expression LE expression
+    { $$ = leq($1,$3);};
+    | expression '=' expression
+    { $$ = eq($1,$3);};
+    | NOT expression
+    { $$ = neg($2);};
+    | '(' expression ')'
+    { $$ = $2;};
+    | OBJECTID
+    { $$ = object($1);};
+    | INT_CONST
+    { $$ = int_const($1);};
+    | STR_CONST
+    { $$ = string_const($1);};
+    | BOOL_CONST
+    { $$ = bool_const($1);}
+    ;
 
-    /* Feature list may be empty, but no empty features in list. */
-    dummy_feature_list:		/* empty */
-    {  $$ = nil_Features(); }
+
 
     
     /* end of grammar */
