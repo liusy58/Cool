@@ -95,7 +95,7 @@ void ClassTable::name_check(Classes classes) {
     // add all class to class_table
     for(int i = classes->first(); classes->more(i); i = classes->next(i)){
         Class_ curr_class = classes->nth(i);
-
+        class_table[curr_class->get_name()] = curr_class;
    }
 }
 
