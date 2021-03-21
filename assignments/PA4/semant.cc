@@ -1,5 +1,3 @@
-
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdarg.h>
@@ -81,12 +79,24 @@ static void initialize_constants(void)
     val         = idtable.add_string("_val");
 }
 
+Symbol class__class::get_name() { return name; }
+
 
 
 ClassTable::ClassTable(Classes classes) : semant_errors(0) , error_stream(cerr) {
 
     /* Fill this in */
+    table = new SymbolTable<char *, int>();
 
+    name_check(classes);
+}
+
+void ClassTable::name_check(Classes classes) {
+    // add all class to class_table
+    for(int i = classes->first(); classes->more(i); i = classes->next(i)){
+        Class_ curr_class = classes->nth(i);
+
+   }
 }
 
 void ClassTable::install_basic_classes() {
@@ -247,8 +257,8 @@ void program_class::semant()
     /* some semantic analysis code may go here */
 
     if (classtable->errors()) {
-	cerr << "Compilation halted due to static semantic errors." << endl;
-	exit(1);
+	    cerr << "Compilation halted due to static semantic errors." << endl;
+	    exit(1);
     }
 }
 

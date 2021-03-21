@@ -164,3 +164,16 @@ Instructions
 
 Write-up for PA4
 ----------------
+
+
+
+First, check that the inheritance graph is well-defined, meaning that all the restrictions on inheritance are satisfied. If
+the inheritance graph is not well-defined, it is acceptable to abort compilation (after printing appropriate
+error messages, of course!).
+
+Second, check all the other semantic conditions. It is much easier to implement
+this second component if one knows the inheritance graph and that it is legal.
+
+
+
+

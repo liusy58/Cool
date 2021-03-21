@@ -7,6 +7,8 @@
 #include "stringtab.h"
 #include "symtab.h"
 #include "list.h"
+#include <map>
+
 
 #define TRUE 1
 #define FALSE 0
@@ -25,12 +27,18 @@ private:
   void install_basic_classes();
   ostream& error_stream;
 
+  SymbolTable<char *,int> *table=NULL;
+  int index = 1;
+  void name_check(Classes classes);
+  void type_check(Classes classes);
 public:
+
   ClassTable(Classes);
   int errors() { return semant_errors; }
   ostream& semant_error();
   ostream& semant_error(Class_ c);
   ostream& semant_error(Symbol filename, tree_node *t);
+  std::map<Symbol,Class_> class_table;
 };
 
 
