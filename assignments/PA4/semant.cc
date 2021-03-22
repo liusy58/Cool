@@ -2,7 +2,14 @@
 #include <stdio.h>
 #include <stdarg.h>
 #include "semant.h"
+#include <sstream>
 #include "utilities.h"
+
+
+
+static bool TESTING = false;
+static std::ostringstream nop_sstream;
+static std::ostream &log = TESTING ? std::cout : nop_sstream;
 
 
 extern int semant_debug;
@@ -79,7 +86,6 @@ static void initialize_constants(void)
     val         = idtable.add_string("_val");
 }
 
-Symbol class__class::get_name() { return name; }
 
 
 
@@ -92,11 +98,43 @@ ClassTable::ClassTable(Classes classes) : semant_errors(0) , error_stream(cerr) 
 }
 
 void ClassTable::name_check(Classes classes) {
-    // add all class to class_table
+    // add all class to class_table so we can check whether duplicate declaration exits.
     for(int i = classes->first(); classes->more(i); i = classes->next(i)){
         Class_ curr_class = classes->nth(i);
+        if(class_table.find(curr_class->get_name())!=class_table.end()){
+            semant_error(curr_class)<<"Error! The class "<<curr_class<<" has declared before"<<endl;
+            return;
+        }
         class_table[curr_class->get_name()] = curr_class;
    }
+
+    // we need check whether Main class exits.
+    if(class_table.find(Main)==class_table.end()){
+        semant_error(curr_class)<<"Error! The Main class doesn't exit"<<endl;
+        return;
+    }
+
+    // now we can check whether inheritance cycle exits.
+    for(int i = classes->first(); classes->more(i); i = classes->next(i)) {
+        Class_ curr_class = classes->nth(i);
+        Symbol parent = curr_class->get_parent();
+        while(parent!=Object&&parent!=curr_class->get_name()){
+            if(parent == Int || parent == Str || parent == SELF_TYPE || parent == Bool){
+                semant_error(curr_class)<<"Error! The  class"<< parent << " cannot be a inherit type"<<endl;
+                return;
+            }
+            if(class_table.find(parent) == class_table.end()){
+                semant_error(curr_class)<<"Error! The  class"<< parent << " doesn't exit"<<endl;
+                return;
+            }
+            Class_ par = class_table[parent];
+            parent = par->get_parent();
+        }
+        if(parent == curr_class->get_name()){
+            semant_error(curr_class)<<"Error! The  class inheritance forms a cycle"<<endl;
+            return;
+        }
+    }
 }
 
 void ClassTable::install_basic_classes() {
