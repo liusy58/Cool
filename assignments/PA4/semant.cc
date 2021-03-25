@@ -120,7 +120,7 @@ void ClassTable::name_check(Classes classes) {
         Symbol parent = curr_class->get_parent();
         while(parent!=Object&&parent!=curr_class->get_name()){
             if(parent == Int || parent == Str || parent == SELF_TYPE || parent == Bool){
-                semant_error(curr_class)<<"Error! The  class"<< parent << " cannot be a inherit type"<<endl;
+                semant_error(curr_clas s)<<"Error! The  class"<< parent << " cannot be a inherit type"<<endl;
                 return;
             }
             if(class_table.find(parent) == class_table.end()){

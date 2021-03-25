@@ -3,7 +3,7 @@
 for filename in ../../examples/*.cl;do
     echo "---------  Test  "$filename"  ---------"
      ../../bin/.i686/lexer $filename | ../../bin/.i686/parser  > refout
-    ./myparser $filename > myout
+    bash myparser $filename > myout
     if diff refout myout;
     then
         echo "pass!"
