@@ -153,15 +153,15 @@
 
     /* You will want to change the following line. */
 
-%left ASSIGN
-%left NOT
-%nonassoc LE '<' '='
-%left '+' '-'
-%left '*' '/'
-%left ISVOID
-%left '~'
-%left '@'
-%left '.'
+    %left ASSIGN
+    %left NOT
+    %nonassoc LE '<' '='
+    %left '+' '-'
+    %left '*' '/'
+    %left ISVOID
+    %left '~'
+    %left '@'
+    %left '.'
 
     /* Precedence declarations go here. */
 
@@ -276,13 +276,13 @@
     case_list
     : case
     { $$ = single_Cases($1);}
-    | case ';' case_list
-    { $$ = append_Cases(single_Cases($1),$3);}
+    | case  case_list
+    { $$ = append_Cases(single_Cases($1),$2);}
     ;
 
 
     case
-    : OBJECTID ':' TYPEID DARROW expression
+    : OBJECTID ':' TYPEID DARROW expression ';'
     { $$ = branch($1,$3,$5);}
     ;
 
@@ -295,7 +295,7 @@
     | expression '@' TYPEID '.' OBJECTID '(' expression_list ')'
     { $$ = static_dispatch($1,$3,$5,$7);}
     | OBJECTID '(' expression_list ')'
-    { $$ =dispatch(no_expr(),$1,$3); }
+    { $$ =dispatch(object(idtable.add_string("self")),$1,$3); }
     | IF expression THEN expression ELSE expression FI
     { $$ = cond($2,$4,$6);}
     | WHILE expression LOOP expression POOL
@@ -338,6 +338,8 @@
     { $$ = string_const($1);}
     | BOOL_CONST
     { $$ = bool_const($1);}
+    |
+    { $$ = no_expr(); }
     ;
 
     /* end of grammar */
