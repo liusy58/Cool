@@ -8,7 +8,8 @@
 #include "symtab.h"
 #include "list.h"
 #include <map>
-
+#include <unordered_map>
+#include <set>
 
 #define TRUE 1
 #define FALSE 0
@@ -27,10 +28,12 @@ private:
   void install_basic_classes();
   ostream& error_stream;
 
-  SymbolTable<char *,int> *table=NULL;
-  int index = 1;
-  void name_check(Classes classes);
-  void type_check(Classes classes);
+  SymbolTable<Symbol,Symbol> attrs;
+  void installClasses(Classes &classes);
+  int checkInheritanceCycle(Classes &classes);
+  void installMethods();
+  int checkMain();
+  void checkMethods();
 public:
 
   ClassTable(Classes);
@@ -38,7 +41,11 @@ public:
   ostream& semant_error();
   ostream& semant_error(Class_ c);
   ostream& semant_error(Symbol filename, tree_node *t);
-  std::map<Symbol,Class_> class_table;
+  std::unordered_map<Symbol,Class_> class_table; // Symbol -> class
+  std::unordered_map<Class_,std::set<method_class*>> method_table; // class -> methods
+
+  std::vector<Class_> getAncestors(Class_ curr_class);
+  bool canConform(Symbol ltype,Symbol rType);
 };
 
 

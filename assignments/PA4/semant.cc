@@ -92,50 +92,21 @@ static void initialize_constants(void)
 ClassTable::ClassTable(Classes classes) : semant_errors(0) , error_stream(cerr) {
 
     /* Fill this in */
-    table = new SymbolTable<char *, int>();
-
-    name_check(classes);
-}
-
-void ClassTable::name_check(Classes classes) {
-    // add all class to class_table so we can check whether duplicate declaration exits.
-    for(int i = classes->first(); classes->more(i); i = classes->next(i)){
-        Class_ curr_class = classes->nth(i);
-        if(class_table.find(curr_class->get_name())!=class_table.end()){
-            semant_error(curr_class)<<"Error! The class "<<curr_class<<" has declared before"<<endl;
-            return;
-        }
-        class_table[curr_class->get_name()] = curr_class;
+    install_basic_classes();
+    install_classes(classes);
+   if(check_inheritence_cycle(classes)){
+       return ;
    }
 
-    // we need check whether Main class exits.
-    if(class_table.find(Main)==class_table.end()){
-        semant_error(curr_class)<<"Error! The Main class doesn't exit"<<endl;
+    if(!checkMain()){
         return;
     }
 
-    // now we can check whether inheritance cycle exits.
-    for(int i = classes->first(); classes->more(i); i = classes->next(i)) {
-        Class_ curr_class = classes->nth(i);
-        Symbol parent = curr_class->get_parent();
-        while(parent!=Object&&parent!=curr_class->get_name()){
-            if(parent == Int || parent == Str || parent == SELF_TYPE || parent == Bool){
-                semant_error(curr_clas s)<<"Error! The  class"<< parent << " cannot be a inherit type"<<endl;
-                return;
-            }
-            if(class_table.find(parent) == class_table.end()){
-                semant_error(curr_class)<<"Error! The  class"<< parent << " doesn't exit"<<endl;
-                return;
-            }
-            Class_ par = class_table[parent];
-            parent = par->get_parent();
-        }
-        if(parent == curr_class->get_name()){
-            semant_error(curr_class)<<"Error! The  class inheritance forms a cycle"<<endl;
-            return;
-        }
-    }
+    installMethods();
+    checkMethods();
+
 }
+
 
 void ClassTable::install_basic_classes() {
 
@@ -236,6 +207,13 @@ void ClassTable::install_basic_classes() {
 						      Str, 
 						      no_expr()))),
 	       filename);
+
+    class_table[Object] = Object_class;
+    class_table[IO] = IO_class;
+    class_table[Int] = Int_class;
+    class_table[Str] = Str_class;
+    class_table[Bool] = Bool_class;
+
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -300,4 +278,161 @@ void program_class::semant()
     }
 }
 
+
+void ClassTable::installClasses(Classes &classes){
+    // add all class to class_table so we can check whether duplicate declaration exits.
+    for(int i = classes->first(); classes->more(i); i = classes->next(i)){
+        Class_ curr_class = classes->nth(i);
+        if(!class_table.count(curr_class->get_name())){
+            semant_error(curr_class)<<"Error! The class "<<curr_class<<" has declared before"<<endl;
+            return;
+        }
+        class_table[curr_class->get_name()] = curr_class;
+    }
+}
+
+int ClassTable::checkInheritanceCycle(Classes &classes){
+    // now we can check whether inheritance cycle exits.
+    for(int i = classes->first(); classes->more(i); i = classes->next(i)) {
+        Class_ curr_class = classes->nth(i);
+        Symbol parent = curr_class->get_parent();
+        while(parent!=Object&&parent!=curr_class->get_name()){
+            if(parent == Int || parent == Str || parent == SELF_TYPE || parent == Bool){
+                semant_error(curr_clas s)<<"Error! The  class"<< parent << " cannot be a inherit type"<<endl;
+                return;
+            }
+            if(!class_table.count(parent)){
+                semant_error(curr_class)<<"Error! The  class"<< parent << " doesn't exit"<<endl;
+                return;
+            }
+            Class_ par = class_table[parent];
+            parent = par->get_parent();
+        }
+        if(parent == curr_class->get_name()){
+            semant_error(curr_class)<<"Error! The class inheritance forms a cycle"<<endl;
+            return;
+        }
+    }
+}
+void ClassTable::installMethods(){
+    for(auto &iter:class_table){
+        Class_ curr_class = iter->second;
+        std::set<method_class*>methods;
+        Features features = curr_class->getFeatures();
+        for(int i = features->first(); features->more(i); i = features->next(i)){
+            if(features->nth(i)->isMethod()){
+                method_class* method = static_cast<method_class*>(features->nth(i));
+                if(methods.count(method)){
+                      semant_error(curr_class)<<"Error! The method "<<method->get_name()<<" is duplicated"<<endl;
+                    return;
+                }
+                methods.insert(method);
+            }
+        }
+        method_table[curr_class] = methods;
+    }
+}
+
+int ClassTable::checkMain{
+        if(!class_table.count(Main)){
+            semant_error(curr_class)<<"Error! The Main class doesn't exit"<<endl;
+            return 0;
+        }
+        Class_ main_class = class_table[Main];
+        Features features = curr_class.second->getFeatures();
+        for(int i = features->first(); features->more(i); i = features->next(i)){
+            if(features->nth(i)->isMethod()){
+                if(stcmp(features->nth(i)->get_string(),"main")==0){
+                    return 1;
+                }
+            }
+        }
+        semant_error(curr_class)<<"Error! The Main class doesn't contain a main method"<<endl;
+        return 0;
+};
+
+
+void ClassTable::checkMethods(){
+    for(auto &iter:class_table){
+        attrs.enterscope();
+        if(iter.first ==  Object_class ||iter.first ==  IO_class ||iter.first ==  Int_class
+        ||iter.first ==  Str_class||iter.first ==  Bool_class){
+            continue;
+        }
+        Symbol class_name = iter->first;
+        Class_ curr_class = iter->second;
+        Features features = curr_class.second->getFeatures();
+
+        std::vector<Class_> ancestors = getAncestors(curr_class);
+        for(auto &ancestor:ancestors){
+            Features ancestor_features = ancestor->getFeatures();
+            attrs.enterscope();
+            for(int i = ancestor_features->first(); ancestor_features->more(i); i = ancestor_features->next(i)){
+                if(ancestor_features->nth(i)->isAttr()){
+                    attr_class*attr = static_cast<attr_class*>(ancestor_features->nth(i));
+                    attrs.addid(attr->get_name(),attr->get_type());
+                }
+            }
+        }
+
+        for(int i = features->first(); features->more(i); i = features->next(i)){
+            if(features->nth(i)->isMethod()){
+                method_class* curr_method = static_cast<method_class*>(features->nth(i));
+
+                for(auto &ancestor:ancestors){
+                    method_class* ancestor_method =
+                }
+            }else{
+               // attr
+                attr_class*attr = static_cast<attr_class*>(features->nth(i));
+                Symbol type = attr->getType();
+                if(!class_table.count(type)){
+                    semant_error(curr_class)<<"Error! The type has not been declared yet."<<endl;
+                    return;
+                }
+                Symbol expr_type = attr->getInitExp()->checkType();
+                if(!class_table.count(expr_type)||!canConform(type,expr_type)){
+                    semant_error(curr_class)<<"Error! The types not match."<<endl;
+                    return;
+                }
+            }
+        }
+    }
+}
+
+std::vector<Class_> ClassTable::getAncestors(Class_ curr_class){
+    vector<Class_>res;
+    while(curr_class != Object){
+        res.push_back(curr_class);
+        curr_class = class_name->get_parent();
+    }
+    return res;
+}
+
+bool ClassTable::canConform(Symbol lType,Symbol rType){
+    if(lType == Object && rType == Object){
+        return true;
+    }
+    if(lType != Object && rType == Object){
+        return false;
+    }
+    if(lType == Object){
+        return true;
+    }
+    if(!class_table.count(lType)||!class_table.count(rType)){
+        // maybe we need to think of a method to print the error.
+        return false;
+    }
+
+    Class_ lClass = class_table[lType];
+    Class_ rClass = class_table[rType];
+
+    std::vector<Class_> ancestors = getAncestors(rClass);
+    for(auto &ancestor:ancestors){
+        if(ancestor == lClass){
+            return true;
+        }
+    }
+    return false;
+}
 

@@ -65,14 +65,26 @@ void dump_with_types(ostream&,int);
 
 
 #define Feature_EXTRAS                                        \
-virtual void dump_with_types(ostream&,int) = 0;
+virtual void dump_with_types(ostream&,int) = 0;               \
+virtual bool isMethod()=0;                                    \
+virtual bool isAttr()=0;
+
+
 
 
 #define Feature_SHARED_EXTRAS                                       \
 void dump_with_types(ostream&,int);
 
 
+#define attr_EXTRAS \
+bool isMethod() {return false;}; \
+bool isAttr() {return true;};
 
+
+
+#define method_class \
+bool isMethod() {return true;}; \
+bool isAttr() {return false;};
 
 
 #define Formal_EXTRAS                              \
