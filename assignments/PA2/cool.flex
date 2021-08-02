@@ -159,18 +159,18 @@ BLANK          " "|"\n"|"\f"|"\r"|"\t"|"\v"
  * BLOCK_COMMENT
  */
 <BLOCK_COMMENT>"*)"     {BEGIN(INITIAL);}
-<BLOCK_COMMENT>0         {
+<BLOCK_COMMENT><<EOF>>         {
                      strcpy(cool_yylval.error_msg,"EOF in comment");
                      return ERROR;}
 
-<INITIAL> \"                 {BEGIN(STRING);
-                                memset(str,0,MAX_STR_CONST);
+<INITIAL>\"                 {BEGIN(STRING);
+                                memset(string_buf,0,MAX_STR_CONST);
                                 string_buf_index = 0;}
-<STRING> \"          {   BEGIN(INITIAL);
-                        cool_yylval.symbol = stringtable.add_string(str);
+<STRING>\"          {   BEGIN(INITIAL);
+                        cool_yylval.symbol = stringtable.add_string(string_buf);
                         return STR_CONST;}
 
-<BLOCK_COMMENT> 0         {
+<BLOCK_COMMENT><<EOF>>         {
                             strcpy(cool_yylval.error_msg,"EOF in comment");
                             return ERROR;}
 
@@ -181,31 +181,31 @@ BLANK          " "|"\n"|"\f"|"\r"|"\t"|"\v"
 <STRING>\0             {
                        strcpy(cool_yylval.error_msg,"String contains null character");
                        return ERROR;}
-<STRING> 0              {
+<STRING><<EOF>>              {
                        strcpy(cool_yylval.error_msg,"EOF in string constant");
                        return ERROR;}
-<STRING> \n             {
+<STRING>\n             {
                        strcpy(cool_yylval.error_msg,"unterminated string constant");
                        return ERROR;}
-<STRING> \\n            {
+<STRING>\\n            {
                        if(string_buf_index >= MAX_STR_CONST){
                        strcpy(cool_yylval.error_msg,"String constant too long");
                        return ERROR;
                        }
                        string_buf[string_buf_index++] = '\n';}
-<STRING> \\t            {
+<STRING>\\t            {
                        if(string_buf_index >= MAX_STR_CONST){
                        strcpy(cool_yylval.error_msg,"String constant too long");
                        return ERROR;
                        }
                        string_buf[string_buf_index++] = '\t';}
-<STRING> \\b            {
+<STRING>\\b            {
                        if(string_buf_index >= MAX_STR_CONST){
                        strcpy(cool_yylval.error_msg,"String constant too long");
                        return ERROR;
                        }
                        string_buf[string_buf_index++] = '\b';}
-<STRING> \\f            {
+<STRING>\\f            {
                        if(string_buf_index >= MAX_STR_CONST){
                        strcpy(cool_yylval.error_msg,"String constant too long");
                        return ERROR;
