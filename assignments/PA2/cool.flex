@@ -39,7 +39,7 @@ extern int verbose_flag;
 
 extern YYSTYPE cool_yylval;
 
-int index = 0;
+int string_buf_index = 0;
 /*
  *  Add Your own definitions here
  */
@@ -52,7 +52,7 @@ int index = 0;
 
 /*
  *definitions allow us to give names to regular expressions
-*/
+ */
 
 DARROW          =>
 ASSIGN          <-
@@ -83,7 +83,7 @@ BLANK          " "|"\n"|"\f"|"\r"|"\t"|"\v"
 <INITIAL>[Ii][Ff]        {return (IF);}
 <INITIAL>[Ii][Nn]    {return (IN);}
 <INITIAL>[Ii][Nn][Hh][Ee][Rr][Ii][Tt][Ss]       {return (INHERITS);}
-<INITIAL>[Ii][Ss][Vv][Oo][Ii][Dd]    {return (ISVOID)};}
+<INITIAL>[Ii][Ss][Vv][Oo][Ii][Dd]    {return (ISVOID);}
 <INITIAL>[Ll][Ee][Tt]        {return (LET);}
 <INITIAL>[Ll][Oo][Oo][Pp]     {return (LOOP);}
 <INITIAL>[Pp][Oo][Oo][Ll]       {return (POOL);}
@@ -93,14 +93,14 @@ BLANK          " "|"\n"|"\f"|"\r"|"\t"|"\v"
 <INITIAL>[Ee][Ss][Aa][Cc]     {return (ESAC);}
 <INITIAL>[Nn][Ee][Ww]     {return (NEW);}
 <INITIAL>[Oo][Ff]       {return (OF);}
-<INITIAL>[Nn][Oo][Tt]{return (NOT);}
+<INITIAL>[Nn][Oo][Tt]    {return (NOT);}
 <INITIAL>f[Aa][Ll][Ss][Ee]      {cool_yylval.boolean = 0;
                         return (BOOL_CONST);}
 <INITIAL>t[Rr][Uu][Ee]      {cool_yylval.boolean = 1;
                     return (BOOL_CONST);}
 
 
-/*
+ /*
  * operations
  */
 <INITIAL>{DARROW}		{ return (DARROW);}
@@ -125,7 +125,7 @@ BLANK          " "|"\n"|"\f"|"\r"|"\t"|"\v"
 
 
 
-/*  integers
+ /*  integers
  *
  */
 
@@ -134,11 +134,11 @@ BLANK          " "|"\n"|"\f"|"\r"|"\t"|"\v"
                             return (INT_CONST);}
 
 <INITIAL>[_a-zA-Z0-9]+         {
-                            cool_yylval.symbol = strtable.add_string(yytext);
+                            cool_yylval.symbol = stringtable.add_string(yytext);
                             return (OBJECTID);}
 
 
-/* comments
+ /* comments
  *
  */
 
@@ -155,7 +155,7 @@ BLANK          " "|"\n"|"\f"|"\r"|"\t"|"\v"
 <LINE_COMMENT>"\n"      {BEGIN(INITIAL);}
 
 
-/*
+ /*
  * BLOCK_COMMENT
  */
 <BLOCK_COMMENT>"*)"     {BEGIN(INITIAL);}
@@ -163,58 +163,69 @@ BLANK          " "|"\n"|"\f"|"\r"|"\t"|"\v"
                      strcpy(cool_yylval.error_msg,"EOF in comment");
                      return ERROR;}
 
-/* STRING
+<INITIAL> \"                 {BEGIN(STRING);
+                                memset(str,0,MAX_STR_CONST);
+                                string_buf_index = 0;}
+<STRING> \"          {   BEGIN(INITIAL);
+                        cool_yylval.symbol = stringtable.add_string(str);
+                        return STR_CONST;}
+
+<BLOCK_COMMENT> 0         {
+                            strcpy(cool_yylval.error_msg,"EOF in comment");
+                            return ERROR;}
+
+ /* STRING
  *
  */
 
 <STRING>\0             {
                        strcpy(cool_yylval.error_msg,"String contains null character");
                        return ERROR;}
-<STRING>0              {
+<STRING> 0              {
                        strcpy(cool_yylval.error_msg,"EOF in string constant");
                        return ERROR;}
-<STRING>\n             {
+<STRING> \n             {
                        strcpy(cool_yylval.error_msg,"unterminated string constant");
                        return ERROR;}
-<STRING>\\n            {
-                       if(index >= MAX_STR_CONST){
+<STRING> \\n            {
+                       if(string_buf_index >= MAX_STR_CONST){
                        strcpy(cool_yylval.error_msg,"String constant too long");
                        return ERROR;
                        }
-                       string_buf[index++] = '\n';}
-<STRING>\\t            {
-                       if(index >= MAX_STR_CONST){
+                       string_buf[string_buf_index++] = '\n';}
+<STRING> \\t            {
+                       if(string_buf_index >= MAX_STR_CONST){
                        strcpy(cool_yylval.error_msg,"String constant too long");
                        return ERROR;
                        }
-                       string_buf[index++] = '\t';}
-<STRING>\\b            {
-                       if(index >= MAX_STR_CONST){
+                       string_buf[string_buf_index++] = '\t';}
+<STRING> \\b            {
+                       if(string_buf_index >= MAX_STR_CONST){
                        strcpy(cool_yylval.error_msg,"String constant too long");
                        return ERROR;
                        }
-                       string_buf[index++] = '\b';}
-<STRING>\\f            {
-                       if(index >= MAX_STR_CONST){
+                       string_buf[string_buf_index++] = '\b';}
+<STRING> \\f            {
+                       if(string_buf_index >= MAX_STR_CONST){
                        strcpy(cool_yylval.error_msg,"String constant too long");
                        return ERROR;
                        }
-                       string_buf[index++] = '\f';}
+                       string_buf[string_buf_index++] = '\f';}
 <STRING>\\.            {
-                       if(index >= MAX_STR_CONST){
+                       if(string_buf_index >= MAX_STR_CONST){
                        strcpy(cool_yylval.error_msg,"String constant too long");
                        return ERROR;
                        }
-                       string_buf[index++] = yytext[1];}
+                       string_buf[string_buf_index++] = yytext[1];}
 <STRING>.              {
-                       if(index >= MAX_STR_CONST){
+                       if(string_buf_index >= MAX_STR_CONST){
                            strcpy(cool_yylval.error_msg,"String constant too long");
                            return ERROR;
                        }
-                       string_buf[index++] = *yytext;}
+                       string_buf[string_buf_index++] = *yytext;}
 
 
-/*
+ /*
 * Keywords are case-insensitive except for the values true and false,
 * which must begin with a lower-case letter.
 */
