@@ -20,12 +20,12 @@
 #include "utilities.h"
 
 //
-//  The lexer keeps this global variable up to date with the line number
+//  The mylexer keeps this global variable up to date with the line number
 //  of the current line read from the input.
 //
 int curr_lineno = 1;
 char *curr_filename = "<stdin>"; // this name is arbitrary
-FILE *fin;   // This is the file pointer from which the lexer reads its input.
+FILE *fin;   // This is the file pointer from which the mylexer reads its input.
 
 //
 //  cool_yylex() is the function produced by flex. It returns the next
@@ -47,7 +47,7 @@ void handle_flags(int argc, char *argv[]);
 //
 //  The full Cool compiler contains several debugging flags, all of which
 //  are handled and set by the routine handle_flags.  Here we declare
-//  cool_yydebug, which is not used by the lexer but is needed to link
+//  cool_yydebug, which is not used by the mylexer but is needed to link
 //  with handle_flags.
 //
 int  cool_yydebug;
@@ -70,7 +70,7 @@ int main(int argc, char** argv) {
 	    }
 
             // sm: the 'coolc' compiler's file-handling loop resets
-            // this counter, so let's make the stand-alone lexer
+            // this counter, so let's make the stand-alone mylexer
             // do the same thing
             curr_lineno = 1;
 

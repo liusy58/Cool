@@ -1,0 +1,36 @@
+---------- Test ../../examples/arith.cl  ----------
+ Passed!!
+---------- Test ../../examples/atoi.cl  ----------
+ Passed!!
+---------- Test ../../examples/atoi_test.cl  ----------
+ Passed!!
+---------- Test ../../examples/book_list.cl  ----------
+ Passed!!
+---------- Test ../../examples/cells.cl  ----------
+ Passed!!
+---------- Test ../../examples/complex.cl  ----------
+ Passed!!
+---------- Test ../../examples/cool.cl  ----------
+ Passed!!
+---------- Test ../../examples/graph.cl  ----------
+ Passed!!
+---------- Test ../../examples/hairyscary.cl  ----------
+ Passed!!
+---------- Test ../../examples/hello_world.cl  ----------
+ Passed!!
+---------- Test ../../examples/io.cl  ----------
+ Passed!!
+---------- Test ../../examples/lam.cl  ----------
+ Passed!!
+---------- Test ../../examples/life.cl  ----------
+ Passed!!
+---------- Test ../../examples/list.cl  ----------
+ Passed!!
+---------- Test ../../examples/new_complex.cl  ----------
+ Passed!!
+---------- Test ../../examples/palindrome.cl  ----------
+ Passed!!
+---------- Test ../../examples/primes.cl  ----------
+ Passed!!
+---------- Test ../../examples/sort_list.cl  ----------
+ Passed!!

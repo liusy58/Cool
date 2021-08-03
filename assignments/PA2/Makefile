@@ -31,7 +31,7 @@ source : ${SRC} ${TSRC} ${LSRC} ${LIBS} lsource
 
 lsource: ${LSRC}
 
-${OUTPUT}:	lexer test.cl
+${OUTPUT}:	mylexer test.cl
 	@rm -f test.output
 	-./lexer test.cl >test.output 2>&1 
 
@@ -44,7 +44,7 @@ lexer: ${OBJS}
 cool-lex.cc: cool.flex 
 	${FLEX} cool.flex
 
-dotest:	lexer test.cl
+dotest:	mylexer test.cl
 	./lexer test.cl
 
 ${LIBS}:

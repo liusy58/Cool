@@ -106,7 +106,7 @@
     /* 
     Declare the terminals; a few have types for associated lexemes.
     The token ERROR is never used in the parser; thus, it is a parse
-    error when the lexer returns it.
+    error when the mylexer returns it.
     
     The integer following token declaration is the numeric constant used
     to represent that token internally.  Typically, Bison generates these

@@ -161,7 +161,7 @@
 
 void ast_yyerror(char *);
 extern int node_lineno;
-extern int yylex();           /* the entry point to the lexer  */
+extern int yylex();           /* the entry point to the mylexer  */
 Program ast_root;             /* the result of the parse  */
 Classes parse_results;        /* for use in parsing multiple files */
 int omerrs = 0;               /* number of errors in lexing and parsing */

@@ -8,7 +8,7 @@
 //
 //  utilities.c
 //
-//  General support code for lexer and parser.
+//  General support code for mylexer and parser.
 //
 //  This file contains:
 //      fatal_error            print an error message and exit
@@ -161,7 +161,7 @@ void print_cool_token(int tok)
   }
 }
 
-// dump the token in format readable by the sceond phase token lexer
+// dump the token in format readable by the sceond phase token mylexer
 void dump_cool_token(ostream& out, int lineno, int token, YYSTYPE yylval)
 {
     out << "#" << lineno << " " << cool_token_to_string(token);
@@ -195,7 +195,7 @@ void dump_cool_token(ostream& out, int lineno, int token, YYSTYPE yylval)
         // sm: I've changed assignment 2 so students are supposed to
         // *not* coalesce error characters into one string; therefore,
         // if we see an "empty" string here, we can safely assume the
-        // lexer is reporting an occurrance of an illegal NUL in the
+        // mylexer is reporting an occurrance of an illegal NUL in the
         // input stream
         if (cool_yylval.error_msg[0] == 0) {
           out << " \"\\000\"";

@@ -1221,7 +1221,7 @@ YY_RULE_SETUP
 case 31:
 YY_RULE_SETUP
 #line 84 "tokens.flex"
-{ YY_FATAL_ERROR("unmatched text in token lexer; token expected"); }
+{ YY_FATAL_ERROR("unmatched text in token mylexer; token expected"); }
 	YY_BREAK
 
 case 32:
@@ -1232,7 +1232,7 @@ YY_RULE_SETUP
 case 33:
 YY_RULE_SETUP
 #line 88 "tokens.flex"
-{ YY_FATAL_ERROR("unmatched text in token lexer; string constant expected"); }
+{ YY_FATAL_ERROR("unmatched text in token mylexer; string constant expected"); }
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
@@ -1242,7 +1242,7 @@ YY_RULE_SETUP
 case 35:
 YY_RULE_SETUP
 #line 91 "tokens.flex"
-{ YY_FATAL_ERROR("unmatched text in token lexer; error message expected"); }
+{ YY_FATAL_ERROR("unmatched text in token mylexer; error message expected"); }
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
@@ -1254,7 +1254,7 @@ YY_RULE_SETUP
 case 37:
 YY_RULE_SETUP
 #line 96 "tokens.flex"
-{ YY_FATAL_ERROR("unmatched text in token lexer; int constant expected"); }
+{ YY_FATAL_ERROR("unmatched text in token mylexer; int constant expected"); }
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
@@ -1269,7 +1269,7 @@ YY_RULE_SETUP
 case 40:
 YY_RULE_SETUP
 #line 100 "tokens.flex"
-{ YY_FATAL_ERROR("unmatched text in token lexer; bool constant expected"); }
+{ YY_FATAL_ERROR("unmatched text in token mylexer; bool constant expected"); }
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
@@ -1280,7 +1280,7 @@ YY_RULE_SETUP
 case 42:
 YY_RULE_SETUP
 #line 104 "tokens.flex"
-{ YY_FATAL_ERROR("unmatched text in token lexer; type symbol expected"); }
+{ YY_FATAL_ERROR("unmatched text in token mylexer; type symbol expected"); }
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
@@ -1291,7 +1291,7 @@ YY_RULE_SETUP
 case 44:
 YY_RULE_SETUP
 #line 108 "tokens.flex"
-{ YY_FATAL_ERROR("unmatched text in token lexer; object symbol expected"); }
+{ YY_FATAL_ERROR("unmatched text in token mylexer; object symbol expected"); }
 	YY_BREAK
 
 case 45:
@@ -1374,7 +1374,7 @@ case YY_STATE_EOF(STRING):
 case 54:
 YY_RULE_SETUP
 #line 146 "tokens.flex"
-{ YY_FATAL_ERROR("unmatched text in token lexer; line number expected"); }
+{ YY_FATAL_ERROR("unmatched text in token mylexer; line number expected"); }
 	YY_BREAK
 case 55:
 YY_RULE_SETUP

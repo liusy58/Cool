@@ -669,7 +669,7 @@ extern FILE *ast_file; /* we read from this file */
 // bhackett:
 // uncomment the following to get line # tracking during parsing
 // for debugging purposes. the change to YY_READ_BUF_SIZE is a hack
-// so that the lexer's position will be somewhere close to the parser
+// so that the mylexer's position will be somewhere close to the parser
 // rather than having skipped ahead hundreds of lines
 /*
 #define YY_READ_BUF_SIZE 20
